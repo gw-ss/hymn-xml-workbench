@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "sourceImage": "Screenshot 2026-09-01 at 12.48.42 PM.png",
+  "hymnNumber": 1,
+  "confidenceProvenance": "Manual visual review of the processed photograph; replace with recognizer confidence when staff-photo OCR is implemented.",
+  "groups": [
+    { "id": "photo-A-m2-b1", "voice": "A", "measure": 2, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.96 },
+    { "id": "photo-A-m4-b1", "voice": "A", "measure": 4, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.92 },
+    { "id": "photo-A-m6-b1", "voice": "A", "measure": 6, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.96 },
+    { "id": "photo-A-m8-b1", "voice": "A", "measure": 8, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.93 },
+    { "id": "photo-A-m10-b1", "voice": "A", "measure": 10, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.91 },
+    { "id": "photo-A-m12-b1", "voice": "A", "measure": 12, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.90 },
+    { "id": "photo-A-m14-b1", "voice": "A", "measure": 14, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.96 },
+    { "id": "photo-A-m16-b1", "voice": "A", "measure": 16, "photoDirection": "up", "expectedRenderedDirection": "up", "confidence": 0.93 }
+  ]
+}
