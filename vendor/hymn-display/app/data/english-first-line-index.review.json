@@ -1,0 +1,7038 @@
+{
+  "version": "0.3.0",
+  "language": "en",
+  "entries": [
+    {
+      "hymnNumber": 1,
+      "kind": "hymn",
+      "text": "God, our Father, we adore Thee!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 2,
+      "kind": "hymn",
+      "text": "Come, Thou Almighty King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 3,
+      "kind": "hymn",
+      "text": "Holy, Holy, Holy, Lord, God Almighty!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 4,
+      "kind": "hymn",
+      "text": "Heavenly Father, I appreciate you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 5,
+      "kind": "hymn",
+      "text": "Father, I adore you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 6,
+      "kind": "hymn",
+      "text": "Praise God, from whom all blessings flow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 7,
+      "kind": "chorus",
+      "text": "Let us praise Him!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 7,
+      "kind": "hymn",
+      "text": "Glory, glory to the Father!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 8,
+      "kind": "chorus",
+      "text": "Then sings my soul, my Savior God to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 8,
+      "kind": "hymn",
+      "text": "O Lord my God, when I in awesome wonder",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 9,
+      "kind": "hymn",
+      "text": "Father, we love You, we worship and adore You",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 10,
+      "kind": "hymn",
+      "text": "What was it, blessed God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 11,
+      "kind": "chorus",
+      "text": "O love of God, how rich and pure!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 11,
+      "kind": "hymn",
+      "text": "The love of God is greater far",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 12,
+      "kind": "hymn",
+      "text": "Blessed be God, our God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 13,
+      "kind": "chorus",
+      "text": "Behold, what manner of love!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 13,
+      "kind": "hymn",
+      "text": "Behold, what love, what boundless love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 14,
+      "kind": "hymn",
+      "text": "O God! we see Thee in the Lamb",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 15,
+      "kind": "hymn",
+      "text": "All that we were—our sin, our guilt",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 16,
+      "kind": "hymn",
+      "text": "Father, ’twas Thy love that knew us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 17,
+      "kind": "hymn",
+      "text": "My God, how wonderful Thou art",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 18,
+      "kind": "hymn",
+      "text": "There’s a wideness in God’s mercy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 19,
+      "kind": "hymn",
+      "text": "And the Spirit in my heart cries, “Abba, Abba\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 20,
+      "kind": "hymn",
+      "text": "Father, long before creation",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 21,
+      "kind": "hymn",
+      "text": "The steadfast love of the Lord never ceases",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 22,
+      "kind": "chorus",
+      "text": "\"Great is Thy faithfulness\" \"Great is Thy faithfulness!\"",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 22,
+      "kind": "hymn",
+      "text": "\"Great is Thy faithfulness,” O God my Father",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 23,
+      "kind": "chorus",
+      "text": "Hallelujah! Thine the glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 23,
+      "kind": "hymn",
+      "text": "We praise Thee, O God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 24,
+      "kind": "chorus",
+      "text": "Praise the Lord, praise the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 24,
+      "kind": "hymn",
+      "text": "To God be the glory, great things He hath done",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 25,
+      "kind": "hymn",
+      "text": "Gracious God, we worship Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 26,
+      "kind": "hymn",
+      "text": "We praise Thee, glorious Father",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 27,
+      "kind": "hymn",
+      "text": "\"Abba, Father,” We approach Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 28,
+      "kind": "chorus",
+      "text": "O the children of the Lord have a right",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 28,
+      "kind": "hymn",
+      "text": "We are never never weary of the grand old song",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 29,
+      "kind": "hymn",
+      "text": "Abba, Father! we adore Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 30,
+      "kind": "hymn",
+      "text": "O gracious God, Thy pleasure",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 31,
+      "kind": "hymn",
+      "text": "By Thee, O God, invited",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 32,
+      "kind": "hymn",
+      "text": "Father, Thy name our souls would bless",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 33,
+      "kind": "hymn",
+      "text": "Joyful, joyful, we adore Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 34,
+      "kind": "hymn",
+      "text": "We bless thee, God and Father",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 35,
+      "kind": "hymn",
+      "text": "Our God and Father, we respond to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 36,
+      "kind": "hymn",
+      "text": "Father, Thy Son beloved leads our praise",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 37,
+      "kind": "hymn",
+      "text": "O God our Father, we would come to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 38,
+      "kind": "hymn",
+      "text": "Our God and Father we respond anew",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 39,
+      "kind": "hymn",
+      "text": "Father, to Thee a joyful song we raise",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 40,
+      "kind": "hymn",
+      "text": "The spacious firmament on high",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 41,
+      "kind": "hymn",
+      "text": "Immortal, invisible, God only wise",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 42,
+      "kind": "chorus",
+      "text": "Worthy, O Lamb of God, art Thou",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 42,
+      "kind": "hymn",
+      "text": "Thou art the everlasting Word",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 43,
+      "kind": "hymn",
+      "text": "The living of Christ when He sojourned on earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 44,
+      "kind": "hymn",
+      "text": "O soul inspiring story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 45,
+      "kind": "chorus",
+      "text": "Jesus! O what a name!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 45,
+      "kind": "hymn",
+      "text": "O how nigh the Lord is unto all who call on Him!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 46,
+      "kind": "hymn",
+      "text": "In the Name of Jesus (Evelyns)",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 47,
+      "kind": "hymn",
+      "text": "Lift that Name high! That glorious Name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 48,
+      "kind": "hymn",
+      "text": "Thy name is as ointment poured forth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 49,
+      "kind": "chorus",
+      "text": "Jesus! Oh, how sweet the name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 49,
+      "kind": "hymn",
+      "text": "The name of Jesus is so sweet",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 50,
+      "kind": "hymn",
+      "text": "Thy name we love, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 51,
+      "kind": "chorus",
+      "text": "Blessed be the name",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 51,
+      "kind": "hymn",
+      "text": "All praise to Him who reigns on high",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 52,
+      "kind": "hymn",
+      "text": "His name is higher than any other",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 53,
+      "kind": "hymn",
+      "text": "Join all the glorious names",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 54,
+      "kind": "hymn",
+      "text": "Jesus, name above all names",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 55,
+      "kind": "hymn",
+      "text": "Jesus! how much Thy name unfolds",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 56,
+      "kind": "hymn",
+      "text": "How we love the glorious name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 57,
+      "kind": "hymn",
+      "text": "How sweet the Name of Jesus sounds",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 58,
+      "kind": "hymn",
+      "text": "Jesus! that name we love",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 59,
+      "kind": "hymn",
+      "text": "Glorious, mighty Name of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 60,
+      "kind": "hymn",
+      "text": "Jesus, the name high over all",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 61,
+      "kind": "hymn",
+      "text": "Name of Jesus! highest Name!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 62,
+      "kind": "hymn",
+      "text": "Praise the name of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 63,
+      "kind": "hymn",
+      "text": "Jesus, Jesus, Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 64,
+      "kind": "hymn",
+      "text": "Jesus, You’re the sweetest name of all",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 65,
+      "kind": "chorus",
+      "text": "We love to sing of Christ our King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 65,
+      "kind": "hymn",
+      "text": "There is no name so sweet on earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 66,
+      "kind": "chorus",
+      "text": "Jesus is the sweetest name I know",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 66,
+      "kind": "hymn",
+      "text": "There have been names that I have loved to hear",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 67,
+      "kind": "hymn",
+      "text": "Joy to the world! the Lord is come",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 68,
+      "kind": "chorus",
+      "text": "O how I love Him!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 68,
+      "kind": "hymn",
+      "text": "Down from His glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 69,
+      "kind": "chorus",
+      "text": "O what a mystery, meekness and majesty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 69,
+      "kind": "hymn",
+      "text": "Meekness and majesty, manhood and Diety",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 70,
+      "kind": "chorus",
+      "text": "O come, let us adore Him (Adeste Fideles)",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 70,
+      "kind": "hymn",
+      "text": "O come, all ye faithful, joyful and triumphant",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 71,
+      "kind": "hymn",
+      "text": "Hark! the herald angels sing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 72,
+      "kind": "hymn",
+      "text": "Praise the Lord, God sent His Son",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 72,
+      "kind": "hymn",
+      "text": "That’s why I call on Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 72,
+      "kind": "hymn",
+      "text": "We all must call on Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 73,
+      "kind": "hymn",
+      "text": "O Lord! When we the path retrace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 74,
+      "kind": "hymn",
+      "text": "How beauteous were the marks divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 75,
+      "kind": "hymn",
+      "text": "Lord, accept our feeble song!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 76,
+      "kind": "hymn",
+      "text": "Jesus! Source of life eternal!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 77,
+      "kind": "hymn",
+      "text": "When I survey the wondrous cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 78,
+      "kind": "hymn",
+      "text": "O Head once full of bruises",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 79,
+      "kind": "hymn",
+      "text": "O Christ, what burdens bowed Thy head!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 80,
+      "kind": "chorus",
+      "text": "We will praise Thee!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 80,
+      "kind": "hymn",
+      "text": "Lord, we treasure with affection",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 81,
+      "kind": "hymn",
+      "text": "Oh, hallelujah, what a death",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 82,
+      "kind": "hymn",
+      "text": "Lamb of God so pure and spotless",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 83,
+      "kind": "hymn",
+      "text": "Behold! a spotless Victim dies",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 84,
+      "kind": "hymn",
+      "text": "God was born a human being",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 85,
+      "kind": "hymn",
+      "text": "Crowned with thorns upon the tree",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 86,
+      "kind": "hymn",
+      "text": "Himself He could not save",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 87,
+      "kind": "chorus",
+      "text": "O Calvary! dark Calvary!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 87,
+      "kind": "hymn",
+      "text": "On Calvary’s brow my Savior died",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 88,
+      "kind": "hymn",
+      "text": "Behold! behold the Lamb of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 89,
+      "kind": "hymn",
+      "text": "Alas! and did my Savior bleed?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 90,
+      "kind": "hymn",
+      "text": "No blood, no altar now",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 91,
+      "kind": "hymn",
+      "text": "\"Man of Sorrows,” what a name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 92,
+      "kind": "hymn",
+      "text": "O solemn hour! O hour alone",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 93,
+      "kind": "hymn",
+      "text": "Jesus, the sinner’s Friend",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 94,
+      "kind": "chorus",
+      "text": "Sound His praise! Sound His praise!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 94,
+      "kind": "hymn",
+      "text": "How sweet is the story of Christ’s boundless love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 95,
+      "kind": "hymn",
+      "text": "Not all the blood of beasts",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 96,
+      "kind": "hymn",
+      "text": "Hail, Thou once despised Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 97,
+      "kind": "hymn",
+      "text": "How pleasant is the sound of praise!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 98,
+      "kind": "hymn",
+      "text": "Hark! the voice of love and mercy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 99,
+      "kind": "chorus",
+      "text": "Thine be the glory, risen, conquering Son",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 99,
+      "kind": "hymn",
+      "text": "Thine be the glory, risen, conquering Son",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 100,
+      "kind": "hymn",
+      "text": "The Lord is risen; and death’s dark judgment flood",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 101,
+      "kind": "chorus",
+      "text": "Up from the grave he arose",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 101,
+      "kind": "hymn",
+      "text": "Low in the grave He lay",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 102,
+      "kind": "hymn",
+      "text": "Christ the Lord is ris’n indeed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 103,
+      "kind": "hymn",
+      "text": "Thou, Lord, to death’s domain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 104,
+      "kind": "chorus",
+      "text": "Christ is risen: Hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 104,
+      "kind": "hymn",
+      "text": "Christ is risen! Hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 105,
+      "kind": "hymn",
+      "text": "His be the Victor’s name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 106,
+      "kind": "hymn",
+      "text": "Hallelujah! sing to Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 107,
+      "kind": "hymn",
+      "text": "The veil is rent: Lo! Jesus stands",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 108,
+      "kind": "hymn",
+      "text": "Our hearts are overflowing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 109,
+      "kind": "hymn",
+      "text": "The queen in gold of Ophir",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 110,
+      "kind": "hymn",
+      "text": "The Lord said unto to my Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 111,
+      "kind": "hymn",
+      "text": "O Lord, our Lord, how excellent",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 112,
+      "kind": "hymn",
+      "text": "God shall rise, His foes be scattered",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 113,
+      "kind": "hymn",
+      "text": "O Jesus, Lord ’tis joy to know",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 114,
+      "kind": "chorus",
+      "text": "Far above all! Far above all!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 114,
+      "kind": "hymn",
+      "text": "Far above all is our Savior enthroned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 115,
+      "kind": "hymn",
+      "text": "Behold the Lamb with glory crowned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 116,
+      "kind": "hymn",
+      "text": "See the Conqu’ror mount in triumph",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 117,
+      "kind": "hymn",
+      "text": "Hark! Ten thousand voices crying",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 118,
+      "kind": "chorus",
+      "text": "I am He that liveth, that liveth and was dead",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 118,
+      "kind": "hymn",
+      "text": "At Your feet we fall, mighty risen Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 119,
+      "kind": "hymn",
+      "text": "O my Savior, glorified!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 120,
+      "kind": "hymn",
+      "text": "Lord of glory, we adore Thee!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 121,
+      "kind": "hymn",
+      "text": "Gazing on the Lord in glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 122,
+      "kind": "chorus",
+      "text": "And crown Him, crown Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 122,
+      "kind": "hymn",
+      "text": "All hail the pow’r of Jesus’ name! (Diadem)",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 123,
+      "kind": "hymn",
+      "text": "All hail the pow’r of Jesus’ name! (Coronation)",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 124,
+      "kind": "hymn",
+      "text": "Crown Him with many crowns",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 125,
+      "kind": "hymn",
+      "text": "Jesus, Thy head, once crown’d with thorns",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 126,
+      "kind": "hymn",
+      "text": "Look, ye saints, the sight is glorious",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 127,
+      "kind": "hymn",
+      "text": "He is Lord. He is Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 128,
+      "kind": "hymn",
+      "text": "Majesty, worship His majesty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 129,
+      "kind": "hymn",
+      "text": "Jesus, Thou alone art worthy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 130,
+      "kind": "hymn",
+      "text": "O blessed Savior, Son of God!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 131,
+      "kind": "hymn",
+      "text": "Jesus shall reign where’er the sun",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 132,
+      "kind": "chorus",
+      "text": "Hallelujah, Hallelujah",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 132,
+      "kind": "hymn",
+      "text": "Hark! Ten thousand heavenly voices",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 133,
+      "kind": "hymn",
+      "text": "Rejoice, the Lord is King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 134,
+      "kind": "hymn",
+      "text": "Lord, Thy love has sought and found us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 135,
+      "kind": "hymn",
+      "text": "Eternal Love! Oh, mighty sea",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 136,
+      "kind": "hymn",
+      "text": "Oh, the deep, deep love of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 137,
+      "kind": "chorus",
+      "text": "O it is wonderful that He should care for me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 137,
+      "kind": "hymn",
+      "text": "I stand all amazed at the love Jesus offers me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 138,
+      "kind": "chorus",
+      "text": "How marvelous! How wonderful!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 138,
+      "kind": "hymn",
+      "text": "I stand amazed in the presence",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 139,
+      "kind": "hymn",
+      "text": "O blessed Savior, is Thy love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 140,
+      "kind": "hymn",
+      "text": "I have a Friend, whose faithful love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 141,
+      "kind": "hymn",
+      "text": "Lord Jesus, are we one with Thee?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 142,
+      "kind": "hymn",
+      "text": "It passeth knowledge, that dear love of Thine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 143,
+      "kind": "hymn",
+      "text": "Majestic sweetness sits enthroned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 144,
+      "kind": "chorus",
+      "text": "Lest I forget Gethsemane",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 144,
+      "kind": "hymn",
+      "text": "King of my life, I crown Thee now",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 145,
+      "kind": "chorus",
+      "text": "Unto Him Who hath loved us and washed us from sin",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 145,
+      "kind": "hymn",
+      "text": "With praise and thanksgiving there stands a great throng",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 146,
+      "kind": "hymn",
+      "text": "O for a thousand tongues to sing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 147,
+      "kind": "hymn",
+      "text": "Jesus, wondrous Savior!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 148,
+      "kind": "hymn",
+      "text": "Fairest Lord Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 149,
+      "kind": "hymn",
+      "text": "Our hearts are full of Christ and long",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 150,
+      "kind": "hymn",
+      "text": "Lord Jesus! when we think of Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 151,
+      "kind": "hymn",
+      "text": "O Christ, He is the fountain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 152,
+      "kind": "hymn",
+      "text": "Glory to Christ on high!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 153,
+      "kind": "hymn",
+      "text": "`Tis the Church triumphant singing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 154,
+      "kind": "chorus",
+      "text": "Praise the Lamb, for He is worthy!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 154,
+      "kind": "hymn",
+      "text": "Blessed Lord, our hallelujahs",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 155,
+      "kind": "chorus",
+      "text": "Lord, Thou art worthy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 155,
+      "kind": "hymn",
+      "text": "Jesus, our Lord, with what joy we adore Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 156,
+      "kind": "hymn",
+      "text": "Come, let us join our cheerful songs",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 157,
+      "kind": "hymn",
+      "text": "Glory be to Him who loved us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 158,
+      "kind": "hymn",
+      "text": "We come, O Christ, to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 159,
+      "kind": "chorus",
+      "text": "Jesus only, Jesus ever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 159,
+      "kind": "hymn",
+      "text": "Jesus only is our message",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 160,
+      "kind": "hymn",
+      "text": "Gathered in Thy name, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 161,
+      "kind": "hymn",
+      "text": "But all we need to do is eat the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 161,
+      "kind": "hymn",
+      "text": "O Jesus Lord, when present at Thy table",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 161,
+      "kind": "hymn",
+      "text": "So all our being sings in praise to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 162,
+      "kind": "hymn",
+      "text": "Christ is our peace! Christ is our peace!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 162,
+      "kind": "hymn",
+      "text": "Lord, Thou art our peace offering",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 162,
+      "kind": "hymn",
+      "text": "What fellowship, what fellowship",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 163,
+      "kind": "hymn",
+      "text": "Praise Him! praise Him! Jesus our blessed Redeemer!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 164,
+      "kind": "hymn",
+      "text": "In my life, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 165,
+      "kind": "hymn",
+      "text": "Lamb of God! our souls adore Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 166,
+      "kind": "hymn",
+      "text": "O come, let us adore Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 167,
+      "kind": "chorus",
+      "text": "Ten thousand thanks, then thousand thanks",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 167,
+      "kind": "hymn",
+      "text": "Ten thousand thanks to Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 168,
+      "kind": "hymn",
+      "text": "Blessing and honor and glory be Thine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 169,
+      "kind": "hymn",
+      "text": "When morning gilds the skies",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 170,
+      "kind": "hymn",
+      "text": "I love You, Lord",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 171,
+      "kind": "chorus",
+      "text": "The Comforter has come",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 171,
+      "kind": "hymn",
+      "text": "Oh, spread the tidings around",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 172,
+      "kind": "chorus",
+      "text": "Speak to the Rock",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 172,
+      "kind": "hymn",
+      "text": "Fainting in the desert",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 173,
+      "kind": "chorus",
+      "text": "Blessed quietness, holy quietness",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 173,
+      "kind": "hymn",
+      "text": "Joys are flowing like a river",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 174,
+      "kind": "chorus",
+      "text": "River of living water",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 174,
+      "kind": "hymn",
+      "text": "Rivers of living water",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 175,
+      "kind": "chorus",
+      "text": "Spring up, O well, within my soul",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 175,
+      "kind": "hymn",
+      "text": "There’s a river of life flowing out thru me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 176,
+      "kind": "chorus",
+      "text": "I am breathing out my sorrow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 176,
+      "kind": "hymn",
+      "text": "O Lord, breathe Thy Spirit on me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 177,
+      "kind": "hymn",
+      "text": "Praise waiteth Thee in Zion’s Courts",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 178,
+      "kind": "chorus",
+      "text": "`Tis burning in my soul",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 178,
+      "kind": "hymn",
+      "text": "God sent His mighty power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 179,
+      "kind": "chorus",
+      "text": "Oh, He’s the wonderful Spirit in us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 179,
+      "kind": "hymn",
+      "text": "Now the Triune God has come to dwell within",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 180,
+      "kind": "hymn",
+      "text": "Spirit of the Living God, fall fresh on me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 181,
+      "kind": "chorus",
+      "text": "Jesus, O Jesus, Come and fill your lambs",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 181,
+      "kind": "hymn",
+      "text": "O let the Son of God enfold you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 182,
+      "kind": "chorus",
+      "text": "Fill me, Lord!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 182,
+      "kind": "hymn",
+      "text": "What a glory! What a blessing!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 183,
+      "kind": "hymn",
+      "text": "Praise the Lord, who firmly joined us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 184,
+      "kind": "hymn",
+      "text": "The Holy Spirit is the seal",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 185,
+      "kind": "chorus",
+      "text": "Oh, from myself deliver",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 185,
+      "kind": "hymn",
+      "text": "Lord, may Thy blood now cleanse me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 186,
+      "kind": "chorus",
+      "text": "Come, O seven Spirits, come",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 186,
+      "kind": "hymn",
+      "text": "\"Seven Spirits” of our God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 187,
+      "kind": "hymn",
+      "text": "O Breath of Life, come sweeping through us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 188,
+      "kind": "hymn",
+      "text": "Of the Spirit, born of Spirit",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 189,
+      "kind": "hymn",
+      "text": "We have come, we have come to the house of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 190,
+      "kind": "hymn",
+      "text": "Lord, when the Father ne’er was known",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 191,
+      "kind": "hymn",
+      "text": "In all thy work, O Lord, Thou didst",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 192,
+      "kind": "hymn",
+      "text": "Lord, Thou didst know when in the flesh",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 193,
+      "kind": "hymn",
+      "text": "Oh, Jesus, Lord, when Thou on earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 194,
+      "kind": "hymn",
+      "text": "The Word! The Word, with hidden veins of gold!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 194,
+      "kind": "hymn",
+      "text": "The Word! The Word! It’s to the church He speaks",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 194,
+      "kind": "hymn",
+      "text": "The Word! The Word! We love the Word of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 194,
+      "kind": "hymn",
+      "text": "The Word! The Word! We love to take it in",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 194,
+      "kind": "hymn",
+      "text": "We’ve come to love the Bible",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 195,
+      "kind": "chorus",
+      "text": "Oh, hallelujah for the Word!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 195,
+      "kind": "hymn",
+      "text": "Oh, how we love the precious Word!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 196,
+      "kind": "hymn",
+      "text": "Oh, how I love this blessed Book!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 197,
+      "kind": "hymn",
+      "text": "Speak, Lord, in the stillness",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 198,
+      "kind": "hymn",
+      "text": "Lord, hast Thou not one word for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 199,
+      "kind": "chorus",
+      "text": "Silently now I wait for Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 199,
+      "kind": "hymn",
+      "text": "Open my eyes that I may see",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 200,
+      "kind": "hymn",
+      "text": "Master, speak! Thy servant heareth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 201,
+      "kind": "hymn",
+      "text": "Break Thou the Bread of Life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 202,
+      "kind": "hymn",
+      "text": "Thy Word is like a storehouse, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 203,
+      "kind": "hymn",
+      "text": "We limit not the truth of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 204,
+      "kind": "hymn",
+      "text": "Jesus is longing for His Bride",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 205,
+      "kind": "hymn",
+      "text": "Teach us to pray that we may cause",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 206,
+      "kind": "hymn",
+      "text": "Christian, seek not yet repose",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 207,
+      "kind": "chorus",
+      "text": "Mighty Name! Mighty Name!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 207,
+      "kind": "hymn",
+      "text": "In the mighty Name of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 208,
+      "kind": "hymn",
+      "text": "\"Ask in faith,” the Name of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 209,
+      "kind": "chorus",
+      "text": "I must tell Jesus! I must tell Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 209,
+      "kind": "hymn",
+      "text": "I must tell Jesus all of my trials",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 210,
+      "kind": "hymn",
+      "text": "What a Friend we have in Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 211,
+      "kind": "hymn",
+      "text": "In the secret of His presence",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 212,
+      "kind": "hymn",
+      "text": "Sitting at the feet of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 213,
+      "kind": "hymn",
+      "text": "\"Keep the incense burning\"",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 214,
+      "kind": "hymn",
+      "text": "Stir me, oh, stir me, Lord, I care not how",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 215,
+      "kind": "hymn",
+      "text": "Father, let Thy kingdom come",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 216,
+      "kind": "hymn",
+      "text": "All heaven waits with bated breath",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 217,
+      "kind": "chorus",
+      "text": "Revive Thy work, O Lord!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 217,
+      "kind": "hymn",
+      "text": "Revive Thy work, O Lord!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 218,
+      "kind": "hymn",
+      "text": "Sweet hour of prayer, sweet hour of prayer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 219,
+      "kind": "chorus",
+      "text": "Come away, come away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 219,
+      "kind": "hymn",
+      "text": "Don’t you be in such a hurry",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 220,
+      "kind": "hymn",
+      "text": "The Church’s one foundation",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 221,
+      "kind": "hymn",
+      "text": "Church of God, beloved and chosen",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 222,
+      "kind": "hymn",
+      "text": "On Christ, salvation rests secure",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 223,
+      "kind": "hymn",
+      "text": "Oh, what a might! Oh, what a strength!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 224,
+      "kind": "hymn",
+      "text": "Father God, Thou art the source of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 224,
+      "kind": "hymn",
+      "text": "In Thy glory, in Thy glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 224,
+      "kind": "hymn",
+      "text": "In Thy life, in Thy life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 224,
+      "kind": "hymn",
+      "text": "Through Thy Word, through Thy Word",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 225,
+      "kind": "hymn",
+      "text": "Let party names no more",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 226,
+      "kind": "hymn",
+      "text": "Saints in Christ! Why thus divided?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 227,
+      "kind": "chorus",
+      "text": "Glorious church life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 227,
+      "kind": "hymn",
+      "text": "Jesus, our wonderful Shepherd",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 228,
+      "kind": "hymn",
+      "text": "Behold how good a thing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 229,
+      "kind": "chorus",
+      "text": "I’m so happy in this lovely place",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 229,
+      "kind": "hymn",
+      "text": "Splendid church life! His green garden!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 230,
+      "kind": "hymn",
+      "text": "Christ, from whom all blessings flow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 231,
+      "kind": "hymn",
+      "text": "How sweet, how heavenly is the sight",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 232,
+      "kind": "hymn",
+      "text": "Blest be the tie that binds",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 233,
+      "kind": "hymn",
+      "text": "All praise to our redeeming Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 234,
+      "kind": "hymn",
+      "text": "Welcome to the family",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 235,
+      "kind": "hymn",
+      "text": "Lord, to know Thee as the Body",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 236,
+      "kind": "hymn",
+      "text": "I love Thy kingdom, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 237,
+      "kind": "hymn",
+      "text": "Hallelujah for the Body!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 237,
+      "kind": "hymn",
+      "text": "Oh, the church of Christ is glorious",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 237,
+      "kind": "hymn",
+      "text": "We are one by eating Jesus!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 238,
+      "kind": "chorus",
+      "text": "Oh, what a miracle that we could be His Bride!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 238,
+      "kind": "hymn",
+      "text": "The Bible is the Word of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 239,
+      "kind": "hymn",
+      "text": "O walk about, walk about Zion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "Be one with Him for this",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "Break forth and sing for joy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "From ev’rything to Christ we’ve turned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "How lovely is God’s house!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "On Zion’s holy hill",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 240,
+      "kind": "hymn",
+      "text": "We only care for Christ!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 241,
+      "kind": "chorus",
+      "text": "Be strong, be strong",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 241,
+      "kind": "hymn",
+      "text": "This is the time for building the temple of the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 242,
+      "kind": "hymn",
+      "text": "Recall how David swore",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 243,
+      "kind": "hymn",
+      "text": "Lo, from heaven descending",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 243,
+      "kind": "hymn",
+      "text": "See the golden lampstand",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 243,
+      "kind": "hymn",
+      "text": "See the golden lampstands",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 244,
+      "kind": "chorus",
+      "text": "The churches, the churches",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 244,
+      "kind": "hymn",
+      "text": "The churches are the Body",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 245,
+      "kind": "hymn",
+      "text": "In Revelation chapter one",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 246,
+      "kind": "hymn",
+      "text": "In Revelation two and three",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 247,
+      "kind": "hymn",
+      "text": "Glorious things to thee are spoken",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 248,
+      "kind": "hymn",
+      "text": "Oh, the Lord is quickly coming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 249,
+      "kind": "chorus",
+      "text": "Till we meet, till we meet",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 249,
+      "kind": "hymn",
+      "text": "God be with you till we meet again",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 250,
+      "kind": "hymn",
+      "text": "Around Thy grave, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 251,
+      "kind": "hymn",
+      "text": "Is it Thy will that I should be",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 252,
+      "kind": "hymn",
+      "text": "We gather together to eat the Lord’s supper",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 253,
+      "kind": "chorus",
+      "text": "Hallelujah! Hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 253,
+      "kind": "hymn",
+      "text": "Oh, how glorious is Thy table, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 254,
+      "kind": "chorus",
+      "text": "There is one Body in this universe",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 254,
+      "kind": "hymn",
+      "text": "We’re gathered here, O Lord, as Thy one Body",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 255,
+      "kind": "hymn",
+      "text": "According to Thy gracious word",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 256,
+      "kind": "hymn",
+      "text": "Jesus spreads His banner over us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 257,
+      "kind": "hymn",
+      "text": "Jesus, Lord, we know Thee present",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 258,
+      "kind": "hymn",
+      "text": "On that same night, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 259,
+      "kind": "hymn",
+      "text": "Sweet feast of love divine!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 260,
+      "kind": "hymn",
+      "text": "Here, O my Lord, I see Thee face to face",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 261,
+      "kind": "hymn",
+      "text": "For the bread and for the wine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 262,
+      "kind": "chorus",
+      "text": "This is our God, the Servant King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 262,
+      "kind": "hymn",
+      "text": "From heav’n You came, helpless babe",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 263,
+      "kind": "hymn",
+      "text": "Make me a servant, humble and meek",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 264,
+      "kind": "hymn",
+      "text": "We have a most glorious King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 265,
+      "kind": "hymn",
+      "text": "O Master, let me walk with Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 266,
+      "kind": "hymn",
+      "text": "If you want to be great in God’s kingdom",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 267,
+      "kind": "hymn",
+      "text": "Lord, speak to me, that I may speak",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 268,
+      "kind": "hymn",
+      "text": "Shine Thou upon us, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 269,
+      "kind": "chorus",
+      "text": "Channels only, blessed Master",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 269,
+      "kind": "hymn",
+      "text": "How I praise Thee, precious Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 270,
+      "kind": "hymn",
+      "text": "Flow through me, Lord",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 271,
+      "kind": "hymn",
+      "text": "In the wilderness for God!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 272,
+      "kind": "hymn",
+      "text": "Work, for the Day is coming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 273,
+      "kind": "hymn",
+      "text": "Go labor on; spend, and be spent",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 274,
+      "kind": "hymn",
+      "text": "Come let us anew our journey pursue",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 275,
+      "kind": "hymn",
+      "text": "Not where we elect to go",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 276,
+      "kind": "chorus",
+      "text": "Showers of blessing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 276,
+      "kind": "hymn",
+      "text": "There shall be showers of blessing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 277,
+      "kind": "hymn",
+      "text": "O perfect Love, all human thought transcending",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 278,
+      "kind": "hymn",
+      "text": "O God of love to Thee we bow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 279,
+      "kind": "chorus",
+      "text": "Oh, touch the hem of His garment",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 279,
+      "kind": "hymn",
+      "text": "She only touched the hem of His garment",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 280,
+      "kind": "chorus",
+      "text": "He healeth me, He healeth me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 280,
+      "kind": "hymn",
+      "text": "He healeth me, oh, bless His name!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 281,
+      "kind": "hymn",
+      "text": "I’ve found a Friend, oh, such a Friend!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 282,
+      "kind": "hymn",
+      "text": "Loved with everlasting love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 283,
+      "kind": "hymn",
+      "text": "Come and rejoice with me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 284,
+      "kind": "chorus",
+      "text": "Sweeter as the years go by",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 284,
+      "kind": "hymn",
+      "text": "Of Jesus’ love that sought me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 285,
+      "kind": "chorus",
+      "text": "Now I be long to Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 285,
+      "kind": "hymn",
+      "text": "Jesus my Lord will love me forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 286,
+      "kind": "chorus",
+      "text": "I am amazed that God would ever save me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 286,
+      "kind": "hymn",
+      "text": "I am amazed that God could ever love me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 287,
+      "kind": "chorus",
+      "text": "I am so glad that Jesus loves me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 287,
+      "kind": "hymn",
+      "text": "I am so glad that our Father in heaven",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 288,
+      "kind": "chorus",
+      "text": "No one ever cared for me like Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 288,
+      "kind": "hymn",
+      "text": "I would love to tell you what I think of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 289,
+      "kind": "hymn",
+      "text": "Cleansed in our Savior’s precious Blood",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 290,
+      "kind": "hymn",
+      "text": "And can it be that I should gain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 291,
+      "kind": "hymn",
+      "text": "On the Lamb our souls are resting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 292,
+      "kind": "chorus",
+      "text": "Glory, glory, hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 292,
+      "kind": "hymn",
+      "text": "Precious Savior, Thou hast saved me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 293,
+      "kind": "chorus",
+      "text": "I love Him, I love Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 293,
+      "kind": "hymn",
+      "text": "Gone from my heart the world and all its charms",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 294,
+      "kind": "hymn",
+      "text": "Jesus,Thy blood and righteousness",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 295,
+      "kind": "chorus",
+      "text": "On Christ, the solid Rock I stand",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 295,
+      "kind": "hymn",
+      "text": "My hope is built on nothing less",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 296,
+      "kind": "chorus",
+      "text": "For me He died",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 296,
+      "kind": "hymn",
+      "text": "My hope is in the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 297,
+      "kind": "chorus",
+      "text": "Propitiation made by the blood",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 297,
+      "kind": "hymn",
+      "text": "In a low dungeon hope we had none",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 298,
+      "kind": "hymn",
+      "text": "Arise, my soul, arise!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 299,
+      "kind": "hymn",
+      "text": "A mind at perfect peace with God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 300,
+      "kind": "chorus",
+      "text": "Redeemed, redeemed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 300,
+      "kind": "hymn",
+      "text": "Redeemed—how I love to proclaim it!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 301,
+      "kind": "chorus",
+      "text": "Since I have been redeemed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 301,
+      "kind": "hymn",
+      "text": "I have a song I love to sing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 302,
+      "kind": "chorus",
+      "text": "Sing, oh, sing of my Redeemer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 302,
+      "kind": "hymn",
+      "text": "I will sing of my Redeemer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 303,
+      "kind": "hymn",
+      "text": "O Jesus Lord, we come to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 304,
+      "kind": "chorus",
+      "text": "This is my story, this is my song",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 304,
+      "kind": "hymn",
+      "text": "Blessed assurance, Jesus is mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 305,
+      "kind": "chorus",
+      "text": "Since Jesus came into my heart!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 305,
+      "kind": "hymn",
+      "text": "What a wonderful change in my life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 306,
+      "kind": "hymn",
+      "text": "What a happy day",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 307,
+      "kind": "chorus",
+      "text": "Rolled away, rolled away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 307,
+      "kind": "hymn",
+      "text": "I remember when my burdens rolled away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 308,
+      "kind": "chorus",
+      "text": "Happy day, happy day",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 308,
+      "kind": "hymn",
+      "text": "O happy day that fixed my choice",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 309,
+      "kind": "chorus",
+      "text": "Glorious freedom, wonderful freedom",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 309,
+      "kind": "hymn",
+      "text": "Once I was bound by sin’s galling fetters",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 310,
+      "kind": "chorus",
+      "text": "Only a sinner saved by grace!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 310,
+      "kind": "hymn",
+      "text": "Naught have I gotten but what I received",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 311,
+      "kind": "chorus",
+      "text": "All sufficient grace!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 311,
+      "kind": "hymn",
+      "text": "Grace! ’tis a charming sound",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 312,
+      "kind": "chorus",
+      "text": "Mine! Mine! Mine!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 312,
+      "kind": "hymn",
+      "text": "Dear Savior, Thou art mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 313,
+      "kind": "chorus",
+      "text": "Saved by His pow’r divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 313,
+      "kind": "hymn",
+      "text": "I’ve found a Friend who is all to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 314,
+      "kind": "chorus",
+      "text": "It took a miracle to put the stars in place",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 314,
+      "kind": "hymn",
+      "text": "My Father is omnipotent",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 315,
+      "kind": "chorus",
+      "text": "From sinking sand He lifted me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 315,
+      "kind": "hymn",
+      "text": "In loving kindness Jesus came",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 316,
+      "kind": "chorus",
+      "text": "Wonderful the matchless grace of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 316,
+      "kind": "hymn",
+      "text": "Wonderful grace of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 317,
+      "kind": "hymn",
+      "text": "Amazing grace! how sweet the sound",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 318,
+      "kind": "chorus",
+      "text": "For He is so precious to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 318,
+      "kind": "hymn",
+      "text": "So precious is Jesus, my Savior, my King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 319,
+      "kind": "hymn",
+      "text": "Come, Thou Fount of ev’ry blessing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 320,
+      "kind": "chorus",
+      "text": "Mercy there was great, and grace was free",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 320,
+      "kind": "hymn",
+      "text": "Years I spent in vanity and pride",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 321,
+      "kind": "hymn",
+      "text": "Full salvation! Full salvation!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 322,
+      "kind": "chorus",
+      "text": "Drinking at the Fountain that never runs dry",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 322,
+      "kind": "hymn",
+      "text": "Many weary years I vainly sought a spring",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 323,
+      "kind": "hymn",
+      "text": "I heard the voice of Jesus say",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 324,
+      "kind": "chorus",
+      "text": "I’m living on the mountain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 324,
+      "kind": "hymn",
+      "text": "Far away the noise of strife upon my ear is falling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 325,
+      "kind": "chorus",
+      "text": "Constantly abiding",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 325,
+      "kind": "hymn",
+      "text": "There’s a peace in my heart that the world never gave",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 326,
+      "kind": "chorus",
+      "text": "Hallelujah! I have found Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 326,
+      "kind": "hymn",
+      "text": "All my life long I had panted",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 327,
+      "kind": "chorus",
+      "text": "Oh, hallelujah, yes, ’tis heaven",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 327,
+      "kind": "hymn",
+      "text": "Since Christ my soul from sin set free",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 328,
+      "kind": "chorus",
+      "text": "Jesus, Jesus, Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 328,
+      "kind": "hymn",
+      "text": "There’s within my heart a melody",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 329,
+      "kind": "chorus",
+      "text": "In my heart there rings a melody",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 329,
+      "kind": "hymn",
+      "text": "I have a song that Jesus gave me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 330,
+      "kind": "chorus",
+      "text": "We’re marching to Zion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 330,
+      "kind": "hymn",
+      "text": "Come, we that love the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 331,
+      "kind": "hymn",
+      "text": "I’m not ashamed to own my Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 332,
+      "kind": "chorus",
+      "text": "O there’s sunshine, blessed sunshine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 332,
+      "kind": "hymn",
+      "text": "There is sunshine in my soul today",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 333,
+      "kind": "chorus",
+      "text": "All that thrills my soul is Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 333,
+      "kind": "hymn",
+      "text": "Who can cheer the heart like Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 334,
+      "kind": "chorus",
+      "text": "Than to be the king of a vast domain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 334,
+      "kind": "hymn",
+      "text": "I’d rather have Jesus than silver or gold",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 335,
+      "kind": "hymn",
+      "text": "Before the throne of God above",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 336,
+      "kind": "chorus",
+      "text": "Yea, justified! O blessed thought!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 336,
+      "kind": "hymn",
+      "text": "Complete in Thee! no work of mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 337,
+      "kind": "chorus",
+      "text": "I need no other argument",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 337,
+      "kind": "hymn",
+      "text": "My faith has found a resting place",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 338,
+      "kind": "chorus",
+      "text": "Leaning, leaning",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 338,
+      "kind": "hymn",
+      "text": "What a fellowship, what a joy divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 339,
+      "kind": "chorus",
+      "text": "But “I know Whom I have believed\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 339,
+      "kind": "hymn",
+      "text": "I know not why God’s wondrous grace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 340,
+      "kind": "chorus",
+      "text": "We have an anchor that keeps the soul",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 340,
+      "kind": "hymn",
+      "text": "Will your anchor hold in the storms of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 341,
+      "kind": "hymn",
+      "text": "I hear the words of love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 342,
+      "kind": "chorus",
+      "text": "He hideth my soul in the cleft of the rock",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 342,
+      "kind": "hymn",
+      "text": "A wonderful Savior is Jesus my Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 343,
+      "kind": "chorus",
+      "text": "Yes, I’ll sing the wondrous story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 343,
+      "kind": "hymn",
+      "text": "I will sing the wondrous story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 344,
+      "kind": "hymn",
+      "text": "Wounded for me, wounded for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 345,
+      "kind": "hymn",
+      "text": "How firm a foundation, ye saints of the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 346,
+      "kind": "chorus",
+      "text": "Standing, standing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 346,
+      "kind": "hymn",
+      "text": "Standing on the promises of Christ my king",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 347,
+      "kind": "chorus",
+      "text": "It is well with my soul!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 347,
+      "kind": "hymn",
+      "text": "When peace like a river attendeth my way",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 348,
+      "kind": "hymn",
+      "text": "Thy mighty love, O God, constraineth me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 349,
+      "kind": "chorus",
+      "text": "Let me love Thee, Savior, Take my heart forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 349,
+      "kind": "hymn",
+      "text": "Let me love Thee, Thou art claiming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 350,
+      "kind": "chorus",
+      "text": "O Jesus, Lord, with me abide",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 350,
+      "kind": "hymn",
+      "text": "O Jesus, Jesus, dearest Lord!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 351,
+      "kind": "chorus",
+      "text": "How can I help but love Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 351,
+      "kind": "hymn",
+      "text": "Down from His splendor in glory He came",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 352,
+      "kind": "hymn",
+      "text": "I love my Lord, but with no love of mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 353,
+      "kind": "hymn",
+      "text": "Jesus, Thine all victorious love",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 354,
+      "kind": "hymn",
+      "text": "Lord Jesus, I love Thee, I know Thou art mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 355,
+      "kind": "chorus",
+      "text": "Lord, we’ve been drawn off by many things",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 355,
+      "kind": "hymn",
+      "text": "Jesus, Lord, you’re our first love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 356,
+      "kind": "chorus",
+      "text": "Oh, how I love Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 356,
+      "kind": "hymn",
+      "text": "There is a name I love to hear",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 357,
+      "kind": "hymn",
+      "text": "Oh, who’s like our Jesus?",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 358,
+      "kind": "hymn",
+      "text": "More love to Thee, O Christ",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 359,
+      "kind": "hymn",
+      "text": "In moments like these I sing out a song",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 360,
+      "kind": "chorus",
+      "text": "You alone are my strength, my shield",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 360,
+      "kind": "hymn",
+      "text": "As the deer panteth for the water",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 361,
+      "kind": "hymn",
+      "text": "As pants the hart for cooling streams",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 362,
+      "kind": "hymn",
+      "text": "My goal is God Him self, not joy, nor peace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 363,
+      "kind": "chorus",
+      "text": "I need Jesus, I need Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 363,
+      "kind": "hymn",
+      "text": "I need Jesus, my need I now confess",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 364,
+      "kind": "hymn",
+      "text": "Jesus, Thou Joy of loving hearts",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 365,
+      "kind": "hymn",
+      "text": "Love Divine, all love excelling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 366,
+      "kind": "chorus",
+      "text": "O Light, all light excelling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 366,
+      "kind": "hymn",
+      "text": "O Light of light, shine in!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 367,
+      "kind": "chorus",
+      "text": "O Jesus, my Lord and Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 367,
+      "kind": "hymn",
+      "text": "He died for me that I might live",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 368,
+      "kind": "hymn",
+      "text": "Be Thou supreme, O Jesus Christ",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 369,
+      "kind": "hymn",
+      "text": "Abide with me! fast falls the eventide",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 370,
+      "kind": "chorus",
+      "text": "Nothing between my soul and the Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 370,
+      "kind": "hymn",
+      "text": "Nothing between my soul and the Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 371,
+      "kind": "chorus",
+      "text": "I need Thee, oh, I need Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 371,
+      "kind": "hymn",
+      "text": "I need Thee every hour",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 372,
+      "kind": "hymn",
+      "text": "Fill Thou my life, O Lord my God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 373,
+      "kind": "hymn",
+      "text": "Nothing between, Lord, nothing between",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 374,
+      "kind": "hymn",
+      "text": "I hunger and I thirst",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 375,
+      "kind": "chorus",
+      "text": "Lead me higher up the mountain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 375,
+      "kind": "hymn",
+      "text": "Savior, lead me up the mountain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 376,
+      "kind": "hymn",
+      "text": "O Bread to pilgrims given",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 377,
+      "kind": "hymn",
+      "text": "O God, we seek Your pleasure",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 378,
+      "kind": "chorus",
+      "text": "Fill all my vision, Savior divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 378,
+      "kind": "hymn",
+      "text": "Fill all my vision, Savior, I pray",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 379,
+      "kind": "hymn",
+      "text": "O Father of glorify, now grant unto me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 380,
+      "kind": "hymn",
+      "text": "A charge to keep I have",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 381,
+      "kind": "hymn",
+      "text": "Lord Jesus, Thou who only art",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 382,
+      "kind": "chorus",
+      "text": "More, more about Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 382,
+      "kind": "hymn",
+      "text": "More about Jesus would I know",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 383,
+      "kind": "hymn",
+      "text": "Lord Jesus, I long in Thy presence to live",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 384,
+      "kind": "hymn",
+      "text": "Let the beauty of Jesus be seen in me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 385,
+      "kind": "hymn",
+      "text": "Nearer, still nearer, close to Thy heart",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 386,
+      "kind": "hymn",
+      "text": "My Jesus, as Thou wilt!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 387,
+      "kind": "chorus",
+      "text": "Lead me, lead me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 387,
+      "kind": "hymn",
+      "text": "Savior, lead me, lest I stray",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 388,
+      "kind": "chorus",
+      "text": "Close to Thee, close to Thee",
+      "reviewStatus": "Added"
+    },
+    {
+      "hymnNumber": 388,
+      "kind": "hymn",
+      "text": "Thou my everlasting Portion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 389,
+      "kind": "chorus",
+      "text": "Just a closer walk with Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 389,
+      "kind": "hymn",
+      "text": "I am weak, but Thou art strong",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 390,
+      "kind": "chorus",
+      "text": "Draw me nearer, nearer",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 390,
+      "kind": "hymn",
+      "text": "I am Thine, O Lord, I have heard Thy voice",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 391,
+      "kind": "hymn",
+      "text": "Jesus, Savior, pilot me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 392,
+      "kind": "chorus",
+      "text": "Each day let Thy supporting might",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 392,
+      "kind": "hymn",
+      "text": "O Jesus Christ, grow Thou in me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 393,
+      "kind": "hymn",
+      "text": "Lord, teach us how to pray",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 394,
+      "kind": "hymn",
+      "text": "Not my will but Thine be done",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 395,
+      "kind": "chorus",
+      "text": "Lord, lift me up, and let me stand",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 395,
+      "kind": "hymn",
+      "text": "I’m pressing on the upward way",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 396,
+      "kind": "chorus",
+      "text": "Come, my Savior, and help me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 396,
+      "kind": "hymn",
+      "text": "More holiness give me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 397,
+      "kind": "chorus",
+      "text": "O to be like Thee! O to be like Thee!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 397,
+      "kind": "hymn",
+      "text": "O to be like Thee! blessed Redeemer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 398,
+      "kind": "hymn",
+      "text": "Live Thyself, Lord Jesus, through me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 399,
+      "kind": "chorus",
+      "text": "Having seen the world’s fair beauty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 399,
+      "kind": "hymn",
+      "text": "Having seen the world’s fair beauty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 400,
+      "kind": "hymn",
+      "text": "Teach me Thy way, O Lord",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 401,
+      "kind": "chorus",
+      "text": "Whiter than snow",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 401,
+      "kind": "hymn",
+      "text": "Lord Jesus, I long to be perfectly whole",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 402,
+      "kind": "hymn",
+      "text": "Search me, O God, my actions try",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 403,
+      "kind": "hymn",
+      "text": "Oh, for a heart to praise my God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 404,
+      "kind": "hymn",
+      "text": "Bless’d are the pure in heart",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 405,
+      "kind": "hymn",
+      "text": "Lord, reveal Thyself to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 406,
+      "kind": "chorus",
+      "text": "Seeking now, seeking now",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 406,
+      "kind": "hymn",
+      "text": "Lord, Thou knowest all the hunger",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 407,
+      "kind": "chorus",
+      "text": "Lower and lower, down at Thy cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 407,
+      "kind": "hymn",
+      "text": "Lower and lower, dear Lord, at Thy feet",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 408,
+      "kind": "hymn",
+      "text": "Jesus, cast a look on me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 409,
+      "kind": "hymn",
+      "text": "Thou hidden love of God, whose height",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 410,
+      "kind": "hymn",
+      "text": "Jesus, Redeemer and my one Inspirer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 411,
+      "kind": "hymn",
+      "text": "My faith looks up to Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 412,
+      "kind": "hymn",
+      "text": "O Love divine, how sweet Thou art",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 413,
+      "kind": "hymn",
+      "text": "Gracious Spirit, Holy Ghost",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 414,
+      "kind": "hymn",
+      "text": "O Lord, Thy boundless love to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 415,
+      "kind": "hymn",
+      "text": "Search me, O God, and know my heart today",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 416,
+      "kind": "chorus",
+      "text": "Shine, Jesus, shine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 416,
+      "kind": "hymn",
+      "text": "Lord, the light of Your love is shining",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 417,
+      "kind": "hymn",
+      "text": "Prince of peace, control my will",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 418,
+      "kind": "hymn",
+      "text": "When I am in the natural man",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 419,
+      "kind": "hymn",
+      "text": "I am the Lord’s! O joy beyond expression",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 420,
+      "kind": "hymn",
+      "text": "How vast, immense, and measureless",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 421,
+      "kind": "hymn",
+      "text": "O Love, that wilt not let me go",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 422,
+      "kind": "hymn",
+      "text": "Lord, Thou hast won, at length I yield",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 423,
+      "kind": "hymn",
+      "text": "Thy Life was given for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 424,
+      "kind": "chorus",
+      "text": "Captivated by His beauty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 424,
+      "kind": "hymn",
+      "text": "Hast thou heard Him, seen Him, known Him?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 425,
+      "kind": "chorus",
+      "text": "I surrender all",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 425,
+      "kind": "hymn",
+      "text": "All to Jesus I surrender",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 426,
+      "kind": "chorus",
+      "text": "Is your all on the altar of sacrifice laid?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 426,
+      "kind": "hymn",
+      "text": "You have longed for sweet peace",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 427,
+      "kind": "hymn",
+      "text": "Take my life, and let it be",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 428,
+      "kind": "chorus",
+      "text": "Jesus, my Lord and Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 428,
+      "kind": "hymn",
+      "text": "What shall I give Thee, Master?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 429,
+      "kind": "hymn",
+      "text": "Have Thine own way, Lord",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 430,
+      "kind": "chorus",
+      "text": "I am not my own",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 430,
+      "kind": "hymn",
+      "text": "Tell me not of earthly pleasures",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 431,
+      "kind": "hymn",
+      "text": "When this passing world is done",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 432,
+      "kind": "chorus",
+      "text": "Sweet will of God",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 432,
+      "kind": "hymn",
+      "text": "My stubborn will at last hath yielded",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 433,
+      "kind": "hymn",
+      "text": "All for Jesus! All for Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 434,
+      "kind": "chorus",
+      "text": "Utterly abandoned To the Lord of all",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 434,
+      "kind": "hymn",
+      "text": "Utterly abandoned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 435,
+      "kind": "hymn",
+      "text": "Make me a captive, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 436,
+      "kind": "chorus",
+      "text": "Far, far behind me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 436,
+      "kind": "hymn",
+      "text": "I’ve turned my back upon the world",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 437,
+      "kind": "chorus",
+      "text": "Follow! follow! I would follow Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 437,
+      "kind": "hymn",
+      "text": "Down in the valley with my Savior",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 438,
+      "kind": "hymn",
+      "text": "How shall I follow Him I serve?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 439,
+      "kind": "chorus",
+      "text": "O Jesus, Lord and Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 439,
+      "kind": "hymn",
+      "text": "Living for Jesus a life that is true",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 440,
+      "kind": "hymn",
+      "text": "My glorious Victor, Prince Divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 441,
+      "kind": "hymn",
+      "text": "Jesus, I my cross have taken",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 442,
+      "kind": "hymn",
+      "text": "I have decided to follow Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 443,
+      "kind": "hymn",
+      "text": "No mortal tongue can e’er describe",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 444,
+      "kind": "hymn",
+      "text": "Many crowd the Savior’s kingdom",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 445,
+      "kind": "chorus",
+      "text": "In the name, the precious name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 445,
+      "kind": "hymn",
+      "text": "Am I a soldier of the Cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 446,
+      "kind": "chorus",
+      "text": "By Thy grand redemption",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 446,
+      "kind": "hymn",
+      "text": "Who is on the Lord’s side?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 447,
+      "kind": "chorus",
+      "text": "One with Thee, one with Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 447,
+      "kind": "hymn",
+      "text": "I am one with Thee, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 448,
+      "kind": "hymn",
+      "text": "One with Thee, Thou Son eternal",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 449,
+      "kind": "chorus",
+      "text": "Moment by moment I’m kept in His love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 449,
+      "kind": "hymn",
+      "text": "Dying with Jesus, by death reckoned mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 450,
+      "kind": "hymn",
+      "text": "Buried with Christ, and raised with Him too",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 451,
+      "kind": "hymn",
+      "text": "Lord, Thou hast shown the mystery",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 452,
+      "kind": "hymn",
+      "text": "Made free! Made free! O captive!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 453,
+      "kind": "hymn",
+      "text": "Beautiful, beautiful, Jesus is beautiful",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 454,
+      "kind": "hymn",
+      "text": "Lord, I was blind; I could not see",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 455,
+      "kind": "hymn",
+      "text": "His banner over me is love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 455,
+      "kind": "hymn",
+      "text": "How sweet! How sweet!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 455,
+      "kind": "hymn",
+      "text": "Is love! Is love!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 456,
+      "kind": "chorus",
+      "text": "I call His name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 456,
+      "kind": "hymn",
+      "text": "Nothing’s quite so precious",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 457,
+      "kind": "hymn",
+      "text": "Dear Lord Jesus, precious Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 458,
+      "kind": "chorus",
+      "text": "The half cannot be fancied",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 458,
+      "kind": "hymn",
+      "text": "To Jesus ev’ry day I find my heart is closer drawn",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 459,
+      "kind": "hymn",
+      "text": "Jesus, the very thought of Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 460,
+      "kind": "hymn",
+      "text": "I cannot breathe enough of Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 461,
+      "kind": "hymn",
+      "text": "Jesus, my Savior! Thou art mine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 462,
+      "kind": "hymn",
+      "text": "In the Testament of old",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 463,
+      "kind": "hymn",
+      "text": "What a victory! What a triumph!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 464,
+      "kind": "hymn",
+      "text": "Power exceeding great God did demonstrate",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 464,
+      "kind": "hymn",
+      "text": "Power, power overruling power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 464,
+      "kind": "hymn",
+      "text": "Power, power, all-subduing power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 464,
+      "kind": "hymn",
+      "text": "Power, power, all-transcending power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 464,
+      "kind": "hymn",
+      "text": "Power, power, resurrection power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 465,
+      "kind": "chorus",
+      "text": "Resurrection, Resurrection",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 465,
+      "kind": "hymn",
+      "text": "Christ is now in resurrection",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 466,
+      "kind": "chorus",
+      "text": "And can it be that “He loved me\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 466,
+      "kind": "hymn",
+      "text": "Once I was dead in sin",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 467,
+      "kind": "chorus",
+      "text": "He lives, He lives",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 467,
+      "kind": "hymn",
+      "text": "I serve a risen Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 468,
+      "kind": "chorus",
+      "text": "Christ liveth in me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 468,
+      "kind": "hymn",
+      "text": "Once far from God and dead in sin",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 469,
+      "kind": "hymn",
+      "text": "Art thou hung’ring for the fulness",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 470,
+      "kind": "hymn",
+      "text": "There’s a Man in the glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 471,
+      "kind": "chorus",
+      "text": "Christ in me, Christ in me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 471,
+      "kind": "hymn",
+      "text": "This is my wonderful story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 472,
+      "kind": "hymn",
+      "text": "Sing praise to Christ Who lives in us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "W hat, hunger nevermore?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "We’re feeding on the living bread",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "What, have the joy of God?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "What, have the life of God?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "What, live forevermore?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 473,
+      "kind": "hymn",
+      "text": "What, never thirst again?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 474,
+      "kind": "hymn",
+      "text": "The tree of life, how sweet the fruit",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 475,
+      "kind": "chorus",
+      "text": "All in all forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 475,
+      "kind": "hymn",
+      "text": "Once it was the blessing",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 476,
+      "kind": "hymn",
+      "text": "We have seen Christ is reality",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 477,
+      "kind": "hymn",
+      "text": "My old person has been nullified",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 478,
+      "kind": "chorus",
+      "text": "Lord, Thou art our Person",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 478,
+      "kind": "hymn",
+      "text": "Lord, to know Thee as our Person",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 479,
+      "kind": "hymn",
+      "text": "My old man has been crucified with Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 480,
+      "kind": "hymn",
+      "text": "O Lord, O Lord, by Your economy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 480,
+      "kind": "hymn",
+      "text": "O Lord, O Lord, speak all You want to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 480,
+      "kind": "hymn",
+      "text": "O Lord, O Lord, You are the man for me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 480,
+      "kind": "hymn",
+      "text": "Oh, Christ in all His glory put on humanity",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 481,
+      "kind": "hymn",
+      "text": "My heart is fixed, eternal God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 482,
+      "kind": "hymn",
+      "text": "Fade, fade each earthly joy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 483,
+      "kind": "chorus",
+      "text": "Jesus for me, Jesus for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 483,
+      "kind": "hymn",
+      "text": "Jesus, my Savior, is all things to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 484,
+      "kind": "hymn",
+      "text": "Whom have I, Lord, in heaven but Thee?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 485,
+      "kind": "hymn",
+      "text": "I’ve found the One of peerless worth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 486,
+      "kind": "hymn",
+      "text": "I thank Thee, Lord, that Thou hast shown",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 487,
+      "kind": "chorus",
+      "text": "Now none but Christ can satisfy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 487,
+      "kind": "hymn",
+      "text": "O Christ, in Thee my soul hath found",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 488,
+      "kind": "hymn",
+      "text": "Jesus is all the world to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 489,
+      "kind": "hymn",
+      "text": "Lord, Thou hast made Thyself to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 490,
+      "kind": "hymn",
+      "text": "The Lord’s my Shepherd, I’ll not want",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 491,
+      "kind": "chorus",
+      "text": "Waters cool, pastures green",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 491,
+      "kind": "hymn",
+      "text": "In God’s green pastures feeding",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 492,
+      "kind": "hymn",
+      "text": "Surely goodness and mercy shall follow me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 493,
+      "kind": "hymn",
+      "text": "The King of love my Shepherd is",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 494,
+      "kind": "chorus",
+      "text": "O Jesus! You’re God’s good land",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 494,
+      "kind": "hymn",
+      "text": "Laboring on Jesus, the good land so real",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 495,
+      "kind": "hymn",
+      "text": "Jesus, the all-inclusive land",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 496,
+      "kind": "hymn",
+      "text": "How tedious and tasteless the hours",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 497,
+      "kind": "hymn",
+      "text": "\"Within the Veil”: be this, beloved, thy portion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 498,
+      "kind": "hymn",
+      "text": "Through Thy precious body broken",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 499,
+      "kind": "hymn",
+      "text": "Marvel not that Christ in glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 500,
+      "kind": "chorus",
+      "text": "Hallelujah! Hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 500,
+      "kind": "hymn",
+      "text": "I’ve believed the true report",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 501,
+      "kind": "hymn",
+      "text": "I have a Friend so precious",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 502,
+      "kind": "chorus",
+      "text": "Touching Thee, new life is glowing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 502,
+      "kind": "hymn",
+      "text": "Savior, I by faith am touching",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 503,
+      "kind": "hymn",
+      "text": "Thou hast said Thou art the Vine, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 504,
+      "kind": "hymn",
+      "text": "Abide in Thee! in that deep love of Thine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 505,
+      "kind": "hymn",
+      "text": "You are the vine, We are the branches",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 506,
+      "kind": "chorus",
+      "text": "In the vine, in the vine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 506,
+      "kind": "hymn",
+      "text": "He’s the vine and we’re the branches",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 507,
+      "kind": "chorus",
+      "text": "Abiding in the vine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 507,
+      "kind": "hymn",
+      "text": "We’ve found the secret of living",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 508,
+      "kind": "chorus",
+      "text": "Under His wings, under His wings",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 508,
+      "kind": "hymn",
+      "text": "Under His wings I am safely abiding",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 509,
+      "kind": "chorus",
+      "text": "I’m abiding in the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 509,
+      "kind": "hymn",
+      "text": "I have learned the wondrous secret",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 510,
+      "kind": "chorus",
+      "text": "Oh, Jesus is a Rock in a weary land!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 510,
+      "kind": "hymn",
+      "text": "The Lord’s our Rock, in Him we hide",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 511,
+      "kind": "chorus",
+      "text": "Hiding in Thee",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 511,
+      "kind": "hymn",
+      "text": "Oh, safe to the Rock that is higher than I",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 512,
+      "kind": "chorus",
+      "text": "Jesus, Jesus, how I trust Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 512,
+      "kind": "hymn",
+      "text": "`Tis so sweet to trust in Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 513,
+      "kind": "chorus",
+      "text": "Trusting as the moments fly",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 513,
+      "kind": "hymn",
+      "text": "Simply trusting every day",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 514,
+      "kind": "hymn",
+      "text": "Thou whose name is called Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 515,
+      "kind": "hymn",
+      "text": "I know that my Redeemer lives",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 516,
+      "kind": "hymn",
+      "text": "I take Thy promise, Lord, in all its length",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 517,
+      "kind": "hymn",
+      "text": "All things are possible to him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 518,
+      "kind": "chorus",
+      "text": "Jesus! I am resting, resting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 518,
+      "kind": "hymn",
+      "text": "Jesus! I am resting, resting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 519,
+      "kind": "hymn",
+      "text": "My will is weak, my strength is frail",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 520,
+      "kind": "chorus",
+      "text": "On Thee my heart is resting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 520,
+      "kind": "hymn",
+      "text": "On Thee my heart is resting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 521,
+      "kind": "chorus",
+      "text": "Trust and obey",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 521,
+      "kind": "hymn",
+      "text": "When we walk with the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 522,
+      "kind": "chorus",
+      "text": "Anywhere! Anywhere!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 522,
+      "kind": "hymn",
+      "text": "Anywhere with Jesus I can safely go",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 523,
+      "kind": "chorus",
+      "text": "He leadeth me! He leadeth me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 523,
+      "kind": "hymn",
+      "text": "He leadeth me! O blessed thought",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 524,
+      "kind": "hymn",
+      "text": "God in heaven hath a treasure",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 525,
+      "kind": "chorus",
+      "text": "Oh, to be saved from myself, dear Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 525,
+      "kind": "hymn",
+      "text": "Not I, but Christ be honored, loved, exalted",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 526,
+      "kind": "hymn",
+      "text": "In God’s image we were made",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 527,
+      "kind": "chorus",
+      "text": "Lord, in nothing will we be ashamed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 527,
+      "kind": "hymn",
+      "text": "Lord, our earnest expectation",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 528,
+      "kind": "hymn",
+      "text": "When God created man on earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 529,
+      "kind": "hymn",
+      "text": "There is always something over",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 530,
+      "kind": "hymn",
+      "text": "Call Him Lord. Call Him Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 530,
+      "kind": "hymn",
+      "text": "Eat His Word, Eat His Word",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 530,
+      "kind": "hymn",
+      "text": "Jesus is reality",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 530,
+      "kind": "hymn",
+      "text": "Overcome! Overcome!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 531,
+      "kind": "hymn",
+      "text": "Out of the depths of darkness, death, and anguish",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 532,
+      "kind": "hymn",
+      "text": "Christ is grace, coming to us from the Father above",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 533,
+      "kind": "hymn",
+      "text": "God is Spirit—the nature of His Person divine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 534,
+      "kind": "hymn",
+      "text": "My God, my Portion, and my Love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 535,
+      "kind": "hymn",
+      "text": "Eternal Light! Eternal Light!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 536,
+      "kind": "hymn",
+      "text": "My home is God Himself",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 537,
+      "kind": "chorus",
+      "text": "Oh, peace of God that passeth thought",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 537,
+      "kind": "hymn",
+      "text": "My heart is resting, O my God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 538,
+      "kind": "hymn",
+      "text": "Thou sweet, beloved will of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 539,
+      "kind": "chorus",
+      "text": "Lord, I treasure the sweet flow of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 539,
+      "kind": "hymn",
+      "text": "From my spirit within flows a fountain of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 540,
+      "kind": "hymn",
+      "text": "O God, our help in ages past",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 541,
+      "kind": "chorus",
+      "text": "Hallelujah, hallelujah",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 541,
+      "kind": "hymn",
+      "text": "The cross it standeth fast",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 542,
+      "kind": "chorus",
+      "text": "Hallelujah! hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 542,
+      "kind": "hymn",
+      "text": "The cross—we all were there",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 543,
+      "kind": "chorus",
+      "text": "So I’ll cherish the old rugged cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 543,
+      "kind": "hymn",
+      "text": "On a hill far away stood an old rugged cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 544,
+      "kind": "hymn",
+      "text": "In the cross of Christ I glory",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 545,
+      "kind": "chorus",
+      "text": "Oh! it is so sweet to die with Christ",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 545,
+      "kind": "hymn",
+      "text": "I am crucified with Christ",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 546,
+      "kind": "chorus",
+      "text": "All the way to Calvary",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 546,
+      "kind": "hymn",
+      "text": "Crucified with Christ my Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 547,
+      "kind": "chorus",
+      "text": "O, Cross of Christ, I take thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 547,
+      "kind": "hymn",
+      "text": "Though Christ a thousand times",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 548,
+      "kind": "chorus",
+      "text": "Through the Cross, O Lord, I pray",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 548,
+      "kind": "hymn",
+      "text": "First the blood, and then the ointment",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 549,
+      "kind": "chorus",
+      "text": "`Tis the way of the Cross",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 549,
+      "kind": "hymn",
+      "text": "The way of the Cross means sacrifice",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 550,
+      "kind": "hymn",
+      "text": "If the path I travel",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 551,
+      "kind": "hymn",
+      "text": "Via Bethlehem we journey",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 552,
+      "kind": "hymn",
+      "text": "Hast thou no scar?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 553,
+      "kind": "chorus",
+      "text": "Each blow I suffer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 553,
+      "kind": "hymn",
+      "text": "Olives that have known no pressure",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 554,
+      "kind": "hymn",
+      "text": "`Tis my happiness below",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 555,
+      "kind": "hymn",
+      "text": "Let us contemplate the grape vine",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 556,
+      "kind": "hymn",
+      "text": "If from the right course I depart",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 557,
+      "kind": "hymn",
+      "text": "Beneath the cross of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 558,
+      "kind": "chorus",
+      "text": "In the cross, in the cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 558,
+      "kind": "hymn",
+      "text": "Jesus, keep me near the cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 559,
+      "kind": "hymn",
+      "text": "Life out of death—dear Master, is it Spoken",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 560,
+      "kind": "chorus",
+      "text": "Precious name! Oh, how sweet!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 560,
+      "kind": "hymn",
+      "text": "Take the name of Jesus with you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 561,
+      "kind": "hymn",
+      "text": "Deep down into the depths of this Thy Name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 562,
+      "kind": "hymn",
+      "text": "Not what I am, O Lord, but what Thou art",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 563,
+      "kind": "chorus",
+      "text": "Safe in the arms of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 563,
+      "kind": "hymn",
+      "text": "Safe in the arms of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 564,
+      "kind": "chorus",
+      "text": "No, never alone (\"Fear not\")",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 564,
+      "kind": "hymn",
+      "text": "\"Fear not, I am with thee\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 565,
+      "kind": "hymn",
+      "text": "God moves in a mysterious way",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 566,
+      "kind": "hymn",
+      "text": "In heav’nly love abiding",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 567,
+      "kind": "hymn",
+      "text": "In His time, in His time",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 568,
+      "kind": "chorus",
+      "text": "Hear the message from the throne",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 568,
+      "kind": "hymn",
+      "text": "Hark! a voice from heav’n proclaiming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 569,
+      "kind": "hymn",
+      "text": "He faileth not, for He is God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 570,
+      "kind": "chorus",
+      "text": "God will take care of you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 570,
+      "kind": "hymn",
+      "text": "Be not dismayed whate’er betide",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 571,
+      "kind": "hymn",
+      "text": "Be still, my soul! the Lord is on thy side",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 572,
+      "kind": "chorus",
+      "text": "O yes, He cares, I know He cares",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 572,
+      "kind": "hymn",
+      "text": "Does Jesus care when my heart is pained",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 573,
+      "kind": "chorus",
+      "text": "Jesus knows all about our struggles",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 573,
+      "kind": "hymn",
+      "text": "There’s not a Friend like, the lowly Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 574,
+      "kind": "hymn",
+      "text": "I’m a pilgrim and a stranger",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 575,
+      "kind": "hymn",
+      "text": "All the way my Savior leads me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 576,
+      "kind": "chorus",
+      "text": "I will guide thee",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 576,
+      "kind": "hymn",
+      "text": "Precious promise God doth give thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 577,
+      "kind": "chorus",
+      "text": "Then trust in God through all thy days",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 577,
+      "kind": "hymn",
+      "text": "Not now, but in the coming years",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 578,
+      "kind": "chorus",
+      "text": "Where He may lead I’ll follow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 578,
+      "kind": "hymn",
+      "text": "I know not what awaits me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 579,
+      "kind": "hymn",
+      "text": "Be still, my heart! these anxious cares",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 580,
+      "kind": "chorus",
+      "text": "Count your blessings, name them one by one",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 580,
+      "kind": "hymn",
+      "text": "When upon life’s billows you are tempest tossed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 581,
+      "kind": "hymn",
+      "text": "Day by day, and with each passing moment",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 582,
+      "kind": "hymn",
+      "text": "Through all the changing scenes of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 583,
+      "kind": "chorus",
+      "text": "Lord, I believe!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 583,
+      "kind": "hymn",
+      "text": "When sorrows and storms are besetting my track",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 584,
+      "kind": "hymn",
+      "text": "Keep up the song of faith",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 585,
+      "kind": "chorus",
+      "text": "Then rejoice evermore",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 585,
+      "kind": "hymn",
+      "text": "O let us rejoice in the Lord evermore",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 586,
+      "kind": "chorus",
+      "text": "Stayed upon Christ Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 586,
+      "kind": "hymn",
+      "text": "Like a river, glorious",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 587,
+      "kind": "hymn",
+      "text": "Peace, perfect peace, in this dark world of sin?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 588,
+      "kind": "chorus",
+      "text": "Yes, over and over and over",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 588,
+      "kind": "hymn",
+      "text": "I’ll sing of the wonderful promise",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 589,
+      "kind": "chorus",
+      "text": "But God hath promised strength for the day",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 589,
+      "kind": "hymn",
+      "text": "God hath not promised skies always blue",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 590,
+      "kind": "chorus",
+      "text": "The cross is not greater than His grace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 590,
+      "kind": "hymn",
+      "text": "The cross that He gave may be heavy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 591,
+      "kind": "hymn",
+      "text": "He giveth more grace when the burdens grow greater",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 592,
+      "kind": "hymn",
+      "text": "A little bird I am",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 593,
+      "kind": "hymn",
+      "text": "Strong are the walls around me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 594,
+      "kind": "chorus",
+      "text": "God is my hope and God is my joy",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 594,
+      "kind": "hymn",
+      "text": "Pressed out of measure, pressed beyond all length",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 595,
+      "kind": "hymn",
+      "text": "His angels His countenance always behold",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 596,
+      "kind": "hymn",
+      "text": "Why should I fear the darkest hour",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 597,
+      "kind": "hymn",
+      "text": "In the heart of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 598,
+      "kind": "hymn",
+      "text": "How good is the God we adore",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 599,
+      "kind": "hymn",
+      "text": "Praise the Savior, ye who know Him!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 600,
+      "kind": "chorus",
+      "text": "Turn your eyes upon Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 600,
+      "kind": "hymn",
+      "text": "O soul, are you weary and troubled?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 601,
+      "kind": "hymn",
+      "text": "O eyes that are weary and hearts that are sore",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 602,
+      "kind": "hymn",
+      "text": "Soldier, soldier, fighting in the world’s great strife",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 603,
+      "kind": "hymn",
+      "text": "\"Be all at rest, my soul!” Oh! blessed secret",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 604,
+      "kind": "hymn",
+      "text": "\"Consider Him,” let Christ thy pattern be",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 605,
+      "kind": "hymn",
+      "text": "Take time to be holy",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 606,
+      "kind": "chorus",
+      "text": "His power can make you what you ought to be",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 606,
+      "kind": "hymn",
+      "text": "Would you live for Jesus and be always pure and good?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 607,
+      "kind": "hymn",
+      "text": "Can you be obedient",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 608,
+      "kind": "chorus",
+      "text": "If God be for us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 608,
+      "kind": "hymn",
+      "text": "Rejoice in the Lord! Oh, let His mercy cheer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 609,
+      "kind": "chorus",
+      "text": "Giving, giving, over and over",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 609,
+      "kind": "hymn",
+      "text": "Share thy handful with the stranger",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 610,
+      "kind": "hymn",
+      "text": "Rise up, O men of God!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 611,
+      "kind": "hymn",
+      "text": "Ye sleeping souls, awake",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 612,
+      "kind": "hymn",
+      "text": "Rise, my soul, thy God directs thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 613,
+      "kind": "hymn",
+      "text": "\"On toward the goal!” Press on!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 614,
+      "kind": "chorus",
+      "text": "Pressing on! Pressing on!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 614,
+      "kind": "hymn",
+      "text": "Press on, press on toward the goal",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 615,
+      "kind": "chorus",
+      "text": "Look away! O look away!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 615,
+      "kind": "hymn",
+      "text": "There’s a race for us to run—Hallelujah",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 616,
+      "kind": "hymn",
+      "text": "\"Forward!” be our watchword",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 617,
+      "kind": "hymn",
+      "text": "Stand up! stand up for Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 618,
+      "kind": "chorus",
+      "text": "Onward, Christian soldiers!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 618,
+      "kind": "hymn",
+      "text": "Onward Christian soldiers!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 619,
+      "kind": "chorus",
+      "text": "A victor, a victor!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 619,
+      "kind": "hymn",
+      "text": "I dare not be defeated",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 620,
+      "kind": "hymn",
+      "text": "Fight the good fight with all thy might!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 621,
+      "kind": "chorus",
+      "text": "Not to the strong is the battle",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 621,
+      "kind": "hymn",
+      "text": "Conquering now and still to conquer",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 622,
+      "kind": "hymn",
+      "text": "`Tis easy when the morning",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 623,
+      "kind": "hymn",
+      "text": "To the foe my word is always, “No,\"",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 624,
+      "kind": "chorus",
+      "text": "Faith is the victory! Faith is the victory!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 624,
+      "kind": "hymn",
+      "text": "Encamped along the hills of light",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 625,
+      "kind": "hymn",
+      "text": "In the Overcomer’s Name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 626,
+      "kind": "hymn",
+      "text": "In the name of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 627,
+      "kind": "hymn",
+      "text": "We rest on Thee, our Shield and our Defender",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 628,
+      "kind": "hymn",
+      "text": "The Son of God goes forth to war",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 629,
+      "kind": "hymn",
+      "text": "A mighty Fortress is our God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 630,
+      "kind": "hymn",
+      "text": "The name of Jesus is our stand",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 631,
+      "kind": "hymn",
+      "text": "Soldiers of Christ, arise",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 632,
+      "kind": "chorus",
+      "text": "Our hands empower, Our hearts enflame!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 632,
+      "kind": "hymn",
+      "text": "O Lord, to conflict new",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 633,
+      "kind": "hymn",
+      "text": "With all the pow’r in heaven and earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 634,
+      "kind": "hymn",
+      "text": "Conflict today is fierce",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 635,
+      "kind": "chorus",
+      "text": "Hallelujah! Christ is Victor",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 635,
+      "kind": "hymn",
+      "text": "Hallelujah! Christ is Victor",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 636,
+      "kind": "hymn",
+      "text": "Charge, soldiers, charge in battle!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 637,
+      "kind": "hymn",
+      "text": "And is it so! I shall be like Thy Son?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 638,
+      "kind": "hymn",
+      "text": "\"A little while” — Our Lord shall come",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 639,
+      "kind": "chorus",
+      "text": "Glory, glory! Joy to my heart ’twill bring",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 639,
+      "kind": "hymn",
+      "text": "Jesus is coming to earth again",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 640,
+      "kind": "chorus",
+      "text": "O the crowning day is coming",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 640,
+      "kind": "hymn",
+      "text": "Our Lord is now rejected",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 641,
+      "kind": "hymn",
+      "text": "Since long ago at Bethany we parted",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 642,
+      "kind": "chorus",
+      "text": "Come Thou, come now",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 642,
+      "kind": "hymn",
+      "text": "Since Thy departure from Olivet’s Mountain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 643,
+      "kind": "hymn",
+      "text": "My King will soon come back again",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 644,
+      "kind": "chorus",
+      "text": "O Lord Jesus, how long",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 644,
+      "kind": "hymn",
+      "text": "It may be at morn when the day is awaking",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 645,
+      "kind": "chorus",
+      "text": "O Lord Jesus, Amen!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 645,
+      "kind": "hymn",
+      "text": "It may be at morn as the day we are greeting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 646,
+      "kind": "hymn",
+      "text": "Lord, Thou wilt soon appear",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 647,
+      "kind": "chorus",
+      "text": "Face to face I shall behold Him",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 647,
+      "kind": "hymn",
+      "text": "Face to face with Christ, my Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 648,
+      "kind": "chorus",
+      "text": "And I shall see Him face to face",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 648,
+      "kind": "hymn",
+      "text": "Some day the silver cord will break",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 649,
+      "kind": "hymn",
+      "text": "Midst the darkness, storm, and sorrow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 650,
+      "kind": "hymn",
+      "text": "When my blest Lord will come again",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 651,
+      "kind": "hymn",
+      "text": "Thou art coming, O my Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 652,
+      "kind": "hymn",
+      "text": "Hail to the Lord’s Anointed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 653,
+      "kind": "chorus",
+      "text": "Oh, wondrous day! Oh, glorious morning",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 653,
+      "kind": "hymn",
+      "text": "Rejoice! Rejoice! Our Bridegroom’s coming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 654,
+      "kind": "chorus",
+      "text": "Oh, can we say we are ready, brother?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 654,
+      "kind": "hymn",
+      "text": "When Jesus comes to reward His servants",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 655,
+      "kind": "chorus",
+      "text": "Be in time! Be in time!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 655,
+      "kind": "hymn",
+      "text": "Christ comes quickly for His Bride",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 656,
+      "kind": "chorus",
+      "text": "Our work of faith must grow exceedingly",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 656,
+      "kind": "hymn",
+      "text": "Our faith to God-ward must in these days spread abroad",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 657,
+      "kind": "chorus",
+      "text": "Come let us sing: Praise to our King",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 657,
+      "kind": "hymn",
+      "text": "Sing we the King who is coming to reign",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 658,
+      "kind": "hymn",
+      "text": "Hallelujah, hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 658,
+      "kind": "hymn",
+      "text": "Lo, the kingdom of the world is now the kingdom of the Lord!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 658,
+      "kind": "hymn",
+      "text": "Victory, victory, Hallelujah!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 659,
+      "kind": "hymn",
+      "text": "Our goal—the holy city with the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 660,
+      "kind": "chorus",
+      "text": "City! O city fair!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 660,
+      "kind": "hymn",
+      "text": "He looked for a city and lived in a tent",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 661,
+      "kind": "hymn",
+      "text": "Glorious things of thee are spoken",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 662,
+      "kind": "hymn",
+      "text": "How true it is no heart may comprehend",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 663,
+      "kind": "hymn",
+      "text": "There is a stream which issues forth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 664,
+      "kind": "hymn",
+      "text": "No more in earthen vessels",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 665,
+      "kind": "chorus",
+      "text": "What a wonderful Savior is Jesus",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 665,
+      "kind": "hymn",
+      "text": "Christ has a full redemption made",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 666,
+      "kind": "hymn",
+      "text": "Calling for me, for me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 666,
+      "kind": "hymn",
+      "text": "Coming for me, for me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 666,
+      "kind": "hymn",
+      "text": "Dying for me, for me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 666,
+      "kind": "hymn",
+      "text": "Jesus, my Savior, to Bethlehem came",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 666,
+      "kind": "hymn",
+      "text": "Seeking for me, for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 667,
+      "kind": "chorus",
+      "text": "Living, He loved me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 667,
+      "kind": "hymn",
+      "text": "One day when heaven was filled with His praises",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 668,
+      "kind": "chorus",
+      "text": "Sweetest note in seraph song",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 668,
+      "kind": "hymn",
+      "text": "The Great Physician now is near",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 669,
+      "kind": "hymn",
+      "text": "We have heard the joyful sound",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 670,
+      "kind": "chorus",
+      "text": "Yesterday, today, forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 670,
+      "kind": "hymn",
+      "text": "O how sweet the glorious message",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 671,
+      "kind": "chorus",
+      "text": "All the way to Calvary He went for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 671,
+      "kind": "hymn",
+      "text": "Oh, how dark the night that wrapt my spirit round!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 672,
+      "kind": "chorus",
+      "text": "Jesus paid it all",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 672,
+      "kind": "hymn",
+      "text": "I hear the Savior say",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 673,
+      "kind": "chorus",
+      "text": "At the cross, at the cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 673,
+      "kind": "hymn",
+      "text": "Alas! and did my Savior bleed? (Gospel)",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 674,
+      "kind": "hymn",
+      "text": "Why should I worry, doubt and fear?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 675,
+      "kind": "chorus",
+      "text": "Once for all—oh, sinner, receive it",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 675,
+      "kind": "hymn",
+      "text": "Free from the law—oh, happy condition!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 676,
+      "kind": "chorus",
+      "text": "It is finished!” yes, indeed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 676,
+      "kind": "hymn",
+      "text": "Nothing either great or small",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 677,
+      "kind": "chorus",
+      "text": "\"When I see the blood\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 677,
+      "kind": "hymn",
+      "text": "Christ our Redeemer died on the cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 678,
+      "kind": "hymn",
+      "text": "There is a fountain filled with blood",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 679,
+      "kind": "chorus",
+      "text": "Are you washed in the blood",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 679,
+      "kind": "hymn",
+      "text": "Have you been to Jesus for the cleansing power?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 680,
+      "kind": "chorus",
+      "text": "Oh! precious is the flow",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 680,
+      "kind": "hymn",
+      "text": "What can wash away my sin?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 681,
+      "kind": "chorus",
+      "text": "There is power, power, wonder-working power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 681,
+      "kind": "hymn",
+      "text": "Would you be free from your burden of sin?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 682,
+      "kind": "chorus",
+      "text": "The cleansing stream I see, I see",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 682,
+      "kind": "hymn",
+      "text": "O now I see the cleansing wave!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 683,
+      "kind": "chorus",
+      "text": "Precious, precious blood of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 683,
+      "kind": "hymn",
+      "text": "Precious, precious blood of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 684,
+      "kind": "hymn",
+      "text": "One there is above all others",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 685,
+      "kind": "hymn",
+      "text": "Come let us sing of a wonderful love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 686,
+      "kind": "chorus",
+      "text": "Jesus’ love, precious love",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 686,
+      "kind": "hymn",
+      "text": "There is no love like the love of Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 687,
+      "kind": "chorus",
+      "text": "Grace, grace, God’s grace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 687,
+      "kind": "hymn",
+      "text": "Marvelous grace of our loving Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 688,
+      "kind": "chorus",
+      "text": "Life! life! eternal life!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 688,
+      "kind": "hymn",
+      "text": "Under the burdens of guilt and care",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 689,
+      "kind": "chorus",
+      "text": "\"Verily, verily, I say unto you\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 689,
+      "kind": "hymn",
+      "text": "Oh, what a Savior that He died for me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 690,
+      "kind": "hymn",
+      "text": "I’ve tried in vain a thousand ways",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 691,
+      "kind": "chorus",
+      "text": "Come to the light, ’tis shining for thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 691,
+      "kind": "hymn",
+      "text": "The whole world was lost in the darkness of sin",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 692,
+      "kind": "chorus",
+      "text": "\"Ye must be born again!\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 692,
+      "kind": "hymn",
+      "text": "A ruler once came to Jesus by night",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 693,
+      "kind": "chorus",
+      "text": "Come home! come home!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 693,
+      "kind": "hymn",
+      "text": "Softly and tenderly Jesus is calling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 694,
+      "kind": "chorus",
+      "text": "Calling today!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 694,
+      "kind": "hymn",
+      "text": "Jesus is tenderly calling thee home",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 695,
+      "kind": "chorus",
+      "text": "Only trust Him!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 695,
+      "kind": "hymn",
+      "text": "Come, every soul by sin oppressed",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 696,
+      "kind": "chorus",
+      "text": "\"Whosoever will!\"",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 696,
+      "kind": "hymn",
+      "text": "\"Whosoever heareth!” shout, shout the sound!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 697,
+      "kind": "chorus",
+      "text": "Room for Jesus, King of glory!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 697,
+      "kind": "hymn",
+      "text": "Have you any room for Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 698,
+      "kind": "chorus",
+      "text": "Just now, your doubtings give over",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 698,
+      "kind": "hymn",
+      "text": "If you are tired of the load of your sin",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 699,
+      "kind": "chorus",
+      "text": "Let Him in!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 699,
+      "kind": "hymn",
+      "text": "Hark, the Savior’s knocking, knocking",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 700,
+      "kind": "hymn",
+      "text": "\"Almost persuaded” now to believe",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 701,
+      "kind": "chorus",
+      "text": "Be in time! Be in time!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 701,
+      "kind": "hymn",
+      "text": "Life at best is very brief",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 702,
+      "kind": "hymn",
+      "text": "Just as I am, without one plea",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 703,
+      "kind": "hymn",
+      "text": "Out of my bondage, sorrow, and night",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 704,
+      "kind": "chorus",
+      "text": "I am coming, Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 704,
+      "kind": "hymn",
+      "text": "I hear Thy welcome voice",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 705,
+      "kind": "chorus",
+      "text": "Coming home, coming home",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 705,
+      "kind": "hymn",
+      "text": "I’ve wandered far away from God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 706,
+      "kind": "chorus",
+      "text": "Hear the invitation",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 706,
+      "kind": "hymn",
+      "text": "\"All things are ready,” come to the feast!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 707,
+      "kind": "hymn",
+      "text": "Jesus, lover of my soul",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 708,
+      "kind": "hymn",
+      "text": "Rock of Ages, cleft for me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 709,
+      "kind": "hymn",
+      "text": "And my heart shall rejoice, Lord Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 709,
+      "kind": "hymn",
+      "text": "Oh, come to my heart, Lord Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 709,
+      "kind": "hymn",
+      "text": "Thou didst leave Thy throne and Thy kingly crown",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 710,
+      "kind": "chorus",
+      "text": "Into my heart",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 710,
+      "kind": "hymn",
+      "text": "Come into my heart, O Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 711,
+      "kind": "hymn",
+      "text": "I am trusting Thee, Lord Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 712,
+      "kind": "chorus",
+      "text": "Jesus, I will trust Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 712,
+      "kind": "hymn",
+      "text": "Jesus, I will trust Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 713,
+      "kind": "chorus",
+      "text": "I love to tell the story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 713,
+      "kind": "hymn",
+      "text": "I love to tell the story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 714,
+      "kind": "chorus",
+      "text": "Jesus breaks every fetter!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 714,
+      "kind": "hymn",
+      "text": "O how great His salvation!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 715,
+      "kind": "chorus",
+      "text": "Glory to His name",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 715,
+      "kind": "hymn",
+      "text": "Down at the cross where my Savior died",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 716,
+      "kind": "chorus",
+      "text": "They were borne on the cross",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 716,
+      "kind": "hymn",
+      "text": "There was One who was willing to die in my stead",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 717,
+      "kind": "chorus",
+      "text": "Oh, the love that sought me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 717,
+      "kind": "hymn",
+      "text": "In tenderness He sought me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 718,
+      "kind": "chorus",
+      "text": "Love lifted me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 718,
+      "kind": "hymn",
+      "text": "I was sinking deep in sin",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 719,
+      "kind": "chorus",
+      "text": "Sing it over and over again",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 719,
+      "kind": "hymn",
+      "text": "Sinners Jesus will receive",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 720,
+      "kind": "hymn",
+      "text": "There were ninety and nine that safely lay",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 721,
+      "kind": "chorus",
+      "text": "Tell me the old, old story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 721,
+      "kind": "hymn",
+      "text": "Tell me the old, old story",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 722,
+      "kind": "hymn",
+      "text": "If I gained the world, but lost the Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 723,
+      "kind": "hymn",
+      "text": "Ours is a fellowship in the gospel",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 724,
+      "kind": "hymn",
+      "text": "Sound ye the trumpet-call",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 725,
+      "kind": "chorus",
+      "text": "Publish glad tidings, tidings of peace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 725,
+      "kind": "hymn",
+      "text": "Christians, make haste, your mission high fulfilling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 726,
+      "kind": "hymn",
+      "text": "He shall reign o’er all the earth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 727,
+      "kind": "chorus",
+      "text": "Rescue the perishing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 727,
+      "kind": "hymn",
+      "text": "Rescue the perishing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 728,
+      "kind": "chorus",
+      "text": "\"All pow’r is given unto me\"",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 728,
+      "kind": "hymn",
+      "text": "Far, far away, in heathen darkness dwelling",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 729,
+      "kind": "chorus",
+      "text": "They’re passing, passing fast away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 729,
+      "kind": "hymn",
+      "text": "A hundred thousand souls a day are passing",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 730,
+      "kind": "hymn",
+      "text": "Send Thou, O Lord, to every place",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 731,
+      "kind": "hymn",
+      "text": "Jesus and shall it ever be?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 732,
+      "kind": "hymn",
+      "text": "Out in the darkness",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 733,
+      "kind": "chorus",
+      "text": "Must I go, and empty-handed?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 733,
+      "kind": "hymn",
+      "text": "\"Must I go, and empty-handed,\"",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 734,
+      "kind": "chorus",
+      "text": "Thou wilt show me the path of life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 734,
+      "kind": "hymn",
+      "text": "The Lord is the portion of my inheritance",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 735,
+      "kind": "hymn",
+      "text": "As for me, I will behold Thy face",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 736,
+      "kind": "hymn",
+      "text": "I will call upon the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 737,
+      "kind": "hymn",
+      "text": "More to be desired are they than gold",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 737,
+      "kind": "hymn",
+      "text": "Moreover by them is Thy servant warned",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 737,
+      "kind": "hymn",
+      "text": "The law of the Lord is perfect",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 738,
+      "kind": "hymn",
+      "text": "Unto Thee, O Lord, do I lift up my soul",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 739,
+      "kind": "hymn",
+      "text": "Thou hast turned my mourning into dancing",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 740,
+      "kind": "hymn",
+      "text": "Great is the Lord, and greatly to be praised",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 741,
+      "kind": "hymn",
+      "text": "Lord, I am continually with Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 742,
+      "kind": "hymn",
+      "text": "I will sing of the mercies of the Lord forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 743,
+      "kind": "hymn",
+      "text": "Bless the Lord, O my soul",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 744,
+      "kind": "hymn",
+      "text": "What shall I give unto the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 745,
+      "kind": "hymn",
+      "text": "When the Lord turned again the captivity of Zion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 746,
+      "kind": "hymn",
+      "text": "This is My rest forever",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 747,
+      "kind": "hymn",
+      "text": "Behold how good and how pleasant it is",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 748,
+      "kind": "hymn",
+      "text": "Praise ye the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 749,
+      "kind": "hymn",
+      "text": "Emmanuel, Emmanuel",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 750,
+      "kind": "chorus",
+      "text": "Call upon His name, declare His doings among the people",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 750,
+      "kind": "hymn",
+      "text": "Therefore with joy shall ye draw water",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 751,
+      "kind": "hymn",
+      "text": "His Name is Wonderful",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 752,
+      "kind": "hymn",
+      "text": "Thou wilt keep him in perfect peace",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 753,
+      "kind": "hymn",
+      "text": "Therefore the redeemed of the Lord shall return",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 754,
+      "kind": "hymn",
+      "text": "Therefore, they shall come and sing in the height of Zion",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 755,
+      "kind": "hymn",
+      "text": "Seek ye first the Kingdom of God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 756,
+      "kind": "hymn",
+      "text": "My peace I give unto you",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 757,
+      "kind": "hymn",
+      "text": "For God so loved the world",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 758,
+      "kind": "hymn",
+      "text": "A new commandment",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 759,
+      "kind": "hymn",
+      "text": "Whenever the heart shall turn to the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 760,
+      "kind": "hymn",
+      "text": "Unto Him be glory in the Church",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 761,
+      "kind": "hymn",
+      "text": "God is light, and in Him there is no darkness at all!",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 762,
+      "kind": "hymn",
+      "text": "Behold, what manner of love the Father has given unto us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 763,
+      "kind": "hymn",
+      "text": "Now is come salvation and strength",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 764,
+      "kind": "hymn",
+      "text": "Hallelujah, for the Lord our God, the Almighty reigns!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 765,
+      "kind": "hymn",
+      "text": "Of all the gifts Thy love bestows",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 768,
+      "kind": "hymn",
+      "text": "O God and Father, we our praises bring",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 769,
+      "kind": "hymn",
+      "text": "What grace, O Lord, and beauty shone",
+      "reviewStatus": "No English"
+    },
+    {
+      "hymnNumber": 770,
+      "kind": "hymn",
+      "text": "Praise Him forevermore",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 772,
+      "kind": "hymn",
+      "text": "Glory, honor, praise and power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 775,
+      "kind": "chorus",
+      "text": "Lord, like the pretty henna-flower",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 775,
+      "kind": "hymn",
+      "text": "Lord Jesus Christ, our heart feels sweet",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 776,
+      "kind": "chorus",
+      "text": "Come, oh Lord, Great Spirit, come!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 776,
+      "kind": "hymn",
+      "text": "Come, Lord, as the Spirit come",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 777,
+      "kind": "chorus",
+      "text": "A little talk with Jesus makes it right",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 777,
+      "kind": "hymn",
+      "text": "While fighting for my Savior here",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 779,
+      "kind": "hymn",
+      "text": "Behold, how good, how pleasant ’tis",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 782,
+      "kind": "hymn",
+      "text": "In death’s waters I am buried",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 783,
+      "kind": "hymn",
+      "text": "Lord, when by baptism we confess",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 784,
+      "kind": "hymn",
+      "text": "Already dead! And buried too!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 788,
+      "kind": "hymn",
+      "text": "Work, for the night is coming",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 789,
+      "kind": "hymn",
+      "text": "Lord, in Thy presence we are met",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 790,
+      "kind": "hymn",
+      "text": "A mind at perfect peace with God",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 794,
+      "kind": "chorus",
+      "text": "Shout of His praise, let the heart resound",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 794,
+      "kind": "hymn",
+      "text": "Wonderful grand new song of the Lamb",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 795,
+      "kind": "chorus",
+      "text": "Rejoice! His grace is free!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 795,
+      "kind": "hymn",
+      "text": "Come, ye that love the Lord",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 796,
+      "kind": "chorus",
+      "text": "Lord Jesus, blessed Savior",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 796,
+      "kind": "hymn",
+      "text": "If Thou shouldst take my love away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 797,
+      "kind": "chorus",
+      "text": "Hold Thou my hand, Lord Jesus",
+      "reviewStatus": "Need work"
+    },
+    {
+      "hymnNumber": 797,
+      "kind": "hymn",
+      "text": "Thy way, not mine, O Lord",
+      "reviewStatus": "Need work"
+    },
+    {
+      "hymnNumber": 800,
+      "kind": "hymn",
+      "text": "Father, I know that all my life is portioned out for me",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 801,
+      "kind": "hymn",
+      "text": "Jesus, cast a look on me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 802,
+      "kind": "chorus",
+      "text": "Captivated by His beauty",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 802,
+      "kind": "hymn",
+      "text": "Hast thou heard Him, seen Him, known Him?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 804,
+      "kind": "hymn",
+      "text": "How can I ever stay away",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 805,
+      "kind": "hymn",
+      "text": "Lord, here I take my cross now to follow Thee",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 806,
+      "kind": "hymn",
+      "text": "He is most dear to me",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 807,
+      "kind": "chorus",
+      "text": "He is so rich, He is so full",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 807,
+      "kind": "hymn",
+      "text": "Give up the world, Christ to obtain",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 809,
+      "kind": "hymn",
+      "text": "The Lord my shepherd is",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 810,
+      "kind": "hymn",
+      "text": "Thy name is sweet as ointment poured forth",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 811,
+      "kind": "hymn",
+      "text": "Sun of my soul, Thou Savior dear",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 813,
+      "kind": "chorus",
+      "text": "Step by step, step by step",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 813,
+      "kind": "hymn",
+      "text": "`Tis so sweet to walk with Jesus",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 814,
+      "kind": "hymn",
+      "text": "Oh, how the thought of God attracts",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 816,
+      "kind": "chorus",
+      "text": "If no death, no life",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 816,
+      "kind": "hymn",
+      "text": "If I’d know Christ’s risen power",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 818,
+      "kind": "chorus",
+      "text": "Thou thinkest, Lord, of me!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 818,
+      "kind": "hymn",
+      "text": "Amid the trials that I meet",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 819,
+      "kind": "chorus",
+      "text": "He will hold me fast",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 819,
+      "kind": "hymn",
+      "text": "When I fear my faith will fail",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 822,
+      "kind": "chorus",
+      "text": "More and more, more and more",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 822,
+      "kind": "hymn",
+      "text": "Have you felt the Father’s love?",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 823,
+      "kind": "chorus",
+      "text": "Lord of all hope, O how sweet is Thy voice",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 823,
+      "kind": "hymn",
+      "text": "Fresh as the dew of the morning",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 824,
+      "kind": "hymn",
+      "text": "Live in the light of life",
+      "reviewStatus": "Need work"
+    },
+    {
+      "hymnNumber": 828,
+      "kind": "chorus",
+      "text": "Glorious hope! Christ will return!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 828,
+      "kind": "hymn",
+      "text": "O hope of glory, our Christ will return!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 835,
+      "kind": "chorus",
+      "text": "There’ll be singing, there’ll be shouting",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 835,
+      "kind": "hymn",
+      "text": "When the toils of life are over",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 836,
+      "kind": "hymn",
+      "text": "Merciful and loving",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 837,
+      "kind": "chorus",
+      "text": "Christ Jesus came for us",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 837,
+      "kind": "hymn",
+      "text": "Christ has become one with sinners",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 838,
+      "kind": "chorus",
+      "text": "You need Jesus! You need Jesus!",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 838,
+      "kind": "hymn",
+      "text": "Christ the Savior is just the One you need",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 840,
+      "kind": "hymn",
+      "text": "There were ninety and nine that safely lay",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 841,
+      "kind": "hymn",
+      "text": "I hear my risen Savior say",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 844,
+      "kind": "chorus",
+      "text": "Come, and welcome",
+      "reviewStatus": "Corrected"
+    },
+    {
+      "hymnNumber": 844,
+      "kind": "hymn",
+      "text": "Jesus lingers still: ’tis for you He waits",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 845,
+      "kind": "chorus",
+      "text": "O why not tonight?",
+      "reviewStatus": "Need work"
+    },
+    {
+      "hymnNumber": 845,
+      "kind": "hymn",
+      "text": "O do not let the Word depart",
+      "reviewStatus": "Need work"
+    },
+    {
+      "hymnNumber": 847,
+      "kind": "chorus",
+      "text": "Bringing in the sheaves, brining in the sheaves",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 847,
+      "kind": "hymn",
+      "text": "Sowing in the morning, sowing seeds of kindness",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 848,
+      "kind": "chorus",
+      "text": "For you I am praying",
+      "reviewStatus": "Approved"
+    },
+    {
+      "hymnNumber": 848,
+      "kind": "hymn",
+      "text": "I have a Savior, He’s pleading in glory",
+      "reviewStatus": "Approved"
+    }
+  ]
+}
