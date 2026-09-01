@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hymn MusicXML Workbench</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="page-shell topbar-inner">
+        <div><p class="eyebrow">Hymn Play · First working version</p><h1>MusicXML Correction &amp; Lyric Workbench</h1></div>
+        <div class="privacy">Runs locally · files stay on this computer</div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="load-panel card">
+        <div>
+          <p class="step">Step 1</p>
+          <h2>Open a MusicXML file</h2>
+          <p>Correct the melody, inspect jianpu by measure, and align Chinese and English lyrics.</p>
+        </div>
+        <div class="load-actions"><label class="file-button">Choose MusicXML<input id="file-input" type="file" accept=".musicxml,.xml,application/xml" /></label><button id="start-entry-button" class="secondary">Enter Jianpu directly</button></div>
+        <div id="file-summary" class="summary">No score loaded</div>
+      </section>
+
+      <section id="editor" class="editor hidden">
+        <aside class="sidebar">
+          <section class="card direct-entry">
+            <p class="step">Step 1A</p><h2>Enter Jianpu</h2>
+            <div class="hymn-picker"><label>Hymn number<input id="hymn-number" type="number" min="1" max="848" value="705" list="hymn-number-list" /></label><button id="load-hymn-button">Load hymn</button></div>
+            <datalist id="hymn-number-list"></datalist>
+            <p id="hymn-title" class="hint">Choose any hymn from 1 through 848.</p>
+            <label>Verse and assigned chorus<select id="hymn-verse"><option value="1">Verse 1</option></select></label>
+            <div id="jianpu-entry-controls">
+            <div id="key-signature-picker" class="key-signature-picker">
+              <strong>Match the printed key signature</strong>
+              <div class="key-picker-toolbar" role="group" aria-label="Key-signature symbol">
+                <button type="button" data-key-kind="flat" aria-pressed="true">♭ Flats</button>
+                <button type="button" data-key-kind="sharp" aria-pressed="false">♯ Sharps</button>
+                <button type="button" id="clear-key-signature">Clear</button>
+              </div>
+              <p class="hint">Choose ♭ or ♯. Move either staff to its lower, middle, or upper group, then click the exact line or space. To remove a symbol, click it to highlight it and press Delete (Windows) or Delete/Backspace ⌫ (macOS).</p>
+              <div class="key-staff" data-clef="treble">
+                <div class="key-staff-heading"><span>Treble</span><span class="key-register-label">Middle group</span></div>
+                <div class="key-staff-window"><div class="key-register-controls"><button type="button" data-register-up aria-label="Show the higher treble staff group">▲</button><button type="button" data-register-down aria-label="Show the lower treble staff group">▼</button></div><svg viewBox="0 0 260 96" role="img" aria-label="Clickable treble staff lines and spaces"></svg></div>
+              </div>
+              <div class="key-staff" data-clef="bass">
+                <div class="key-staff-heading"><span>Bass</span><span class="key-register-label">Middle group</span></div>
+                <div class="key-staff-window"><div class="key-register-controls"><button type="button" data-register-up aria-label="Show the higher bass staff group">▲</button><button type="button" data-register-down aria-label="Show the lower bass staff group">▼</button></div><svg viewBox="0 0 260 96" role="img" aria-label="Clickable bass staff lines and spaces"></svg></div>
+              </div>
+              <p id="key-position-readout" class="hint" aria-live="polite">No symbols selected.</p>
+              <button type="button" id="finish-key-signature" class="secondary">Done</button>
+            </div>
+            <div class="score-basics">
+              <label>Generated key signature<input id="entry-key-display" type="text" value="Not generated yet" readonly aria-readonly="true" /><input id="entry-key" type="hidden" value="" /></label>
+              <label>Beats/measure<input id="entry-beats" type="number" min="1" max="12" value="4" /></label>
+              <label>Time-signature beat unit<select id="entry-beat-type"><option value="2">Half note</option><option value="4" selected>Quarter note</option><option value="8">Eighth note</option><option value="16">Sixteenth note</option></select></label><span aria-hidden="true"></span>
+              <label>Pickup note value<select id="entry-pickup-type"><option value="4">Whole note</option><option value="2">Half note</option><option value="1" selected>Quarter note</option><option value="0.5">Eighth note</option><option value="0.25">Sixteenth note</option></select></label>
+              <label>Pickup count<input id="entry-pickup-count" type="number" min="0" max="12" step="1" value="0" /></label>
+              <label>Tempo marking<select id="entry-tempo-text"><option value="" selected>Not printed / unknown</option><option>Grave</option><option>Largo</option><option>Lento</option><option>Adagio</option><option>Andante</option><option>Moderato</option><option>Allegretto</option><option>Allegro</option><option>Vivace</option><option>Presto</option><option>Prestissimo</option></select></label>
+              <label>Quarter-note BPM<input id="entry-tempo" type="number" min="20" max="300" value="" placeholder="Optional" /></label>
+            </div>
+            <label>Numeric notation<textarea id="jianpu-input" rows="5" wrap="soft" placeholder="5|3311|6/16/5·0/|..."></textarea></label>
+            <p class="hint"><code>|</code> measure · <code>@</code> new system (after <code>|</code>) · <code>||</code> verse stop · <code>|:</code>/<code>:|</code> repeat · <code>|]</code> end · <code>/</code> half-beat · <code>//</code> quarter-beat · <code>(4/3/)</code> connected underline · <code>s(6/·1)</code> slur · <code>#4</code>/<code>♯4</code> sharp · <code>b7</code>/<code>♭7</code> flat · <code>·</code> or <code>*</code> duration dot · <code>-</code> one-beat prolongation · <code>0</code> pause.</p>
+            <button id="apply-jianpu-button" class="primary">Update notation preview from Jianpu</button>
+            </div>
+          </section>
+          <section class="card token-editor">
+            <p class="step">Step 2</p><h2>Prepare lyrics</h2>
+            <div class="language-tabs" role="tablist">
+              <button class="language-tab active" data-language="1">中文</button>
+              <button class="language-tab" data-language="2">English</button>
+            </div>
+            <label id="zh-input-label">Chinese lyrics<textarea id="zh-input" rows="5" placeholder="每個漢字會成為一個標記"></textarea></label>
+            <label id="en-input-label" class="hidden">English lyrics<textarea id="en-input" rows="5" placeholder="Separate sung syllables with hyphens: lift-ed"></textarea></label>
+            <section id="staff-entry-palette" class="staff-entry-palette hidden" aria-label="SATB staff entry palette">
+              <strong>Staff notation palette</strong>
+              <button id="generate-soprano-button" class="primary">Generate Soprano from corrected Jianpu</button>
+              <div class="staff-palette-grid">
+                <label>Voice<select id="staff-voice"><option value="S">Soprano · treble</option><option value="A">Alto · treble</option><option value="T">Tenor · bass</option><option value="B">Bass · bass</option></select></label>
+                <label>Treble staff group<select id="staff-treble-register"><option value="-1">Lower group</option><option value="0" selected>Center group</option><option value="1">Upper group</option></select></label>
+                <label>Bass staff group<select id="staff-bass-register"><option value="-1">Lower group</option><option value="0" selected>Center group</option><option value="1">Upper group</option></select></label>
+                <label>Action<select id="staff-action"><option value="note">♩ Add note</option><option value="rest">𝄽 Add rest</option><option value="erase">⌫ Erase position</option></select></label>
+                <label>Note value<select id="staff-duration"><option value="4">𝅝 Whole note</option><option value="2">𝅗𝅥 Half note</option><option value="1" selected>♩ Quarter note</option><option value="0.5">♪ Eighth note</option><option value="0.25">♬ Sixteenth note</option></select></label>
+                <label>Accidental<select id="staff-accidental"><option value="0" selected>♮ Natural / key signature</option><option value="1">♯ Sharp</option><option value="-1">♭ Flat</option></select></label>
+              </div>
+              <div class="staff-operation-row">
+                <label>Selected-note operation<select id="staff-operation"><option value="delete">⌫ Delete</option><option value="split">⑂ Split equally</option><option value="merge-previous">⇤ Merge previous</option><option value="merge-next">⇥ Merge next</option><option value="step-up">↑ Next staff space/line</option><option value="step-down">↓ Previous staff space/line</option><option value="semitone-up">♯ Raise semitone</option><option value="semitone-down">♭ Lower semitone</option><option value="octave-up">↑8 Raise octave</option><option value="octave-down">↓8 Lower octave</option><option value="stem-auto">↕ Stem automatic</option><option value="stem-up">↑ Stem upward</option><option value="stem-down">↓ Stem downward</option></select></label>
+                <button id="apply-staff-operation" class="secondary">Apply to selected note</button>
+              </div>
+              <div class="staff-operation-row" role="group" aria-label="Staff beaming operations">
+                <button id="beam-staff-notes" class="secondary" type="button">Beam Notes</button>
+                <button id="unbeam-staff-notes" class="secondary" type="button">Remove Beam</button>
+              </div>
+              <p id="selected-staff-note" class="hint">No staff note selected.</p>
+              <button id="prepare-english-button" class="secondary">Prepare English syllables</button>
+              <p class="hint">Choose a voice and symbol, then click its staff. Drag an existing note vertically to another line/space or horizontally to another beat. Select a note for split, merge, pitch, octave, stem, or delete operations. For a shared beam, choose Beam Notes, then click the first and last short note in one voice and measure. Click a Soprano note after selecting an English token to assign that syllable.</p>
+            </section>
+            <p class="hint">Select a token in this palette, then select its jianpu note. The selection clears after one assignment so later note clicks cannot replace lyrics accidentally. Assigned tokens show a checkmark.</p>
+            <div id="token-palette" class="token-palette"></div>
+          </section>
+          <section class="card actions">
+            <p class="step">Step 4</p><h2>Check and save</h2>
+            <div id="validation-summary" class="validation-summary">Open a score to validate it.</div>
+            <button id="save-button" class="primary">Save working copy</button>
+            <button id="export-button" class="primary">Export revised MusicXML</button>
+            <button id="export-review-button" class="secondary">Export alignment JSON</button>
+            <p id="status" class="status" role="status"></p>
+          </section>
+        </aside>
+
+        <section class="workspace card">
+          <div class="workspace-heading">
+            <div><p class="step">Step 3</p><h2>Assign lyrics to jianpu</h2></div>
+            <div class="legend"><span><i class="underline"></i> short note</span><span>“-” sustained note</span><span id="key-label">1 = —</span></div>
+          </div>
+          <p class="instructions">Select a note to edit it. Select a lyric token and then choose a note to align it. Jianpu octave dots use the key tonic nearest the melody's normal register; they do not transpose the XML.</p>
+          <div class="layout-controls" aria-label="Notation spacing controls">
+            <label>Measures per line <select id="measures-per-line"><option value="auto">Automatic</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>
+            <label>All measure windows <input id="all-measure-width-slider" type="range" min="120" max="500" step="1" value="320" /><output id="all-measure-width-value">Default</output></label>
+            <label>Default measure width <input id="measure-width-slider" type="range" min="120" max="640" step="10" value="320" /><output id="measure-width-value">320 px</output></label>
+            <label>Minimum symbol space <input id="symbol-width-slider" type="range" min="0" max="100" step="2" value="56" /><output id="symbol-width-value">56 px</output></label>
+            <button id="reset-spacing-button">Reset spacing</button>
+          </div>
+          <p class="resize-hint">Drag the handle at the lower-right corner of this display to enlarge or shrink the notation workspace.</p>
+          <div class="sticky-edit-controls">
+          <section id="note-inspector" class="note-inspector hidden" aria-live="polite">
+            <div><strong id="selected-note-label">No note selected</strong><small id="selected-note-detail"></small></div>
+            <div class="note-controls">
+              <label>Length<select id="duration-select"><option value="0.25">1/16</option><option value="0.5">1/8</option><option value="0.75">dotted 1/8</option><option value="1">1/4</option><option value="1.5">dotted 1/4</option><option value="2">1/2</option><option value="3">dotted 1/2</option><option value="4">whole</option></select></label>
+              <label>Pause before<select id="rest-duration-select"><option value="0.25">1/4 beat</option><option value="0.5" selected>1/2 beat</option><option value="1">1 beat</option><option value="1.5">1 1/2 beats</option><option value="2">2 beats</option><option value="3">3 beats</option><option value="4">4 beats</option></select></label>
+              <button id="split-with-rest-button" title="Shorten the selected note and use that time for a pause immediately after it">Add 0 after note (keep 4/4)</button>
+              <button id="insert-rest-button" title="Insert a numeric 0 pause before the selected note, adding time to the measure">Insert 0 before (adds time)</button>
+              <button id="continuation-to-rest-button" disabled title="Replace the selected sustain mark or duration dot with a pause of the same length">Change selected sustain to 0</button>
+              <label>Connector<select id="connector-span-select"><option value="1">Next 1 note</option><option value="2">Next 2 notes</option><option value="3">Next 3 notes</option><option value="4">Next 4 notes</option><option value="5">Next 5 notes</option><option value="6">Next 6 notes</option><option value="8">Next 8 notes</option></select></label>
+              <button id="tie-button" title="Draw a MusicXML slur from this note through the selected number of following notes">Add connector</button>
+              <span id="first-note-position-controls" class="first-note-position-controls hidden" role="group" aria-label="First note position">
+                <strong id="first-note-position-value">First-note position: centered</strong>
+                <button id="move-first-note-left" type="button" title="Move the first note left and release more room for later notes">← Move left</button>
+                <button id="center-first-note" type="button">Center</button>
+                <button id="move-first-note-right" type="button" title="Move the first note right">Move right →</button>
+              </span>
+            </div>
+          </section>
+          <section class="symbol-command-bar" aria-label="Generic numeric notation operation">
+            <label>Layer<select id="operation-layer"><option value="notation">Numeric notation</option><option value="1">Chinese lyrics</option><option value="2">English lyrics</option></select></label>
+            <label>Operation<select id="symbol-operation"><option value="insert">Insert</option><option value="replace">Replace</option><option value="remove">Remove</option><option value="split">Split current</option><option value="merge-previous">Merge previous</option><option value="merge-next">Merge next</option><option value="pitch-down">Lower semitone</option><option value="pitch-up">Raise semitone</option><option value="octave-down">Lower octave</option><option value="octave-up">Raise octave</option><option value="shift-left">Shift left</option><option value="shift-right">Shift right</option></select></label>
+            <label>Target<select id="symbol-target"><option value="previous">Previous symbol</option><option value="current" selected>Current symbol</option><option value="next">Next symbol</option></select></label>
+            <label>Symbol<select id="symbol-value"><option value="0">0 (pause)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="sustain">− (prolongation)</option><option value="dot">· (duration dot)</option><option value="double-bar">|| (section/verse barline)</option><option value="repeat-start">|: (repeat begins)</option><option value="repeat-end">:| (repeat ends)</option><option value="final-bar">|] (final barline)</option></select></label>
+            <label id="lyric-operand-label" class="hidden">Lyric operand<input id="lyric-operand" type="text" maxlength="40" placeholder="Character or syllable" /></label>
+            <button id="apply-symbol-operation" class="primary">Apply operation</button>
+            <div class="command-history" aria-label="Edit history">
+              <button id="workspace-undo-button" disabled title="Undo (Ctrl/Cmd+Z)">↶ Undo</button>
+              <button id="workspace-redo-button" disabled title="Redo (Ctrl/Cmd+Shift+Z)">↷ Redo</button>
+            </div>
+          </section>
+          </div>
+          <div class="score-viewport" tabindex="0" role="region" aria-label="Scrollable measure editor">
+            <div id="score-grid" class="score-grid"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

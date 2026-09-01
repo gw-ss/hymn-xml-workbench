@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1787080646798,
+      "tag": "0000_low_tarot",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787081249181,
+      "tag": "0001_crazy_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787086800000,
+      "tag": "0002_canonical_hymn_titles_and_lyrics",
+      "breakpoints": true
+    }
+  ]
+}
