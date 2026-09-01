@@ -68,6 +68,89 @@ export function chooseStaffBeamRange(notes, startId, endId) {
   return { members, error: '' };
 }
 
+export function staffBeamEndpointYs(noteYs, stemDown, stemLength = 25, maxSlope = 10) {
+  const values = noteYs.map(Number).filter(Number.isFinite);
+  if (!values.length) return { start: 0, end: 0 };
+  const direction = stemDown ? 1 : -1;
+  const start = values[0] + direction * stemLength;
+  const naturalEnd = values.at(-1) + direction * stemLength;
+  const slope = Math.max(-Math.abs(maxSlope), Math.min(Math.abs(maxSlope), naturalEnd - start));
+  return { start, end: start + slope };
+}
+
+export function combineCompatibleStaffBeamGroups(groups) {
+  const buckets = new Map();
+  for (const group of Array.isArray(groups) ? groups : []) {
+    const members = Array.isArray(group.members) ? group.members.toSorted((a, b) => Number(a.onset) - Number(b.onset)) : [];
+    if (!group.id || members.length < 2 || !['up', 'down'].includes(group.direction)) continue;
+    const rhythm = members.map(note => `${Number(note.onset).toFixed(6)}:${Number(note.duration).toFixed(6)}`).join('|');
+    const key = `${group.clef || ''}:${group.direction}:${rhythm}`;
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push({ ...group, members });
+  }
+  return [...buckets.entries()].map(([key, compatible]) => {
+    const direction = compatible[0].direction;
+    const averageY = group => group.members.reduce((sum, note) => sum + Number(note.y), 0) / group.members.length;
+    const reference = compatible.toSorted((a, b) => direction === 'up' ? averageY(a) - averageY(b) : averageY(b) - averageY(a))[0];
+    return {
+      key,
+      clef: reference.clef,
+      direction,
+      groupIds: compatible.map(group => group.id),
+      referenceGroupId: reference.id,
+      members: reference.members,
+      beamEnds: staffBeamEndpointYs(reference.members.map(note => note.y), direction === 'down'),
+      shared: compatible.length > 1,
+    };
+  });
+}
+
+export function assessPhotoBeamDirections(groups, { warningThreshold = .8, rejectionThreshold = .55 } = {}) {
+  const items = Array.isArray(groups) ? groups : [];
+  const reasons = [], results = [];
+  if (!items.length) return { decision: 'reject', reasons: ['No recognizable beam groups were found in the photo.'], groups: [] };
+  for (const group of items) {
+    const id = String(group.id || 'unnamed beam group'), photoDirection = group.photoDirection, renderedDirection = group.renderedDirection;
+    const confidence = Number(group.confidence);
+    let status = 'accept', reason = '';
+    if (!['up', 'down'].includes(photoDirection)) {
+      status = 'reject'; reason = `${id}: the photo beam side could not be determined.`;
+    } else if (!['up', 'down'].includes(renderedDirection)) {
+      status = 'reject'; reason = `${id}: the rendered beam has no explicit up/down direction.`;
+    } else if (!Number.isFinite(confidence) || confidence < rejectionThreshold) {
+      status = 'reject'; reason = `${id}: photo clarity is too low to determine the beam side reliably.`;
+    } else if (photoDirection !== renderedDirection) {
+      status = 'reject'; reason = `${id}: rendered ${renderedDirection}, but the photo indicates ${photoDirection}.`;
+    } else if (confidence < warningThreshold) {
+      status = 'warning'; reason = `${id}: beam side matches, but the photo is unclear and needs human review.`;
+    }
+    if (reason) reasons.push(reason);
+    results.push({ id, photoDirection, renderedDirection, confidence, status, reason });
+  }
+  const decision = results.some(result => result.status === 'reject') ? 'reject' : results.some(result => result.status === 'warning') ? 'warning' : 'accept';
+  return { decision, reasons, groups: results };
+}
+
+export function normalizePhotoConflicts(conflicts) {
+  if (!Array.isArray(conflicts)) return [];
+  return conflicts.filter(conflict => conflict && Number.isFinite(Number(conflict.measure))).map((conflict, index) => ({
+    id: String(conflict.id || `photo-conflict-${index + 1}`),
+    measure: Number(conflict.measure),
+    voice: ['S', 'A', 'T', 'B'].includes(conflict.voice) ? conflict.voice : null,
+    onset: Number.isFinite(Number(conflict.onset)) ? Number(conflict.onset) : null,
+    noteId: conflict.noteId ? String(conflict.noteId) : null,
+    ocrValue: String(conflict.ocrValue || 'Unclear'),
+    inferredValue: String(conflict.inferredValue || 'No suggestion'),
+    confidence: Number.isFinite(Number(conflict.confidence)) ? Number(conflict.confidence) : null,
+    reason: String(conflict.reason || 'The recognized item conflicts with the verification result.'),
+    resolution: ['confirmed-photo', 'corrected'].includes(conflict.resolution) ? conflict.resolution : null,
+  }));
+}
+
+export function unresolvedPhotoConflicts(conflicts, measure = null) {
+  return normalizePhotoConflicts(conflicts).filter(conflict => !conflict.resolution && (measure === null || conflict.measure === Number(measure)));
+}
+
 export function clampMeasureWidth(width) {
   return Math.max(120, Math.min(900, Math.round(Number(width) || 0)));
 }

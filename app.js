@@ -1,9 +1,9 @@
-import { MAJOR_STEPS, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, validatePickupDuration } from './core.mjs';
+import { MAJOR_STEPS, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
 
 const $ = selector => document.querySelector(selector);
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 const KEYS = { '-7': ['Cb', 11], '-6': ['Gb', 6], '-5': ['Db', 1], '-4': ['Ab', 8], '-3': ['Eb', 3], '-2': ['Bb', 10], '-1': ['F', 5], 0: ['C', 0], 1: ['G', 7], 2: ['D', 2], 3: ['A', 9], 4: ['E', 4], 5: ['B', 11], 6: ['F#', 6], 7: ['C#', 1] };
-const state = { xml: null, filename: '', events: [], measures: [], fifths: 0, activeLanguage: '1', tokens: { 1: [], 2: [] }, assignments: { 1: new Map(), 2: new Map() }, staffNotes: [], staffAssignments: new Map(), staffRegisters: { treble: 0, bass: 0 }, spacing: { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' }, containerSize: null, layoutProfiles: {}, firstNoteOffsets: new Map(), measureWidths: new Map(), nextStaffNoteId: 1, selectedStaffNoteId: null, staffBeamMode: null, staffBeamStartId: null, selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null, history: [], future: [] };
+const state = { xml: null, filename: '', events: [], measures: [], fifths: 0, activeLanguage: '1', tokens: { 1: [], 2: [] }, assignments: { 1: new Map(), 2: new Map() }, staffNotes: [], staffAssignments: new Map(), photoConflicts: [], staffRegisters: { treble: 0, bass: 0 }, spacing: { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' }, containerSize: null, layoutProfiles: {}, firstNoteOffsets: new Map(), measureWidths: new Map(), nextStaffNoteId: 1, selectedStaffNoteId: null, staffBeamMode: null, staffBeamStartId: null, selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null, history: [], future: [] };
 
 function setupKeySignaturePicker() {
   const picker = $('#key-signature-picker'), staffs = [...document.querySelectorAll('.key-staff')];
@@ -327,7 +327,7 @@ function miscellaneousField(xml, name, create = false) {
 }
 
 function loadEmbeddedStaffLayer() {
-  state.staffNotes = []; state.staffAssignments = new Map(); state.staffRegisters = { treble: 0, bass: 0 }; state.layoutProfiles = {}; state.firstNoteOffsets = new Map(); state.measureWidths = new Map(); state.nextStaffNoteId = 1; state.selectedStaffNoteId = null;
+  state.staffNotes = []; state.staffAssignments = new Map(); state.photoConflicts = []; state.staffRegisters = { treble: 0, bass: 0 }; state.layoutProfiles = {}; state.firstNoteOffsets = new Map(); state.measureWidths = new Map(); state.nextStaffNoteId = 1; state.selectedStaffNoteId = null;
   applyLoadedSpacing();
   applyContainerSize();
   const field = miscellaneousField(state.xml, 'hymn-play-satb-json'); if (!field?.textContent) return;
@@ -335,6 +335,7 @@ function loadEmbeddedStaffLayer() {
     const data = JSON.parse(field.textContent);
     state.staffNotes = Array.isArray(data.notes) ? data.notes : [];
     state.staffAssignments = new Map(Array.isArray(data.assignments) ? data.assignments : []);
+    state.photoConflicts = normalizePhotoConflicts(data.photoConflicts || data.photoTranscription?.conflicts);
     state.layoutProfiles = data.layoutProfiles && typeof data.layoutProfiles === 'object' ? data.layoutProfiles : {};
     const profile = state.layoutProfiles[currentEnvironmentKey()] || state.layoutProfiles[legacyEnvironmentKey()] || legacyLayoutProfile(data);
     if (profile) {
@@ -350,15 +351,15 @@ function loadEmbeddedStaffLayer() {
 
 function writeEmbeddedStaffLayer(xml) {
   state.layoutProfiles[currentEnvironmentKey()] = currentLayoutProfile();
-  miscellaneousField(xml, 'hymn-play-satb-json', true).textContent = JSON.stringify({ schemaVersion: 7, notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'], layoutProfiles: state.layoutProfiles });
+  miscellaneousField(xml, 'hymn-play-satb-json', true).textContent = JSON.stringify({ schemaVersion: 7, notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'], photoConflicts: state.photoConflicts, layoutProfiles: state.layoutProfiles });
 }
 
-function snapshot() { return { xml: new XMLSerializer().serializeToString(state.xml), assignments: { 1: [...state.assignments['1']], 2: [...state.assignments['2']] }, staffNotes: state.staffNotes.map(note => ({ ...note })), staffAssignments: [...state.staffAssignments], staffRegisters: { ...state.staffRegisters }, spacing: { ...state.spacing }, containerSize: state.containerSize ? { ...state.containerSize } : null, layoutProfiles: structuredClone(state.layoutProfiles), firstNoteOffsets: [...state.firstNoteOffsets], measureWidths: [...state.measureWidths], nextStaffNoteId: state.nextStaffNoteId, selectedStaffNoteId: state.selectedStaffNoteId, tokens: { 1: state.tokens['1'].map(token => ({ ...token })), 2: state.tokens['2'].map(token => ({ ...token })) }, selected: state.selectedTokenId, shiftAnchorTokenId: state.shiftAnchorTokenId, selectedEventId: state.selectedEventId, selectedContinuation: state.selectedContinuation, activeLanguage: state.activeLanguage }; }
+function snapshot() { return { xml: new XMLSerializer().serializeToString(state.xml), assignments: { 1: [...state.assignments['1']], 2: [...state.assignments['2']] }, staffNotes: state.staffNotes.map(note => ({ ...note })), staffAssignments: [...state.staffAssignments], photoConflicts: state.photoConflicts.map(conflict => ({ ...conflict })), staffRegisters: { ...state.staffRegisters }, spacing: { ...state.spacing }, containerSize: state.containerSize ? { ...state.containerSize } : null, layoutProfiles: structuredClone(state.layoutProfiles), firstNoteOffsets: [...state.firstNoteOffsets], measureWidths: [...state.measureWidths], nextStaffNoteId: state.nextStaffNoteId, selectedStaffNoteId: state.selectedStaffNoteId, tokens: { 1: state.tokens['1'].map(token => ({ ...token })), 2: state.tokens['2'].map(token => ({ ...token })) }, selected: state.selectedTokenId, shiftAnchorTokenId: state.shiftAnchorTokenId, selectedEventId: state.selectedEventId, selectedContinuation: state.selectedContinuation, activeLanguage: state.activeLanguage }; }
 function restore(snap) {
   state.xml = new DOMParser().parseFromString(snap.xml, 'application/xml');
   Object.assign(state, parseScore(state.xml));
   state.assignments['1'] = new Map(snap.assignments['1']); state.assignments['2'] = new Map(snap.assignments['2']);
-  state.staffNotes = snap.staffNotes?.map(note => ({ ...note })) || []; state.staffAssignments = new Map(snap.staffAssignments || []); state.staffRegisters = { treble: snap.staffRegisters?.treble || 0, bass: snap.staffRegisters?.bass || 0 }; state.firstNoteOffsets = new Map(snap.firstNoteOffsets || []); state.measureWidths = new Map(snap.measureWidths || []); state.nextStaffNoteId = snap.nextStaffNoteId || 1; state.selectedStaffNoteId = snap.selectedStaffNoteId || null; state.staffBeamMode = null; state.staffBeamStartId = null;
+  state.staffNotes = snap.staffNotes?.map(note => ({ ...note })) || []; state.staffAssignments = new Map(snap.staffAssignments || []); state.photoConflicts = normalizePhotoConflicts(snap.photoConflicts); state.staffRegisters = { treble: snap.staffRegisters?.treble || 0, bass: snap.staffRegisters?.bass || 0 }; state.firstNoteOffsets = new Map(snap.firstNoteOffsets || []); state.measureWidths = new Map(snap.measureWidths || []); state.nextStaffNoteId = snap.nextStaffNoteId || 1; state.selectedStaffNoteId = snap.selectedStaffNoteId || null; state.staffBeamMode = null; state.staffBeamStartId = null;
   state.layoutProfiles = structuredClone(snap.layoutProfiles || {});
   state.tokens = { 1: snap.tokens['1'].map(token => ({ ...token })), 2: snap.tokens['2'].map(token => ({ ...token })) };
   state.selectedTokenId = snap.selected; state.shiftAnchorTokenId = snap.shiftAnchorTokenId; state.selectedEventId = snap.selectedEventId; state.selectedContinuation = snap.selectedContinuation; state.activeLanguage = snap.activeLanguage;
@@ -558,7 +559,10 @@ function applyStaffOperation() {
   } else if (operation === 'semitone-up' || operation === 'semitone-down') {
     const midiValue = (note.octave + 1) * 12 + STEP[note.step] + note.alter + (operation === 'semitone-up' ? 1 : -1), next = pitchFromMidi(midiValue, state.fifths < 0); Object.assign(note, next); note.explicitAccidental = true;
   } else if (operation === 'octave-up' || operation === 'octave-down') note.octave += operation === 'octave-up' ? 1 : -1;
-  else if (operation.startsWith('stem-')) note.stem = operation.slice(5);
+  else if (operation.startsWith('stem-')) {
+    const members = note.beamGroup ? state.staffNotes.filter(item => item.beamGroup === note.beamGroup) : [note];
+    for (const member of members) member.stem = operation.slice(5);
+  }
   $('#status').textContent = `Applied ${$('#staff-operation').selectedOptions[0].textContent} to the selected ${STAFF_VOICES[note.voice].name} note.`; render();
 }
 
@@ -598,17 +602,19 @@ function keySignatureAlter(step) {
   return order.slice(0, Math.abs(state.fifths)).includes(step) ? Math.sign(state.fifths) : 0;
 }
 
-function displayedStaffAlter(note) {
-  if (!note.alter) return 0;
-  const sourceHasAccidental = note.sourceEventId && state.events.find(event => event.id === note.sourceEventId)?.note.querySelector(':scope > accidental');
-  return note.explicitAccidental || sourceHasAccidental || Number(note.alter) !== keySignatureAlter(note.step) ? Number(note.alter) : 0;
+function displayedStaffAccidental(note) {
+  const keyAlter = keySignatureAlter(note.step), alter = Number(note.alter) || 0;
+  const sourceAccidental = note.sourceEventId && state.events.find(event => event.id === note.sourceEventId)?.note.querySelector(':scope > accidental')?.textContent?.trim();
+  if (sourceAccidental) return sourceAccidental === 'natural' ? '♮' : sourceAccidental.includes('sharp') ? '♯' : sourceAccidental.includes('flat') ? '♭' : '';
+  if (!note.explicitAccidental && alter === keyAlter) return '';
+  if (alter > 0) return '♯';
+  if (alter < 0) return '♭';
+  return keyAlter ? '♮' : '';
 }
 
 function staffRenderedX(note, measure, anchors = null) {
-  return staffX(note, measure, anchors) + staffVoiceOffset(note.voice) + (displayedStaffAlter(note) ? 7 : 0);
+  return staffX(note, measure, anchors);
 }
-
-function staffVoiceOffset(voice) { return ['A', 'B'].includes(voice) ? 4 : 0; }
 
 function assignEnglishToStaffNote(note) {
   if (note.voice !== 'S') { $('#status').textContent = 'English syllables attach to Soprano notes. Choose a Soprano note.'; return; }
@@ -646,19 +652,29 @@ function createStaffSvg(measure, clef, anchors = null) {
   appendStaffBarline(svg, measure);
   const clefMark = document.createElementNS(svg.namespaceURI, 'text'); clefMark.setAttribute('x', '5'); clefMark.setAttribute('y', clef === 'treble' ? '70' : '62'); clefMark.setAttribute('class', 'satb-clef'); clefMark.textContent = clef === 'treble' ? '𝄞' : '𝄢'; svg.append(clefMark);
   const visibleNotes = state.staffNotes.filter(item => item.measure === measure.number && item.clef === clef && (item.rest || (staffY(clef, item) >= 10 && staffY(clef, item) <= 90))).toSorted((a, b) => a.onset - b.onset || a.voice.localeCompare(b.voice));
+  const rawBeamGroups = [...new Set(visibleNotes.map(note => note.beamGroup).filter(Boolean))].map(id => {
+    const members = visibleNotes.filter(note => note.beamGroup === id).toSorted((a, b) => a.onset - b.onset);
+    const first = members[0], stemDown = first?.stem === 'down' || (first?.stem !== 'up' && ['A', 'B'].includes(first?.voice));
+    return { id, clef, direction: stemDown ? 'down' : 'up', members: members.map(note => ({ ...note, y: staffY(clef, note) })) };
+  });
+  const beamLayouts = combineCompatibleStaffBeamGroups(rawBeamGroups), beamLayoutByGroup = new Map();
+  for (const layout of beamLayouts) for (const groupId of layout.groupIds) beamLayoutByGroup.set(groupId, layout);
   for (const note of visibleNotes) {
-    const rhythmicX = staffX(note, measure, anchors) + staffVoiceOffset(note.voice), x = staffRenderedX(note, measure, anchors), y = staffY(clef, note), displayedAlter = displayedStaffAlter(note);
+    const x = staffRenderedX(note, measure, anchors), y = staffY(clef, note), displayedAccidental = displayedStaffAccidental(note);
     const group = document.createElementNS(svg.namespaceURI, 'g'); group.setAttribute('class', `satb-note voice-${note.voice}${state.staffAssignments.has(note.id) ? ' has-lyric' : ''}${state.selectedStaffNoteId === note.id ? ' selected' : ''}${state.staffBeamStartId === note.id ? ' beam-anchor' : ''}`); group.dataset.noteId = note.id;
     const title = document.createElementNS(svg.namespaceURI, 'title'); title.textContent = `${STAFF_VOICES[note.voice].name} · ${note.rest ? 'rest' : `${note.step}${note.octave}`} · beat ${formatBeat(note.onset + 1)}`; group.append(title);
     const hit = document.createElementNS(svg.namespaceURI, 'circle'); hit.setAttribute('cx', String(x)); hit.setAttribute('cy', String(note.rest ? 52 : y)); hit.setAttribute('r', '11'); hit.setAttribute('class', 'satb-note-hit'); group.append(hit);
-    if (displayedAlter) { const accidental = document.createElementNS(svg.namespaceURI, 'text'); accidental.setAttribute('x', String(rhythmicX - 2)); accidental.setAttribute('y', String(y + 5)); accidental.setAttribute('text-anchor', 'end'); accidental.setAttribute('class', 'satb-accidental'); accidental.textContent = displayedAlter > 0 ? '♯' : '♭'; group.append(accidental); }
+    if (displayedAccidental) { const accidental = document.createElementNS(svg.namespaceURI, 'text'); accidental.setAttribute('x', String(x - 8)); accidental.setAttribute('y', String(y + 5)); accidental.setAttribute('text-anchor', 'end'); accidental.setAttribute('class', 'satb-accidental'); accidental.textContent = displayedAccidental; group.append(accidental); }
     if (note.rest) { const rest = document.createElementNS(svg.namespaceURI, 'text'); rest.setAttribute('x', String(x - 5)); rest.setAttribute('y', '55'); rest.setAttribute('class', 'satb-rest'); rest.textContent = '𝄽'; group.append(rest); }
     else {
       appendStaffLedgerLines(group, x, y);
       const head = document.createElementNS(svg.namespaceURI, 'ellipse'); head.setAttribute('cx', String(x)); head.setAttribute('cy', String(y)); head.setAttribute('rx', '6'); head.setAttribute('ry', '4'); head.setAttribute('class', `satb-notehead${note.duration >= 2 ? ' open' : ''}`); group.append(head);
       const stemDown = note.stem === 'down' || (note.stem !== 'up' && ['A', 'B'].includes(note.voice));
-      const beamMembers = note.beamGroup ? visibleNotes.filter(item => item.beamGroup === note.beamGroup) : [];
-      const beamY = beamMembers.length > 1 ? (stemDown ? Math.max(...beamMembers.map(item => staffY(clef, item))) + 25 : Math.min(...beamMembers.map(item => staffY(clef, item))) - 25) : null;
+      const beamLayout = note.beamGroup ? beamLayoutByGroup.get(note.beamGroup) : null, referenceMembers = beamLayout?.members || [];
+      const beamEnds = beamLayout?.beamEnds || null;
+      const firstBeamX = beamEnds ? staffX(referenceMembers[0], measure, anchors) : 0, lastBeamX = beamEnds ? staffX(referenceMembers.at(-1), measure, anchors) : 0;
+      const beamRatio = beamEnds && Math.abs(lastBeamX - firstBeamX) > .001 ? (x - firstBeamX) / (lastBeamX - firstBeamX) : 0;
+      const beamY = beamEnds ? beamEnds.start + (beamEnds.end - beamEnds.start) * beamRatio : null;
       const stemX = x + (stemDown ? -5 : 5), stemEnd = beamY ?? y + (stemDown ? 25 : -25);
       if (note.duration < 4) { const stem = document.createElementNS(svg.namespaceURI, 'line'); stem.setAttribute('x1', String(stemX)); stem.setAttribute('x2', String(stemX)); stem.setAttribute('y1', String(y)); stem.setAttribute('y2', String(stemEnd)); stem.setAttribute('class', 'satb-stem'); group.append(stem); }
       if (note.duration < 1 && !note.beamGroup) { const flag = document.createElementNS(svg.namespaceURI, 'path'); flag.setAttribute('d', stemDown ? `M ${stemX} ${stemEnd} q -13 -7 -4 -17` : `M ${stemX} ${stemEnd} q 13 7 4 17`); flag.setAttribute('class', 'satb-flag'); group.append(flag); }
@@ -677,18 +693,13 @@ function createStaffSvg(measure, clef, anchors = null) {
     });
     svg.append(group);
   }
-  const drawnBeamGroups = new Set();
-  for (const note of visibleNotes) {
-    if (!note.beamGroup || drawnBeamGroups.has(note.beamGroup)) continue;
-    const members = visibleNotes.filter(item => item.beamGroup === note.beamGroup).toSorted((a, b) => a.onset - b.onset);
+  for (const layout of beamLayouts) {
+    const members = layout.members;
     if (members.length < 2) continue;
-    drawnBeamGroups.add(note.beamGroup);
-    const stemDown = note.stem === 'down' || (note.stem !== 'up' && ['A', 'B'].includes(note.voice));
-    const stemX = item => staffRenderedX(item, measure, anchors) + (stemDown ? -5 : 5);
-    const beamY = stemDown ? Math.max(...members.map(item => staffY(clef, item))) + 25 : Math.min(...members.map(item => staffY(clef, item))) - 25;
-    const addBeam = y => { const beam = document.createElementNS(svg.namespaceURI, 'line'); beam.setAttribute('x1', String(stemX(members[0]))); beam.setAttribute('x2', String(stemX(members.at(-1)))); beam.setAttribute('y1', String(y)); beam.setAttribute('y2', String(y)); beam.setAttribute('class', `satb-beam voice-${note.voice}`); svg.append(beam); };
-    addBeam(beamY);
-    if (members.every(item => Number(item.duration) <= .25)) addBeam(beamY + (stemDown ? -7 : 7));
+    const stemDown = layout.direction === 'down', stemX = item => staffX(item, measure, anchors) + (stemDown ? -5 : 5);
+    const addBeam = offset => { const beam = document.createElementNS(svg.namespaceURI, 'line'); beam.setAttribute('x1', String(stemX(members[0]))); beam.setAttribute('x2', String(stemX(members.at(-1)))); beam.setAttribute('y1', String(layout.beamEnds.start + offset)); beam.setAttribute('y2', String(layout.beamEnds.end + offset)); beam.setAttribute('class', `satb-beam ${layout.shared ? 'shared' : `voice-${members[0].voice}`}`); svg.append(beam); };
+    addBeam(0);
+    if (members.every(item => Number(item.duration) <= .25)) addBeam(stemDown ? -7 : 7);
   }
   const positionPreview = document.createElementNS(svg.namespaceURI, 'ellipse'); positionPreview.setAttribute('rx', '6'); positionPreview.setAttribute('ry', '4'); positionPreview.setAttribute('class', 'satb-position-preview'); svg.append(positionPreview);
   svg.addEventListener('pointermove', event => {
@@ -851,7 +862,68 @@ function updateFixedMeasureWidth() {
   document.documentElement.style.setProperty('--fixed-measure-width', `${common || state.spacing.measureWidth}px`);
 }
 
+let photoConflictHideTimer = null;
+
+function hidePhotoConflictPopover(force = false) {
+  const popover = $('#photo-conflict-popover');
+  if (!force && popover.dataset.pinned === 'true') return;
+  popover.classList.add('hidden'); popover.dataset.pinned = 'false'; popover.replaceChildren();
+  document.querySelectorAll('.photo-conflict-indicator[aria-expanded="true"]').forEach(button => button.setAttribute('aria-expanded', 'false'));
+}
+
+function focusPhotoConflict(conflict) {
+  state.activeLanguage = '2';
+  if (conflict.noteId && state.staffNotes.some(note => note.id === conflict.noteId)) state.selectedStaffNoteId = conflict.noteId;
+  render();
+  requestAnimationFrame(() => {
+    const measure = document.querySelector(`.measure[data-measure-number="${conflict.measure}"]`);
+    measure?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    measure?.classList.add('photo-conflict-focus');
+    setTimeout(() => measure?.classList.remove('photo-conflict-focus'), 1800);
+  });
+}
+
+function resolvePhotoConflict(conflictId, resolution) {
+  const conflict = state.photoConflicts.find(item => item.id === conflictId); if (!conflict) return;
+  recordChange(); conflict.resolution = resolution; hidePhotoConflictPopover(true);
+  $('#status').textContent = resolution === 'confirmed-photo' ? `Photo reading confirmed for the ${conflict.voice || 'staff'} conflict in measure ${conflict.measure}.` : `The staff conflict in measure ${conflict.measure} was marked corrected.`;
+  render();
+}
+
+function showPhotoConflictPopover(measure, button, pinned = false) {
+  clearTimeout(photoConflictHideTimer);
+  const conflicts = unresolvedPhotoConflicts(state.photoConflicts, measure.number), popover = $('#photo-conflict-popover');
+  if (!conflicts.length) return;
+  popover.replaceChildren(); popover.dataset.pinned = String(pinned); popover.dataset.measure = String(measure.number);
+  const heading = document.createElement('div'); heading.className = 'photo-conflict-heading'; heading.innerHTML = `<strong>Measure ${measure.number} · ${conflicts.length} staff-photo conflict${conflicts.length === 1 ? '' : 's'}</strong><span>${pinned ? 'Pinned' : 'Click warning to pin'}</span>`; popover.append(heading);
+  for (const conflict of conflicts) {
+    const item = document.createElement('section'); item.className = 'photo-conflict-item';
+    const beat = conflict.onset === null ? 'unknown beat' : `beat ${formatBeat(conflict.onset + 1)}`;
+    const confidence = conflict.confidence === null ? 'confidence unavailable' : `${Math.round(conflict.confidence * 100)}% confidence`;
+    const title = document.createElement('button'); title.type = 'button'; title.className = 'photo-conflict-target'; title.textContent = `${conflict.voice || 'Staff'} · ${beat}`; title.addEventListener('click', () => focusPhotoConflict(conflict));
+    const comparison = document.createElement('p'); comparison.innerHTML = `<span>Photo/OCR: <strong>${escapeHtml(conflict.ocrValue)}</strong></span><span>Verification: <strong>${escapeHtml(conflict.inferredValue)}</strong></span>`;
+    const reason = document.createElement('p'); reason.className = 'photo-conflict-reason'; reason.textContent = `${conflict.reason} · ${confidence}`;
+    const actions = document.createElement('div'); actions.className = 'photo-conflict-actions';
+    const keep = document.createElement('button'); keep.type = 'button'; keep.textContent = 'Keep photo reading'; keep.addEventListener('click', () => resolvePhotoConflict(conflict.id, 'confirmed-photo'));
+    const corrected = document.createElement('button'); corrected.type = 'button'; corrected.textContent = 'Mark corrected'; corrected.addEventListener('click', () => resolvePhotoConflict(conflict.id, 'corrected'));
+    actions.append(keep, corrected); item.append(title, comparison, reason, actions); popover.append(item);
+  }
+  popover.classList.remove('hidden');
+  document.querySelectorAll('.photo-conflict-indicator').forEach(item => item.setAttribute('aria-expanded', String(item === button && pinned)));
+  const rect = button.getBoundingClientRect(), width = Math.min(360, window.innerWidth - 20);
+  popover.style.width = `${width}px`; popover.style.left = `${Math.max(10, Math.min(rect.right - width, window.innerWidth - width - 10))}px`;
+  popover.style.top = `${Math.max(10, Math.min(rect.bottom + 7, window.innerHeight - popover.offsetHeight - 10))}px`;
+}
+
+function setupPhotoConflictIndicator(section, measure, conflicts) {
+  const button = section.querySelector('.photo-conflict-indicator'); if (!button || !conflicts.length) return;
+  button.addEventListener('mouseenter', () => showPhotoConflictPopover(measure, button, false));
+  button.addEventListener('mouseleave', () => { photoConflictHideTimer = setTimeout(() => hidePhotoConflictPopover(), 180); });
+  button.addEventListener('click', event => { event.stopPropagation(); const popover = $('#photo-conflict-popover'), alreadyPinned = popover.dataset.pinned === 'true' && popover.dataset.measure === String(measure.number); if (alreadyPinned) hidePhotoConflictPopover(true); else showPhotoConflictPopover(measure, button, true); });
+}
+
 function renderGrid() {
+  hidePhotoConflictPopover(true);
   const grid = $('#score-grid'); grid.replaceChildren();
   const [, tonicPc] = KEYS[state.fifths] || KEYS[0];
   let system = null;
@@ -866,6 +938,8 @@ function renderGrid() {
     const usedBeats = measure.events.reduce((sum, event) => sum + event.duration, 0);
     const balance = Math.abs(usedBeats - measure.expectedBeats) < .001 ? 'complete' : usedBeats > measure.expectedBeats ? 'overfull' : 'underfull';
     section.classList.add(balance);
+    const photoConflicts = unresolvedPhotoConflicts(state.photoConflicts, measure.number);
+    if (photoConflicts.length) section.classList.add('photo-conflict');
     const barClass = measure.repeatEnd ? 'repeat-end' : measure.barStyle === 'light-light' ? 'double' : measure.barStyle === 'light-heavy' ? 'final' : '';
     if (barClass) section.classList.add('has-end-bar');
     const barMarkers = `${measure.repeatStart ? '<button class="barline-marker repeat-start" title="Repeat begins" aria-label="Select repeat-start barline"></button>' : ''}${barClass ? `<button class="barline-marker ${barClass}" title="${barClass === 'final' ? 'Final barline' : barClass === 'repeat-end' ? 'Repeat ends' : 'Section or verse double barline'}" aria-label="Select ${barClass} barline"></button>` : ''}`;
@@ -874,7 +948,9 @@ function renderGrid() {
       : measure.isComplementaryEnding
         ? `Measure ${measure.number} · pickup ending`
         : `Measure ${measure.number}`;
-    section.innerHTML = `<header><span>${measureLabel}</span>${measureCapacityMeterHtml(measure, usedBeats)}</header><div class="events">${barMarkers}</div>`;
+    const conflictIndicator = photoConflicts.length ? `<button type="button" class="photo-conflict-indicator" aria-expanded="false" aria-label="${photoConflicts.length} unresolved staff-photo conflict${photoConflicts.length === 1 ? '' : 's'} in measure ${measure.number}">⚠ ${photoConflicts.length}</button>` : '';
+    section.innerHTML = `<header><span>${measureLabel}</span><span class="measure-header-tools">${measureCapacityMeterHtml(measure, usedBeats)}${conflictIndicator}</span></header><div class="events">${barMarkers}</div>`;
+    setupPhotoConflictIndicator(section, measure, photoConflicts);
     const events = section.querySelector('.events');
     for (const event of measure.events) {
       const beamClass = event.beam ? `beam-${event.beam}` : '';
@@ -978,9 +1054,9 @@ function canAddBeats(event, delta) {
 }
 function render() {
   document.querySelectorAll('.language-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.language === state.activeLanguage));
-  $('#zh-input-label').classList.remove('hidden');
-  $('#en-input-label').classList.remove('hidden');
   const englishMode = state.activeLanguage === '2';
+  $('#zh-input-label').classList.toggle('hidden', englishMode);
+  $('#en-input-label').classList.toggle('hidden', !englishMode);
   $('#staff-treble-register').value = String(state.staffRegisters.treble);
   $('#staff-bass-register').value = String(state.staffRegisters.bass);
   $('#staff-entry-palette').classList.toggle('hidden', !englishMode);
@@ -1580,7 +1656,7 @@ function download(content, filename, type) { const url = URL.createObjectURL(new
 function outputStem(filename) { return filename.replace(/\.(musicxml|xml)$/i, '').replace(/(?:-aligned)+$/i, ''); }
 function exportXml() { download(revisedXml(), outputStem(state.filename) + '-aligned.musicxml', 'application/vnd.recordare.musicxml+xml'); $('#status').textContent = 'Revised MusicXML exported.'; }
 function reviewPayload() {
-  return { schemaVersion: 7, source: state.filename, keyFifths: state.fifths, environment: currentEnvironmentKey(), sourceLyrics: { zhHant: $('#zh-input').value, en: $('#en-input').value }, layout: currentLayoutProfile(), satb: { notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'] }, assignments: state.events.map(event => ({ id: event.id, measure: event.measure, beat: event.beat, jianpu: event.isRest ? '0' : jianpuForEvent(event), durationBeats: event.duration, zhHant: assignmentFor('1', event.id)?.text || null, en: assignmentFor('2', event.id)?.text || null })) };
+  return { schemaVersion: 7, source: state.filename, keyFifths: state.fifths, environment: currentEnvironmentKey(), sourceLyrics: { zhHant: $('#zh-input').value, en: $('#en-input').value }, layout: currentLayoutProfile(), satb: { notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'], photoConflicts: state.photoConflicts }, assignments: state.events.map(event => ({ id: event.id, measure: event.measure, beat: event.beat, jianpu: event.isRest ? '0' : jianpuForEvent(event), durationBeats: event.duration, zhHant: assignmentFor('1', event.id)?.text || null, en: assignmentFor('2', event.id)?.text || null })) };
 }
 function exportReview() {
   const payload = reviewPayload();
@@ -1767,6 +1843,7 @@ function buildDirectEntryXml() {
     assignments: { 1: new Map(state.assignments['1']), 2: new Map(state.assignments['2']) },
     staffNotes: state.staffNotes.map(note => ({ ...note })),
     staffAssignments: new Map(state.staffAssignments),
+    photoConflicts: state.photoConflicts.map(conflict => ({ ...conflict })),
     staffRegisters: { ...state.staffRegisters },
     firstNoteOffsets: new Map(state.firstNoteOffsets),
     measureWidths: new Map(state.measureWidths),
@@ -1857,7 +1934,7 @@ function buildDirectEntryXml() {
   }
   state.staffNotes = preserved.staffNotes;
   for (const note of state.staffNotes) if (note.sourceEventId) note.sourceEventId = remapEventId(note.sourceEventId, preserved.events, state.events);
-  state.staffAssignments = preserved.staffAssignments; state.staffRegisters = preserved.staffRegisters; state.firstNoteOffsets = preserved.firstNoteOffsets; state.measureWidths = preserved.measureWidths; state.nextStaffNoteId = preserved.nextStaffNoteId; state.selectedStaffNoteId = null;
+  state.staffAssignments = preserved.staffAssignments; state.photoConflicts = preserved.photoConflicts; state.staffRegisters = preserved.staffRegisters; state.firstNoteOffsets = preserved.firstNoteOffsets; state.measureWidths = preserved.measureWidths; state.nextStaffNoteId = preserved.nextStaffNoteId; state.selectedStaffNoteId = null;
   const restoredChineseAlignment = restoreChineseAlignmentIfMissing();
   const [keyName] = KEYS[fifths] || KEYS[0]; $('#key-label').textContent = `1 = ${keyName}`; $('#file-summary').textContent = `${state.filename} · ${state.measures.length} measures · direct entry`; $('#editor').classList.remove('hidden');
   const keptChinese = state.assignments['1'].size, keptEnglish = state.assignments['2'].size, staffMessage = state.staffNotes.length ? ' Existing staff notes were kept; regenerate Soprano if the melody changed.' : '';
@@ -1916,6 +1993,9 @@ for (const clef of ['treble', 'bass']) $(`#staff-${clef}-register`).addEventList
   render();
 });
 document.querySelectorAll('.language-tab').forEach(tab => tab.addEventListener('click', () => { state.activeLanguage = tab.dataset.language; state.staffBeamMode = null; state.staffBeamStartId = null; state.selectedTokenId = null; state.shiftAnchorTokenId = null; render(); }));
+$('#photo-conflict-popover').addEventListener('mouseenter', () => clearTimeout(photoConflictHideTimer));
+$('#photo-conflict-popover').addEventListener('mouseleave', () => { photoConflictHideTimer = setTimeout(() => hidePhotoConflictPopover(), 180); });
+document.addEventListener('click', event => { if (!event.target.closest('.photo-conflict-popover,.photo-conflict-indicator')) hidePhotoConflictPopover(true); });
 $('#workspace-undo-button').addEventListener('click', undo);
 $('#workspace-redo-button').addEventListener('click', redo);
 $('#save-button').addEventListener('click', saveWorkingCopy);

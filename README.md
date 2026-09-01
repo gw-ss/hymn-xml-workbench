@@ -285,8 +285,9 @@ current environment's profile for backward compatibility and is upgraded to the
 multi-environment format on its next save.
 
 Generated staff notes do not repeat flats or sharps already supplied by the key
-signature. A required accidental is placed to the left of the dotted rhythmic
-guide and its notehead to the right, centering the pair on the Jianpu position.
+signature. Every SATB notehead at the same onset is centered directly on the
+dotted Jianpu guide. A required accidental is placed to the guide's left without
+moving its notehead away from that shared anchor.
 Connected Jianpu underlines use one continuous scaled stroke. Their start and
 end extensions do not overlap the adjoining segment, avoiding a short darker or
 thicker patch at either endpoint.

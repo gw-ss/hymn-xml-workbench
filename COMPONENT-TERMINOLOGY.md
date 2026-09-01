@@ -112,12 +112,17 @@ Additional layer vocabulary:
 | --- | --- | --- |
 | **SATB staff notation** | The four staff voices: Soprano, Alto, Tenor, and Bass. | “Soprano staff” for the entire four-voice layer. |
 | **Staff note** | One pitched event belonging to a staff voice. | **Jianpu note**. |
+| **Staff onset alignment** | The rule that every Soprano, Alto, Tenor, and Bass note at the same rhythmic onset is centered on the same Jianpu anchor, regardless of pitch or voice. | Collision offsets or voice-specific horizontal shifts. |
 | **Staff rest** | A silence event belonging to a staff voice. | **Jianpu rest**. |
 | **Staff voice** | Soprano, Alto, Tenor, or Bass. | “Staff”; two voices may share the same staff layer. |
 | **Treble staff** | The staff shared by Soprano and Alto. | “Soprano staff,” unless specifically discussing Soprano notes. |
 | **Bass staff** | The staff shared by Tenor and Bass. | “Base staff”; **bass** is the correct musical spelling. |
 | **Staff beam** | The thick bar connecting eligible consecutive short staff notes. | **Connected underline**, which belongs to Jianpu. |
 | **Beam group** | The inclusive group of staff notes joined by one Staff beam. | “Connector”; connectors are curved slurs. |
+| **Beam side** | Whether a Staff beam is printed above its notes with upward stems or below them with downward stems. A photographed Beam side overrides automatic voice defaults. | **Beam slope**, which describes the beam's angle from first note to last. |
+| **Beam slope** | The restrained angle of a Staff beam following the pitch contour of its first and last notes. | **Beam side**. |
+| **Shared staff beam** | One beam used by compatible voices on the same staff when their beamed onset/duration pattern and Beam side match. Upward beams follow the upper voice; downward beams follow the lower voice. | Two independent beams with different rhythms or Beam sides. |
+| **Unison notehead** | One completely overlapping notehead shared visually by two voices at the same onset and exact pitch; each voice retains its own stem direction. | Two merely adjacent pitches, which require separate noteheads. |
 | **Accidental** | A sharp, flat, or natural applying to a staff/Jianpu pitch. | **Key signature symbol**, which belongs to the key signature. |
 | **Notehead** | The oval part of a Staff note. | “Staff symbol” when its position relative to an accidental matters. |
 | **Stem** | The vertical line attached to a Staff note. | **Beam**. |
@@ -251,3 +256,19 @@ When a new component is introduced, add:
 If an existing term changes, update this document, `FEATURE-NOTES.md`, visible
 interface labels, accessibility labels, and the future user manual together.
 
+## Planned photo-transcription components
+
+These names are reserved for the later staff-notation recognition workflow;
+the controls are not implemented yet.
+
+| Preferred term | Definition |
+| --- | --- |
+| **Staff-photo import controls** | English-mode Sidebar controls used to choose a processed hymn photo for staff recognition. |
+| **Recognition activity indicator** | Busy/progress feedback shown while a staff photo is being analyzed. |
+| **Recognition decision** | Accepted or rejected result for an imported photo. |
+| **Recognition reason** | Specific explanation accompanying acceptance, rejection, or a request for manual review. |
+| **Photo-transcription draft** | Editable SATB staff entries produced from an accepted image and marked for human verification. |
+| **Beam-direction assessment** | Per-group comparison of photographed Beam side, rendered Beam side, and recognition confidence, producing Accept, Warning, or Reject. |
+| **Photo-conflict outline** | Red outline around a Measure editor window containing one or more unresolved photo/OCR-versus-verification conflicts. | The Capacity meter's red excess-duration segment. |
+| **Photo-conflict indicator** | Measure-header warning button showing the unresolved conflict count. Hover previews details and click pins them. | The Capacity meter. |
+| **Photo-conflict popover** | Floating details panel listing voice, beat, photo/OCR value, verification alternative, confidence, reason, and resolution actions. | A permanent Sidebar panel. |

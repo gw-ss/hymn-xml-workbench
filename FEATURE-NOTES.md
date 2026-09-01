@@ -78,13 +78,41 @@ melody/rhythm corrections can otherwise require English realignment.
   interaction.
 - Staff beaming is required as an operation because Jianpu direct-entry grouping
   rules do not govern independently edited staff voices.
+- Staff beams follow their notes' pitch contour with a restrained slope. Stem
+  Up, Stem Down, or Stem Automatic applies to the complete connected beam group
+  so its direction remains coherent and can match a photographed source.
+- For a photo transcription, the photographed beam side (above/up-stem or
+  below/down-stem) is authoritative source data and is saved with the beam
+  group. SATB voice defaults are used only when no source direction is known.
+- Compatible SATB beam groups on the same staff are drawn as one shared beam
+  when their onset/duration sequence and Beam side match. Upward shared beams
+  use the upper photographed voice for height and slope; downward shared beams
+  use the lower photographed voice. All participating stems terminate at that
+  single line. Opposite Beam sides or different rhythms remain separate.
+- Photo beam-direction validation has three decisions: Accept when every
+  recognized group matches at sufficient confidence; Warning when directions
+  match but one or more groups are only reviewably clear; Reject when clarity
+  is too low, a direction is unknown, or the rendered direction disagrees with
+  the photo. Manually entered confidence is used until staff-photo OCR supplies
+  recognition confidence.
+- Measures containing unresolved photo/OCR-versus-verification conflicts receive
+  a red outline and a conflict-count badge in the Measure header. Hover previews
+  a floating conflict popover; clicking pins it; clicking elsewhere dismisses
+  it. Each item identifies voice, beat, photo/OCR reading, verification result,
+  confidence, and reason, and can focus the affected staff note. Confirming the
+  photo reading or marking the entry corrected resolves the warning and is
+  saved with the working score.
+- Two voices at the same onset and exact pitch share one completely overlapping
+  notehead while retaining their independent upward/downward stems. All staff
+  voices at the same rhythmic onset use the exact same horizontal Jianpu anchor,
+  even when their pitches differ; no voice receives a collision offset.
 - Treble and bass each offer Lower, Center, and Upper staff groups. These move
   the visible five-line range by an octave without transposing notes. Notes just
   outside the staff receive ledger lines.
 - Key-signature accidentals are not redundantly printed on generated staff
-  notes. When an explicit accidental is required, the accidental sits left of
-  the alignment guide and the notehead sits right of it, with the pair centered
-  on the Jianpu anchor.
+  notes. When an explicit accidental is required, it sits to the left of the
+  alignment guide without shifting the notehead away from the Jianpu anchor.
+- An explicit natural is displayed when a note cancels the key signature.
 
 ## Alignment rules — do not regress
 

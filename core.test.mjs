@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, validatePickupDuration } from './core.mjs';
+import { assessPhotoBeamDirections, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, staffBeamEndpointYs, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
+
+const hymn1PhotoBeams = JSON.parse(readFileSync(new URL('./test-fixtures/hymn-1-photo-beams.json', import.meta.url), 'utf8'));
 
 test('Chinese punctuation stays with its preceding character', () => assert.deepEqual(tokenizeChinese('愛救了我！').map(x => x.text), ['愛','救','了','我！']));
 test('English hyphens create syllabic roles', () => assert.deepEqual(tokenizeEnglish('Love lift-ed').map(x => [x.text,x.syllabic]), [['Love','single'],['lift','begin'],['ed','end']]));
@@ -64,6 +67,56 @@ test('staff beam range includes consecutive notes between either endpoint order'
     { id: 'c', measure: 1, voice: 'S', onset: .75, duration: .25, rest: false },
   ];
   assert.deepEqual(chooseStaffBeamRange(notes, 'c', 'a').members.map(note => note.id), ['a', 'b', 'c']);
+});
+test('staff beams follow the photographed pitch contour with a limited slope', () => {
+  assert.deepEqual(staffBeamEndpointYs([50, 40], false), { start: 25, end: 15 });
+  assert.deepEqual(staffBeamEndpointYs([40, 50], true), { start: 65, end: 75 });
+  assert.deepEqual(staffBeamEndpointYs([40, 80], false), { start: 15, end: 25 });
+});
+test('Hymn 1 rendered beam sides match the accepted photo fixture', () => {
+  const assessment = assessPhotoBeamDirections(hymn1PhotoBeams.groups.map(group => ({ ...group, renderedDirection: group.expectedRenderedDirection })));
+  assert.equal(assessment.decision, 'accept');
+  assert.equal(assessment.groups.length, 8);
+  assert.ok(assessment.groups.every(group => group.status === 'accept'));
+});
+test('unclear photo beams produce warnings or rejection, and mismatches are rejected', () => {
+  assert.equal(assessPhotoBeamDirections([{ id: 'reviewable', photoDirection: 'up', renderedDirection: 'up', confidence: .7 }]).decision, 'warning');
+  assert.match(assessPhotoBeamDirections([{ id: 'unclear', photoDirection: 'up', renderedDirection: 'up', confidence: .4 }]).reasons[0], /clarity is too low/);
+  assert.equal(assessPhotoBeamDirections([{ id: 'mismatch', photoDirection: 'down', renderedDirection: 'up', confidence: .95 }]).decision, 'reject');
+  assert.match(assessPhotoBeamDirections([{ id: 'unknown', photoDirection: null, renderedDirection: 'up', confidence: .9 }]).reasons[0], /could not be determined/);
+});
+test('compatible SATB beam groups combine at the photographed outer height and tilt', () => {
+  const rhythm = [{ onset: 1, duration: .5 }, { onset: 1.5, duration: .5 }];
+  const groups = combineCompatibleStaffBeamGroups([
+    { id: 's', clef: 'treble', direction: 'up', members: rhythm.map((note, index) => ({ ...note, y: [40, 35][index] })) },
+    { id: 'a', clef: 'treble', direction: 'up', members: rhythm.map((note, index) => ({ ...note, y: [65, 60][index] })) },
+  ]);
+  assert.equal(groups.length, 1);
+  assert.deepEqual(groups[0].groupIds, ['s', 'a']);
+  assert.equal(groups[0].referenceGroupId, 's');
+  assert.deepEqual(groups[0].beamEnds, { start: 15, end: 10 });
+  assert.equal(groups[0].shared, true);
+});
+test('opposite beam sides or different rhythms remain separate', () => {
+  const groups = combineCompatibleStaffBeamGroups([
+    { id: 's', clef: 'treble', direction: 'up', members: [{ onset: 1, duration: .5, y: 40 }, { onset: 1.5, duration: .5, y: 35 }] },
+    { id: 'a', clef: 'treble', direction: 'down', members: [{ onset: 1, duration: .5, y: 65 }, { onset: 1.5, duration: .5, y: 60 }] },
+    { id: 't', clef: 'bass', direction: 'up', members: [{ onset: 2, duration: .5, y: 45 }, { onset: 2.5, duration: .5, y: 40 }] },
+  ]);
+  assert.equal(groups.length, 3);
+  assert.ok(groups.every(group => !group.shared));
+});
+test('photo conflicts normalize, group by measure, and disappear when resolved', () => {
+  const conflicts = normalizePhotoConflicts([
+    { id: 'a', measure: '2', voice: 'A', onset: 1, ocrValue: 'E4', inferredValue: 'E-flat4', confidence: .72, reason: 'Key-signature disagreement' },
+    { id: 'b', measure: 2, voice: 'X', resolution: 'confirmed-photo' },
+    { id: 'c', measure: 3, resolution: 'corrected' },
+    { id: 'bad' },
+  ]);
+  assert.equal(conflicts.length, 3);
+  assert.deepEqual(unresolvedPhotoConflicts(conflicts, 2).map(conflict => conflict.id), ['a']);
+  assert.deepEqual(unresolvedPhotoConflicts(conflicts).map(conflict => conflict.id), ['a']);
+  assert.equal(conflicts[1].voice, null);
 });
 test('staff beam range rejects long notes, gaps, mixed voices, and barlines', () => {
   const base = { measure: 1, voice: 'S', duration: .5, rest: false };
