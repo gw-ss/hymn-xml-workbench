@@ -7,6 +7,42 @@ standard vocabulary for interface components, musical objects, and saved state.
 
 Offline browser editor for attaching Traditional Chinese characters and English syllables to a MusicXML melody without editing XML by hand.
 
+## Photo-recognition development mode
+
+The development pipeline is evidence-first. It evaluates page-level
+registration quality separately from individual symbol confidence, reconciles a
+primary OMR reading with an independent visual reading, checks photographed
+items against musical inference, and prevents inference-only Alto, Tenor, or
+Bass notes from entering the score. Uncertain symbols create localized review
+items; they do not reject an otherwise usable page.
+
+Run the deterministic development fixture with:
+
+```sh
+node scripts/run-photo-recognition-dev.mjs test-fixtures/photo-recognition-development.json /tmp/photo-recognition-report.json
+```
+
+The report preserves evidence, conflicts, confidence, and the emission decision
+for every item. Automatic score writing remains outside this development runner
+until the evidence gate has been validated with additional hymn photographs.
+
+Open `photo-cleaner.html` from the Workbench start screen to prepare a derived
+copy of a hymn photograph without overwriting the camera source. The cleaner
+automatically normalizes uneven paper illumination, preserves grayscale symbol
+detail, and rejects only microscopic dust. It deliberately does not redraw
+staff lines or other music geometry before neural recognition.
+
+The cleaner supports 0.2-degree straightening, stable circular or square manual
+erasers, Original/Cleaned comparison, undoable eraser strokes, and separate PNG
+exports for the straightened original and cleaned image. Both exports use the
+system Save chooser when the browser supports it.
+
+In English mode, **Load Staff Photo** opens an integrated quality-review dialog
+with processing feedback, Original/Cleaned previews, and explicit acceptance,
+warning, or rejection reasons. Accepted pixels are staged in memory for the
+future staff-region/Oemer provider and are not written to MusicXML during the
+intake step.
+
 Direct entry uses an exact-position key-signature picker. Choose a flat or sharp,
 move the treble or bass window among its lower, middle, and upper five-line
 groups, and click the printed line or space. **Done** accepts an empty staff as

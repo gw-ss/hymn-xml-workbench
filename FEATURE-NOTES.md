@@ -95,6 +95,33 @@ melody/rhythm corrections can otherwise require English realignment.
   is too low, a direction is unknown, or the rendered direction disagrees with
   the photo. Manually entered confidence is used until staff-photo OCR supplies
   recognition confidence.
+- The development-mode photo-recognition pipeline separates page-level image
+  quality from localized symbol uncertainty. A whole photograph is rejected
+  only when it cannot be registered reliably (for example, missing staff lines,
+  cropped music, insufficient page coverage, severe perspective distortion, or
+  unusably low resolution). Blur, contrast, and isolated uncertain symbols
+  produce review notices attached to their locations instead of rejecting the
+  complete page.
+- Every recognized symbol is stored as evidence with its source, confidence,
+  measure, onset, voice, bounding box, and optional crop reference. Independent
+  agreement may strengthen confidence; disagreement remains a visible conflict.
+  Musical inference verifies photo evidence but cannot create a missing
+  Alto/Tenor/Bass item. The emission gate passes corroborated evidence, sends
+  weaker single-reader evidence to localized review, and blocks unresolved
+  conflicts without blocking unrelated measures.
+- The Hymn Photo Dust Cleaner is a separate, non-destructive preparation tool.
+  It converts the preview to black and white, finds connected dark components,
+  and removes a component only when both its pixel area and bounding dimensions
+  are below the adjustable limits. A red inspection mode displays every pixel
+  scheduled for removal before the cleaned PNG is exported.
+  Before classifying connected components, it recognizes supported horizontal,
+  vertical, and shallow sloped segments and reconstructs adjustable gaps. This
+  protects staff lines, measure barlines, thick system-opening lines,
+  end/repeat lines, stems, beams, Jianpu underlines, and sustain lines. Thick
+  lines are reconstructed across their component columns. The changes preview
+  colors removals red, horizontal reconstruction green, vertical boundary
+  reconstruction blue, and sloped reconstruction purple. The tool reports the
+  recognized boundary and horizontal-structure counts before export.
 - Measures containing unresolved photo/OCR-versus-verification conflicts receive
   a red outline and a conflict-count badge in the Measure header. Hover previews
   a floating conflict popover; clicking pins it; clicking elsewhere dismisses
@@ -265,3 +292,82 @@ melody/rhythm corrections can otherwise require English realignment.
 - A saved file restores the same layout on the same display and defaults safely
   on an unknown display.
 - Operation controls remain reachable after panning to the last measure.
+
+## Photo cleaner and neural recognition
+
+- The source photograph is never overwritten; cleanup and neural inputs are
+  derived files.
+- The cleaner toolbar uses two panes: **Image file operations** on the left
+  contains loading, preview selection, and vertically stacked export buttons;
+  **Image operations** on the right places processing checkboxes at the top and
+  straightening controls at the bottom. Export labels omit decorative ellipses.
+- The left pane is a single vertical flow so a long loaded filename cannot
+  collide with Preview. Native file input text is constrained to the pane and
+  truncates visually when necessary.
+- **Image file operations** is divided into an upper **Load and preview**
+  subpane and a lower **Export files** subpane. The export actions remain
+  vertically stacked.
+- Preview appears above Photo in the left cleaner pane. On the Workbench opening
+  panel, **Choose MusicXML**, **Enter Jianpu directly**, and **Clean a hymn
+  photo** have equal widths/heights, zero inherited label margins, and uniform
+  spacing.
+- **Export cleaned PNG…** opens the operating-system Save chooser with the
+  generated filename and Downloads as the initial directory. Browsers without
+  File System Access support fall back to their configured Downloads location
+  and report that behavior in the status line.
+- After loading, **Rotate left 0.2°**, **Rotate right 0.2°**, and **Reset** straighten
+  a derived photo before cleanup. Rotation is limited to ±45° and expands a
+  white canvas around the page so corners are not cropped. Both the
+  straightened original and straightened cleaned image have separate PNG Save
+  operations; the camera source is never overwritten.
+- The former automatic **Trim gray rotation borders** option was replaced by a
+  manual white eraser. Users can choose a circular or square 8–96 px brush,
+  drag over gray page borders, dust, or unwanted black spots, and undo up to 20
+  eraser strokes. Strokes edit both working previews directly and do not rerun
+  adaptive background normalization, so gray thresholds cannot shift elsewhere.
+  The native pointer is replaced by a live circle or square outline matching
+  the selected shape and scaled brush size while it is over the image. Turning
+  Eraser off immediately hides the outline, ends any active gesture, and
+  restores the normal arrow cursor.
+  Erasing changes only the straightened working copy; changing rotation clears
+  eraser history because the pixel coordinates change.
+- **Remove uneven paper background** is enabled when a photo is loaded. It
+  estimates low-frequency illumination and local paper tone, whitens the
+  background, and retains locally detected notation/lyric ink in grayscale.
+  It can be disabled to compare against the untouched paper background.
+- Background normalization applies a conservative 0.25%–99.7% percentile
+  contrast stretch after illumination correction. This matches the development
+  result and whitens residual gray edge shading without imposing a global
+  music-symbol threshold.
+- **Preserve original symbol detail** is enabled by default. It retains the
+  source grayscale and antialiased pixels for clefs, accidentals, noteheads,
+  rests, ties, lyrics, and other surviving content. Only confirmed dust is
+  whitened and recognized line gaps are redrawn in black.
+- Strict black-and-white conversion remains available by turning symbol-detail
+  protection off, but it can make fine printed symbols look rougher.
+- Interactive line repair was removed from the browser cleaner. Even a 1 px
+  repair can mistake dense lyric or symbol strokes for a broken line and can
+  contaminate neural recognition. The cleaner always preserves the original
+  staff, beam, barline, lyric, and symbol geometry for Oemer and later stages.
+- Changing a cleanup control immediately invalidates the previous result and
+  disables export until the new preview has finished, preventing a stale
+  nonzero line-repair result from being downloaded after the slider reaches 0.
+- The former black/white threshold, maximum dust area, and maximum dust size
+  sliders and the **Removed dust** preview were removed. Automatic local
+  background separation already covers their useful role, while global manual
+  values had little visible effect and could become unsafe. A fixed conservative
+  4-pixel/3-by-3 micro-dust rejection runs internally after normalization.
+- Oemer supplies neural evidence masks; it is not yet the browser cleaner and
+  its legacy end-to-end MusicXML postprocessor is not authoritative.
+- Workbench geometry, corrected Jianpu/Soprano timing, photo evidence,
+  inference verification, and user conflict resolution govern XML emission.
+- English mode includes **Load Staff Photo**. PNG and high-quality JPEG are
+  preferred; TIFF, WebP, HEIC, and HEIF are accepted when the browser can
+  decode them.
+- Loading opens an integrated **Staff Photo Review** dialog with a busy state,
+  Original/Cleaned comparison, page dimensions/type, and explicit accept,
+  warning, or rejection reasons. Rejected photos cannot be accepted.
+- Accepted cleaned pixels and their quality/cleanup manifest are staged only
+  in the current in-memory session with status
+  `cleaned-awaiting-staff-region-recognition`. This intake layer does not write
+  photo-derived notes to MusicXML.

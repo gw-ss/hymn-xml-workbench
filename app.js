@@ -1,9 +1,10 @@
 import { MAJOR_STEPS, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
+import { assessStaffPhotoQuality, removePaperBackground } from './photo-recognition.mjs';
 
 const $ = selector => document.querySelector(selector);
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 const KEYS = { '-7': ['Cb', 11], '-6': ['Gb', 6], '-5': ['Db', 1], '-4': ['Ab', 8], '-3': ['Eb', 3], '-2': ['Bb', 10], '-1': ['F', 5], 0: ['C', 0], 1: ['G', 7], 2: ['D', 2], 3: ['A', 9], 4: ['E', 4], 5: ['B', 11], 6: ['F#', 6], 7: ['C#', 1] };
-const state = { xml: null, filename: '', events: [], measures: [], fifths: 0, activeLanguage: '1', tokens: { 1: [], 2: [] }, assignments: { 1: new Map(), 2: new Map() }, staffNotes: [], staffAssignments: new Map(), photoConflicts: [], staffRegisters: { treble: 0, bass: 0 }, spacing: { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' }, containerSize: null, layoutProfiles: {}, firstNoteOffsets: new Map(), measureWidths: new Map(), nextStaffNoteId: 1, selectedStaffNoteId: null, staffBeamMode: null, staffBeamStartId: null, selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null, history: [], future: [] };
+const state = { xml: null, filename: '', events: [], measures: [], fifths: 0, activeLanguage: '1', tokens: { 1: [], 2: [] }, assignments: { 1: new Map(), 2: new Map() }, staffNotes: [], staffAssignments: new Map(), photoConflicts: [], staffPhoto: null, staffRegisters: { treble: 0, bass: 0 }, spacing: { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' }, containerSize: null, layoutProfiles: {}, firstNoteOffsets: new Map(), measureWidths: new Map(), nextStaffNoteId: 1, selectedStaffNoteId: null, staffBeamMode: null, staffBeamStartId: null, selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null, history: [], future: [] };
 
 function setupKeySignaturePicker() {
   const picker = $('#key-signature-picker'), staffs = [...document.querySelectorAll('.key-staff')];
@@ -1965,6 +1966,76 @@ function restoreChineseAlignmentIfMissing() {
   return true;
 }
 
+let staffPhotoReviewData = null;
+
+function staffPhotoMetrics(imageData) {
+  const { data, width, height } = imageData, step = Math.max(1, Math.floor(Math.sqrt(width * height / 300000)));
+  let count=0,sum=0,sumSquares=0,gradient=0,gradientCount=0,minX=width,minY=height,maxX=-1,maxY=-1;
+  const rowInk = new Uint32Array(Math.ceil(height / step));
+  for (let y=0,row=0;y<height;y+=step,row+=1) for (let x=0;x<width;x+=step) {
+    const offset=(y*width+x)*4, gray=.2126*data[offset]+.7152*data[offset+1]+.0722*data[offset+2];
+    count+=1; sum+=gray; sumSquares+=gray*gray;
+    if (gray<185) { minX=Math.min(minX,x); maxX=Math.max(maxX,x); minY=Math.min(minY,y); maxY=Math.max(maxY,y); rowInk[row]+=1; }
+    if (x>=step) { const left=(y*width+x-step)*4, leftGray=.2126*data[left]+.7152*data[left+1]+.0722*data[left+2]; gradient+=Math.abs(gray-leftGray); gradientCount+=1; }
+  }
+  const mean=sum/Math.max(1,count), deviation=Math.sqrt(Math.max(0,sumSquares/Math.max(1,count)-mean*mean));
+  const samplesPerRow=Math.ceil(width/step), strongRows=[...rowInk].filter(value=>value/samplesPerRow>.035).length;
+  const pageCoverage=maxX>=0 ? ((maxX-minX+step)*(maxY-minY+step))/(width*height) : 0;
+  return {
+    width,height,pageCoverage:Math.min(1,pageCoverage),
+    staffLineConfidence:Math.min(1,strongRows/18),
+    blurScore:Math.min(1,(gradient/Math.max(1,gradientCount))/14),
+    contrastScore:Math.min(1,deviation/55),perspectiveSkewDegrees:0,croppedMusicalContent:false,
+  };
+}
+
+function showStaffPhotoDecision(quality, file, width, height) {
+  const panel=$('#staff-photo-decision'), labels={ accept:'Accepted for recognition staging', warning:'Accepted with review warnings', reject:'Photo rejected' };
+  panel.className=`photo-review-decision ${quality.decision}`;
+  const details=[...(quality.reasons||[]),...(quality.recommendations||[])];
+  panel.innerHTML=`<strong>${labels[quality.decision]}</strong><div>${escapeHtml(file.name)} · ${width} × ${height}px · ${escapeHtml(file.type||'image')}</div>${details.length?`<ul>${details.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:''}`;
+  $('#accept-staff-photo').disabled=quality.decision==='reject';
+  $('#accept-staff-photo').textContent=quality.decision==='warning'?'Accept with warnings':'Accept cleaned photo';
+}
+
+function drawStaffPhotoReview(mode='cleaned') {
+  if (!staffPhotoReviewData) return;
+  const canvas=$('#staff-photo-canvas'), context=canvas.getContext('2d');
+  canvas.width=staffPhotoReviewData.width; canvas.height=staffPhotoReviewData.height;
+  context.putImageData(mode==='original'?staffPhotoReviewData.original:staffPhotoReviewData.cleaned,0,0);
+}
+
+async function loadStaffPhoto(file) {
+  const dialog=$('#staff-photo-review');
+  $('#staff-photo-review-title').textContent=`Review ${file.name}`;
+  $('#staff-photo-progress').classList.remove('hidden'); $('#staff-photo-review-content').classList.add('hidden');
+  if (!dialog.open) dialog.showModal();
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  try {
+    const bitmap=await createImageBitmap(file), canvas=document.createElement('canvas');
+    canvas.width=bitmap.width; canvas.height=bitmap.height; const context=canvas.getContext('2d',{willReadFrequently:true}); context.drawImage(bitmap,0,0); bitmap.close();
+    const original=context.getImageData(0,0,canvas.width,canvas.height), metrics=staffPhotoMetrics(original), quality=assessStaffPhotoQuality(metrics);
+    const cleanedResult=removePaperBackground(original.data,canvas.width,canvas.height), cleaned=new ImageData(cleanedResult.data,canvas.width,canvas.height);
+    staffPhotoReviewData={ file,width:canvas.width,height:canvas.height,original,cleaned,quality,metrics,cleanup:cleanedResult.stats };
+    showStaffPhotoDecision(quality,file,canvas.width,canvas.height); drawStaffPhotoReview('cleaned');
+    document.querySelector('input[name="staff-photo-preview"][value="cleaned"]').checked=true;
+    $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
+  } catch (error) {
+    staffPhotoReviewData=null; $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
+    $('#staff-photo-decision').className='photo-review-decision reject'; $('#staff-photo-decision').innerHTML='<strong>Photo rejected</strong><div>This browser could not decode the file. Export HEIC/HEIF or TIFF as a full-resolution PNG or high-quality JPEG and try again.</div>';
+    $('#accept-staff-photo').disabled=true; console.error(error);
+  }
+}
+
+function acceptStaffPhoto() {
+  if (!staffPhotoReviewData||staffPhotoReviewData.quality.decision==='reject') return;
+  const { file,width,height,quality,metrics,cleanup,cleaned }=staffPhotoReviewData;
+  state.staffPhoto={ name:file.name,type:file.type,width,height,quality,metrics,cleanup,cleaned,acceptedAt:new Date().toISOString(),stage:'cleaned-awaiting-staff-region-recognition' };
+  $('#staff-photo-status').textContent=`${file.name} accepted${quality.decision==='warning'?' with warnings':''}; ready for staff-region recognition.`;
+  $('#status').textContent='The cleaned staff photo is staged in memory. No photo-derived notes have been written to MusicXML.';
+  $('#staff-photo-review').close();
+}
+
 $('#file-input').addEventListener('change', async event => {
   const file = event.target.files[0]; if (!file) return;
   const xml = new DOMParser().parseFromString(await file.text(), 'application/xml');
@@ -1983,6 +2054,10 @@ $('#hymn-verse').addEventListener('change', fillSelectedHymnLyrics);
 loadHymnCatalog();
 $('#apply-jianpu-button').addEventListener('click', buildDirectEntryXml);
 $('#prepare-english-button').addEventListener('click', prepareEnglishSyllables);
+$('#staff-photo-input').addEventListener('change', event=>{ const file=event.target.files[0]; if(file) loadStaffPhoto(file); });
+document.querySelectorAll('input[name="staff-photo-preview"]').forEach(control=>control.addEventListener('change',event=>drawStaffPhotoReview(event.target.value)));
+$('#accept-staff-photo').addEventListener('click',acceptStaffPhoto);
+$('#choose-another-staff-photo').addEventListener('click',()=>$('#staff-photo-input').click());
 $('#generate-soprano-button').addEventListener('click', generateSopranoFromJianpu);
 $('#apply-staff-operation').addEventListener('click', applyStaffOperation);
 $('#beam-staff-notes').addEventListener('click', () => beginStaffBeamOperation('beam'));
