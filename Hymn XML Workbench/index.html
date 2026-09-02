@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hymn MusicXML Workbench</title>
-    <link rel="stylesheet" href="./styles.css?v=20260901-even-load-actions-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260901-confidence-bands-1" />
   </head>
   <body>
     <header class="topbar">
@@ -81,6 +81,11 @@
                 <div><strong>Staff photo</strong><p class="hint">Load a printed score photo for cleanup and quality review. Recognition remains provisional until conflicts are accepted.</p></div>
                 <label class="file-button">Load Staff Photo<input id="staff-photo-input" type="file" accept="image/png,image/jpeg,image/tiff,image/webp,image/heic,image/heif,.tif,.tiff,.heic,.heif" /></label>
                 <span id="staff-photo-status" class="photo-intake-status">No staff photo loaded.</span>
+                <div id="staff-photo-editor-result" class="staff-photo-editor-result hidden">
+                  <strong id="staff-photo-editor-summary"></strong>
+                  <div id="staff-photo-editor-meter" class="confidence-meter compact" aria-label="Extraction confidence colors"></div>
+                  <button id="review-extracted-regions" type="button" class="secondary">Review extracted regions</button>
+                </div>
               </section>
               <button id="generate-soprano-button" class="primary">Generate Soprano from corrected Jianpu</button>
               <div class="staff-palette-grid">
@@ -173,14 +178,15 @@
         <header><div><p class="step">Staff Photo Review</p><h2 id="staff-photo-review-title">Preparing photo…</h2></div><button id="close-staff-photo-review" class="secondary" value="cancel" aria-label="Close photo review">Close</button></header>
         <div id="staff-photo-progress" class="photo-progress"><span class="busy-spinner" aria-hidden="true"></span><span>Processing the photograph…</span></div>
         <div id="staff-photo-review-content" class="hidden">
-          <div class="photo-review-toolbar" role="group" aria-label="Photo preview"><label><input type="radio" name="staff-photo-preview" value="cleaned" checked /> Cleaned</label><label><input type="radio" name="staff-photo-preview" value="original" /> Original</label></div>
+          <div class="photo-review-toolbar" role="group" aria-label="Photo preview"><label><input type="radio" name="staff-photo-preview" value="cleaned" checked /> Cleaned</label><label><input type="radio" name="staff-photo-preview" value="original" /> Original</label><label><input id="show-staff-regions" type="checkbox" disabled /> Show extracted regions</label></div>
           <div id="staff-photo-decision" class="photo-review-decision"></div>
+          <div id="staff-region-result" class="staff-region-result hidden" aria-live="polite"></div>
           <div class="photo-review-canvas"><canvas id="staff-photo-canvas" aria-label="Staff photo review preview"></canvas></div>
           <div class="photo-review-actions"><button id="accept-staff-photo" type="button" class="primary">Accept cleaned photo</button><button id="choose-another-staff-photo" type="button" class="secondary">Choose another photo</button></div>
         </div>
       </form>
     </dialog>
     <div id="photo-conflict-popover" class="photo-conflict-popover hidden" role="dialog" aria-label="Staff-photo conflicts"></div>
-    <script type="module" src="./app.js?v=20260901-staff-photo-intake-1"></script>
+    <script type="module" src="./app.js?v=20260901-vertical-boundaries-1"></script>
   </body>
 </html>

@@ -254,6 +254,195 @@ export function assessStaffPhotoQuality(metrics = {}) {
   return { decision: recommendations.length ? 'warning' : 'accept', reasons: [], recommendations };
 }
 
+function grayscaleInkProfile(rgba, width, height, threshold) {
+  const rows = new Uint32Array(height);
+  for (let y = 0; y < height; y += 1) {
+    let count = 0;
+    for (let x = 0; x < width; x += 1) {
+      const offset = (y * width + x) * 4;
+      const gray = .2126 * rgba[offset] + .7152 * rgba[offset + 1] + .0722 * rgba[offset + 2];
+      if (gray < threshold) count += 1;
+    }
+    rows[y] = count;
+  }
+  return rows;
+}
+
+function rowLinePeaks(profile, width, { minimumCoverage = .2 } = {}) {
+  const threshold = width * minimumCoverage, bands = [];
+  let start = -1, weighted = 0, total = 0, maximum = 0;
+  const finish = end => {
+    if (start < 0) return;
+    bands.push({ y: total ? weighted / total : (start + end) / 2, y1: start, y2: end, strength: maximum / width });
+    start = -1; weighted = 0; total = 0; maximum = 0;
+  };
+  for (let y = 0; y < profile.length; y += 1) {
+    const smoothed = (profile[Math.max(0, y - 1)] + profile[y] + profile[Math.min(profile.length - 1, y + 1)]) / 3;
+    if (smoothed >= threshold) {
+      if (start < 0) start = y;
+      weighted += y * smoothed; total += smoothed; maximum = Math.max(maximum, smoothed);
+    } else finish(y - 1);
+  }
+  finish(profile.length - 1);
+  return bands;
+}
+
+function staffCandidates(peaks, imageHeight) {
+  const candidates = [];
+  const minimumSpacing=Math.max(3,imageHeight*.002), maximumSpacing=imageHeight*.035;
+  for (let first=0;first<peaks.length;first+=1) for(let second=first+1;second<Math.min(peaks.length,first+6);second+=1) {
+    const spacing=peaks[second].y-peaks[first].y;
+    if(spacing<minimumSpacing||spacing>maximumSpacing) continue;
+    const group=[peaks[first],peaks[second]]; let cursor=second,valid=true;
+    for(let member=2;member<5;member+=1){
+      const expected=peaks[first].y+spacing*member; let best=-1,bestDistance=Infinity;
+      for(let index=cursor+1;index<peaks.length&&peaks[index].y<=expected+spacing*.38;index+=1){const distance=Math.abs(peaks[index].y-expected);if(distance<bestDistance){best=index;bestDistance=distance;}}
+      if(best<0||bestDistance>spacing*.38){valid=false;break;} group.push(peaks[best]);cursor=best;
+    }
+    if(!valid) continue;
+    const gaps=group.slice(1).map((peak,member)=>peak.y-group[member].y),fittedSpacing=gaps.reduce((sum,gap)=>sum+gap,0)/4;
+    const deviation=Math.sqrt(gaps.reduce((sum,gap)=>sum+(gap-fittedSpacing)**2,0)/gaps.length);
+    const regularity=Math.max(0,1-deviation/Math.max(1,fittedSpacing*.38));
+    const strength=group.reduce((sum,peak)=>sum+Math.min(1,peak.strength/.34),0)/5;
+    const confidence=.78*regularity+.22*strength;
+    if(confidence>=.48)candidates.push({index:first,lines:group.map(peak=>peak.y),spacing:fittedSpacing,confidence});
+  }
+  return candidates.toSorted((left, right) => right.confidence - left.confidence);
+}
+
+function selectNonOverlappingStaffs(candidates) {
+  const selected = [];
+  for (const candidate of candidates) {
+    const top = candidate.lines[0] - candidate.spacing, bottom = candidate.lines[4] + candidate.spacing;
+    if (selected.some(staff => Math.max(top, staff.top) < Math.min(bottom, staff.bottom))) continue;
+    selected.push({ ...candidate, top, bottom });
+  }
+  return selected.toSorted((left, right) => left.lines[0] - right.lines[0]);
+}
+
+function darkAt(pixels,width,x,y,threshold){const offset=(y*width+x)*4,gray=.2126*pixels[offset]+.7152*pixels[offset+1]+.0722*pixels[offset+2];return gray<threshold;}
+
+function verticalStaffBoundaries(pixels,width,height,staff,threshold){
+  const top=Math.max(0,Math.round(staff.lines[0])),bottom=Math.min(height-1,Math.round(staff.lines[4])),span=bottom-top+1,candidates=[];
+  for(let x=0;x<width;x+=1){
+    let longest=0,current=0,darkCount=0;
+    for(let y=top;y<=bottom;y+=1){if(darkAt(pixels,width,x,y,threshold)){current+=1;darkCount+=1;longest=Math.max(longest,current);}else current=0;}
+    // Bar ink may be interrupted where curved/fuzzy staff lines cross it.
+    // Requiring both a long run and strong total coverage keeps ordinary note
+    // stems out while tolerating those small photographic gaps.
+    if(longest>=span*.52&&darkCount>=span*.62)candidates.push(x);
+  }
+  const bands=[];
+  for(const x of candidates){const last=bands.at(-1);if(last&&x<=last.x2+1)last.x2=x;else bands.push({x1:x,x2:x});}
+  return bands.map(band=>({x:(band.x1+band.x2)/2,x1:band.x1,x2:band.x2,thickness:band.x2-band.x1+1}));
+}
+
+function matchSystemBoundaries(trebleBoundaries,bassBoundaries,width){
+  const matches=[];
+  for(const treble of trebleBoundaries){
+    const bass=bassBoundaries.filter(item=>Math.abs(item.x-treble.x)<=Math.max(5,width*.013)).toSorted((a,b)=>Math.abs(a.x-treble.x)-Math.abs(b.x-treble.x))[0];
+    if(!bass)continue;
+    const x=(treble.x+bass.x)/2; if(matches.some(item=>Math.abs(item.x-x)<2))continue;
+    matches.push({x,x1:Math.min(treble.x1,bass.x1),x2:Math.max(treble.x2,bass.x2),thickness:Math.max(treble.thickness,bass.thickness)});
+  }
+  matches.sort((a,b)=>a.x-b.x);
+  for(let index=0;index<matches.length;index+=1){const item=matches[index],neighbor=matches[index+1],nearLeft=item.x<width*.12,nearRight=item.x>width*.88,double=neighbor&&neighbor.x-item.x<=Math.max(9,width*.012);item.kind=nearLeft?'system-start':double||nearRight?'stop-or-repeat':'measure';item.confidence=Math.min(1,.82+(item.thickness>=2?.08:0)+(nearLeft||nearRight?.06:0));if(double){neighbor.kind='stop-or-repeat';neighbor.confidence=item.confidence;}}
+  return matches;
+}
+
+function jianpuVerticalBoundaries(pixels,width,height,system,treble,threshold){
+  const top=Math.max(0,Math.round(treble.lines[0]-treble.spacing*6)),bottom=Math.max(top,Math.min(height-1,Math.round(treble.lines[0]-treble.spacing*.65))),minimumRun=Math.max(10,treble.spacing*1.9),columns=[];
+  for(let x=0;x<width;x+=1){let longest=0,current=0;for(let y=top;y<=bottom;y+=1){if(darkAt(pixels,width,x,y,threshold)){current+=1;longest=Math.max(longest,current);}else current=0;}if(longest>=minimumRun)columns.push({x,longest});}
+  const bands=[];
+  for(const column of columns){const last=bands.at(-1);if(last&&column.x<=last.x2+1){last.x2=column.x;last.longest=Math.max(last.longest,column.longest);}else bands.push({x1:column.x,x2:column.x,longest:column.longest});}
+  return bands.filter(item=>item.x2-item.x1+1<=Math.max(6,width*.008)).map(item=>({x:(item.x1+item.x2)/2,x1:item.x1,x2:item.x2,thickness:item.x2-item.x1+1,kind:'measure',confidence:Math.min(.98,.78+item.longest/Math.max(1,bottom-top+1)*.2)}));
+}
+
+function staffHorizontalExtent(pixels,width,height,staff,threshold){
+  const starts=[],ends=[];
+  for(const line of staff.lines){const y=Math.max(0,Math.min(height-1,Math.round(line)));let first=-1,last=-1;for(let x=0;x<width;x+=1){if([-1,0,1].some(dy=>y+dy>=0&&y+dy<height&&darkAt(pixels,width,x,y+dy,threshold))){if(first<0)first=x;last=x;}}if(first>=0){starts.push(first);ends.push(last);}}
+  const median=values=>values.toSorted((a,b)=>a-b)[Math.floor(values.length/2)];
+  return starts.length?{left:median(starts),right:median(ends)}:null;
+}
+
+/**
+ * Locate printed five-line staffs and pair adjacent treble/bass staffs into
+ * SATB hymn systems. This stage extracts geometry only; it deliberately does
+ * not recognize notes or emit MusicXML.
+ */
+export function extractStaffRegions(rgba, width, height, { inkThreshold = 175, minimumLineCoverage = .14 } = {}) {
+  const pixels = rgba instanceof Uint8ClampedArray ? rgba : new Uint8ClampedArray(rgba || []);
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0 || pixels.length !== width * height * 4) throw new Error('RGBA data must match the positive image dimensions.');
+  const profile = grayscaleInkProfile(pixels, width, height, inkThreshold);
+  // Curved/faint photographed lines can peak at different coverage levels.
+  // Pool several conservative row profiles, then let the non-overlap selector
+  // keep the best-supported five-line fit for each physical staff.
+  const coverageLevels=[minimumLineCoverage,.16,.18,.2].filter((value,index,list)=>value<=.22&&list.indexOf(value)===index);
+  const candidates=coverageLevels.flatMap(coverage=>staffCandidates(rowLinePeaks(profile,width,{minimumCoverage:coverage}),height));
+  const staffs = selectNonOverlappingStaffs(candidates).map((staff, index) => ({
+    id: `staff-${index + 1}`,
+    role: index % 2 ? 'bass' : 'treble',
+    lines: staff.lines.map(value => Math.round(value * 10) / 10),
+    spacing: Math.round(staff.spacing * 10) / 10,
+    confidence: Math.round(staff.confidence * 1000) / 1000,
+    bbox: {
+      x: 0,
+      y: Math.max(0, Math.floor(staff.lines[0] - staff.spacing * 2.2)),
+      width,
+      height: Math.min(height, Math.ceil(staff.lines[4] + staff.spacing * 2.2)) - Math.max(0, Math.floor(staff.lines[0] - staff.spacing * 2.2)),
+    },
+  }));
+  const systems = [];
+  for (let index = 0; index + 1 < staffs.length; index += 2) {
+    const treble = staffs[index], bass = staffs[index + 1];
+    const previousSystem=systems.at(-1),previousBottom=previousSystem?previousSystem.bbox.y+previousSystem.bbox.height:null;
+    const nextTop = staffs[index + 2]?.bbox.y;
+    const naturalTop = Math.max(0, Math.floor(treble.lines[0] - treble.spacing * 4));
+    const naturalBottom = Math.min(height, Math.ceil(bass.lines[4] + bass.spacing * 4));
+    const top = previousBottom === null ? naturalTop : Math.max(naturalTop, Math.floor((previousBottom + naturalTop) / 2));
+    const bottom = nextTop === undefined ? naturalBottom : Math.min(naturalBottom, Math.ceil((naturalBottom + nextTop) / 2));
+    systems.push({
+      id: `system-${systems.length + 1}`,
+      staffIds: [treble.id, bass.id],
+      confidence: Math.round(Math.min(treble.confidence, bass.confidence) * 1000) / 1000,
+      bbox: { x: 0, y: top, width, height: Math.max(1, bottom - top) },
+    });
+  }
+  const unpairedStaffIds = staffs.length % 2 ? [staffs.at(-1).id] : [];
+  const boundaries=[];
+  for(const system of systems){
+    const treble=staffs.find(staff=>staff.id===system.staffIds[0]),bass=staffs.find(staff=>staff.id===system.staffIds[1]);
+    const staffMatched=matchSystemBoundaries(verticalStaffBoundaries(pixels,width,height,treble,inkThreshold),verticalStaffBoundaries(pixels,width,height,bass,inkThreshold),width),jianpu=jianpuVerticalBoundaries(pixels,width,height,system,treble,inkThreshold),trebleExtent=staffHorizontalExtent(pixels,width,height,treble,inkThreshold),bassExtent=staffHorizontalExtent(pixels,width,height,bass,inkThreshold),combined=[];
+    const leftX=trebleExtent&&bassExtent?Math.min(trebleExtent.left,bassExtent.left):staffMatched[0]?.x,rightX=trebleExtent&&bassExtent?Math.max(trebleExtent.right,bassExtent.right):staffMatched.at(-1)?.x;
+    const left=Number.isFinite(leftX)?{x:leftX,x1:leftX,x2:leftX,thickness:Math.max(1,staffMatched[0]?.thickness||1),kind:'system-start',confidence:.94}:null,right=Number.isFinite(rightX)?{x:rightX,x1:rightX,x2:rightX,thickness:Math.max(1,staffMatched.at(-1)?.thickness||1),kind:'stop-or-repeat',confidence:.9}:null;
+    if(left)combined.push(left);
+    for(const candidate of jianpu){if(!combined.some(item=>Math.abs(item.x-candidate.x)<=Math.max(3,width*.006)))combined.push(candidate);}
+    if(right&&right!==left&&!combined.some(item=>Math.abs(item.x-right.x)<=Math.max(3,width*.006))){if(right.x>width*.86)right.kind='stop-or-repeat';combined.push(right);}
+    combined.sort((a,b)=>a.x-b.x);
+    for(let index=0;index<combined.length-1;index+=1)if(combined[index+1].x-combined[index].x<=Math.max(9,width*.012)){combined[index].kind='stop-or-repeat';combined[index+1].kind='stop-or-repeat';}
+    for(const [index,boundary] of combined.entries())boundaries.push({...boundary,id:`${system.id}-boundary-${index+1}`,systemId:system.id});
+    const usable=combined.filter(item=>item.kind==='system-start'||item.kind==='measure'||item.kind==='stop-or-repeat');
+    if(usable.length>=2){system.contentX1=Math.round(usable[0].x);system.contentX2=Math.round(usable.at(-1).x);system.boundaryIds=combined.map((item,index)=>`${system.id}-boundary-${index+1}`);}
+  }
+  const warnings = [];
+  if (!staffs.length) warnings.push('No reliable five-line staff was found.');
+  if (unpairedStaffIds.length) warnings.push('One detected staff could not be paired into a treble/bass hymn system.');
+  if (staffs.some(staff => staff.confidence < .68)) warnings.push('At least one staff boundary has low confidence and needs visual review.');
+  if(systems.some(system=>!Number.isFinite(system.contentX1)||!Number.isFinite(system.contentX2)))warnings.push('At least one system does not have reliable left and right vertical boundaries.');
+  const confidence = staffs.length ? staffs.reduce((sum, staff) => sum + staff.confidence, 0) / staffs.length : 0;
+  return {
+    schemaVersion: 1,
+    stage: systems.length ? 'staff-regions-extracted' : 'staff-region-extraction-failed',
+    image: { width, height },
+    staffs,
+    systems,
+    boundaries,
+    unpairedStaffIds,
+    warnings,
+    confidence: Math.round(confidence * 1000) / 1000,
+  };
+}
+
 export function recognitionSlot(item = {}) {
   const measure = finite(item.measure) ? Number(item.measure) : '?';
   const onset = finite(item.onset) ? Number(item.onset).toFixed(6) : '?';

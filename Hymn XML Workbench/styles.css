@@ -187,12 +187,30 @@ textarea { width:100%; resize:vertical; padding:9px; border:1px solid var(--line
 .staff-photo-intake { display:grid; gap:8px; margin:10px 0; padding:10px; border:1px solid #b9c9c2; border-radius:9px; background:#f4faf7; }
 .staff-photo-intake p { margin:3px 0; }
 .photo-intake-status { color:var(--muted); font-size:.82rem; font-weight:700; }
+.staff-photo-editor-result { display:grid; gap:7px; padding:9px; border:1px solid #d76d6d; border-radius:7px; background:#fff5f5; }
+.staff-photo-editor-result.hidden { display:none; }
+.staff-photo-editor-result strong { color:#8d2020; }
+.staff-photo-editor-result button { width:100%; }
 .staff-photo-review { width:min(1120px,calc(100vw - 28px)); max-height:calc(100vh - 28px); padding:0; border:1px solid #80958b; border-radius:12px; color:var(--ink); background:var(--panel); box-shadow:0 18px 60px #10251c55; }
 .staff-photo-review::backdrop { background:#13251d99; }
 .staff-photo-review-shell { display:grid; gap:12px; padding:16px; }
 .staff-photo-review header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
 .staff-photo-review h2 { margin:2px 0; }
+.staff-region-result { padding:10px 12px; border:1px solid #96b8a8; border-radius:8px; background:#f2fbf6; }
+.staff-region-result.reject { border-color:#d58e8e; background:#fff5f5; }
+.staff-region-result ul { margin:6px 0 0; }
+.photo-stage-note { margin-top:6px; color:#53645d; font-size:.92em; }
+.confidence-meter { display:grid; grid-template-columns:repeat(4,minmax(90px,1fr)); margin-top:8px; overflow:hidden; border:1px solid #a8b1ac; border-radius:7px; color:white; text-align:center; font-weight:800; }
+.confidence-meter span { padding:6px 8px; }
+.confidence-meter small { color:inherit; font-weight:700; }
+.confidence-meter.compact { grid-template-columns:repeat(2,1fr); margin:0; font-size:.75rem; }
+.confidence-meter.compact span { padding:3px 4px; }
+.confidence-high { background:#0b5d3b; }
+.confidence-middle { background:#00a9b8; }
+.confidence-low { background:#e07a00; }
+.confidence-none { background:#c62828; }
 .photo-progress { display:flex; align-items:center; gap:10px; min-height:64px; font-weight:750; }
+.photo-progress.hidden { display:none; }
 .busy-spinner { width:24px; height:24px; border:3px solid #b9c9c2; border-top-color:var(--green); border-radius:50%; animation:photo-spin .8s linear infinite; }
 @keyframes photo-spin { to { transform:rotate(360deg); } }
 .photo-review-toolbar,.photo-review-actions { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; }

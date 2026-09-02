@@ -367,7 +367,24 @@ melody/rhythm corrections can otherwise require English realignment.
 - Loading opens an integrated **Staff Photo Review** dialog with a busy state,
   Original/Cleaned comparison, page dimensions/type, and explicit accept,
   warning, or rejection reasons. Rejected photos cannot be accepted.
+- The processing indicator is hidden immediately after cleaning completes and
+  does not remain visible during or after staff-region review.
 - Accepted cleaned pixels and their quality/cleanup manifest are staged only
   in the current in-memory session with status
-  `cleaned-awaiting-staff-region-recognition`. This intake layer does not write
+  `cleaned-awaiting-staff-region-recognition` until extraction begins.
+- **Staff-region extraction** detects regular five-line staffs, pairs adjacent
+  treble/bass regions into SATB hymn systems, and presents confidence-coded
+  system boxes and staff-line guides for visual review: dark green is high
+  (95–100%), cyan is middle (85–94%), orange is low (65–84%), and red is no
+  confidence (0–64%). A four-band meter explains these colors. The extraction manifest
+  (staff lines, crop rectangles, confidence, and warnings) is kept in memory
+  with status `staff-regions-extracted`. It does not recognize symbols or write
   photo-derived notes to MusicXML.
+- Region extraction also detects vertical measure bars, strong system-start
+  bars, and stop/repeat boundary pairs by matching full-height lines in the
+  treble and bass staffs. Horizontal staff guides are clipped to the detected
+  outer bars instead of running across the entire photograph.
+- After **Use extracted regions**, the Editor retains a visible system/staff
+  count and confidence summary with **Review extracted regions**, which reopens
+  the confidence-red overlay. Measure viewports remain unchanged until the
+  separate measure-registration stage.

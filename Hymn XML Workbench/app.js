@@ -1,5 +1,5 @@
 import { MAJOR_STEPS, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
-import { assessStaffPhotoQuality, removePaperBackground } from './photo-recognition.mjs';
+import { assessStaffPhotoQuality, extractStaffRegions, removePaperBackground } from './photo-recognition.mjs';
 
 const $ = selector => document.querySelector(selector);
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -1995,7 +1995,7 @@ function showStaffPhotoDecision(quality, file, width, height) {
   const details=[...(quality.reasons||[]),...(quality.recommendations||[])];
   panel.innerHTML=`<strong>${labels[quality.decision]}</strong><div>${escapeHtml(file.name)} · ${width} × ${height}px · ${escapeHtml(file.type||'image')}</div>${details.length?`<ul>${details.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:''}`;
   $('#accept-staff-photo').disabled=quality.decision==='reject';
-  $('#accept-staff-photo').textContent=quality.decision==='warning'?'Accept with warnings':'Accept cleaned photo';
+  $('#accept-staff-photo').textContent=quality.decision==='warning'?'Accept warnings and extract regions':'Extract staff regions';
 }
 
 function drawStaffPhotoReview(mode='cleaned') {
@@ -2003,11 +2003,30 @@ function drawStaffPhotoReview(mode='cleaned') {
   const canvas=$('#staff-photo-canvas'), context=canvas.getContext('2d');
   canvas.width=staffPhotoReviewData.width; canvas.height=staffPhotoReviewData.height;
   context.putImageData(mode==='original'?staffPhotoReviewData.original:staffPhotoReviewData.cleaned,0,0);
+  if (!staffPhotoReviewData.extraction||!$('#show-staff-regions').checked) return;
+  const confidenceColor=confidence=>{const percent=(Number(confidence)||0)*100;return percent>=95?'#0b5d3b':percent>=85?'#00a9b8':percent>=65?'#e07a00':'#c62828';};
+  context.save(); context.lineWidth=Math.max(2,Math.round(canvas.width/700)); context.font=`${Math.max(16,Math.round(canvas.width/70))}px system-ui`;
+  for (const [index,system] of staffPhotoReviewData.extraction.systems.entries()) {
+    const { y,height }=system.bbox,x=Number.isFinite(system.contentX1)?system.contentX1:system.bbox.x,right=Number.isFinite(system.contentX2)?system.contentX2:system.bbox.x+system.bbox.width,width=Math.max(1,right-x); context.strokeStyle=confidenceColor(system.confidence); context.fillStyle=confidenceColor(system.confidence); context.setLineDash([12,8]); context.strokeRect(x+2,y+2,width-4,height-4); context.setLineDash([]); context.fillText(`System ${index+1} · ${Math.round(system.confidence*100)}%`,x+10,y+Math.max(22,canvas.width/65));
+  }
+  context.lineWidth=Math.max(2,Math.round(canvas.width/850));
+  for (const staff of staffPhotoReviewData.extraction.staffs) { const system=staffPhotoReviewData.extraction.systems.find(item=>item.staffIds.includes(staff.id)),left=system?.contentX1??0,right=system?.contentX2??canvas.width;context.strokeStyle=confidenceColor(staff.confidence); for (const y of staff.lines) { context.beginPath(); context.moveTo(left,y); context.lineTo(right,y); context.stroke(); } }
+  for(const boundary of staffPhotoReviewData.extraction.boundaries||[]){const system=staffPhotoReviewData.extraction.systems.find(item=>item.id===boundary.systemId),staffs=system?.staffIds.map(id=>staffPhotoReviewData.extraction.staffs.find(item=>item.id===id));if(!staffs?.every(Boolean))continue;context.strokeStyle=confidenceColor(boundary.confidence);context.lineWidth=Math.max(boundary.kind==='stop-or-repeat'?3:2,Math.round(canvas.width/900));context.beginPath();context.moveTo(boundary.x,staffs[0].lines[0]);context.lineTo(boundary.x,staffs[1].lines[4]);context.stroke();}
+  context.restore();
+}
+
+function showStaffRegionExtraction(extraction) {
+  const panel=$('#staff-region-result'), success=extraction.systems.length>0;
+  const confidenceMeter='<div class="confidence-meter" aria-label="Extraction confidence colors"><span class="confidence-high">High<br><small>95–100%</small></span><span class="confidence-middle">Middle<br><small>85–94%</small></span><span class="confidence-low">Low<br><small>65–84%</small></span><span class="confidence-none">No confidence<br><small>0–64%</small></span></div>';
+  panel.className=`staff-region-result ${success?'accept':'reject'}`;
+  panel.innerHTML=`<strong>${success?`${extraction.systems.length} hymn system${extraction.systems.length===1?'':'s'} extracted`:'Staff-region extraction failed'}</strong><div>${extraction.staffs.length} five-line staff region${extraction.staffs.length===1?'':'s'} · ${(extraction.boundaries||[]).length} vertical boundaries · ${Math.round(extraction.confidence*100)}% geometry confidence</div>${confidenceMeter}${extraction.warnings.length?`<ul>${extraction.warnings.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:''}<div class="photo-stage-note">System boxes, staff guides, and extracted measure/system/stop boundaries use the confidence colors above. Horizontal guides stop at the detected outer bars. No notes or MusicXML were created.</div>`;
+  panel.classList.remove('hidden'); $('#show-staff-regions').disabled=!success; $('#show-staff-regions').checked=success;
 }
 
 async function loadStaffPhoto(file) {
   const dialog=$('#staff-photo-review');
   $('#staff-photo-review-title').textContent=`Review ${file.name}`;
+  $('#staff-photo-editor-result').classList.add('hidden');
   $('#staff-photo-progress').classList.remove('hidden'); $('#staff-photo-review-content').classList.add('hidden');
   if (!dialog.open) dialog.showModal();
   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
@@ -2016,7 +2035,8 @@ async function loadStaffPhoto(file) {
     canvas.width=bitmap.width; canvas.height=bitmap.height; const context=canvas.getContext('2d',{willReadFrequently:true}); context.drawImage(bitmap,0,0); bitmap.close();
     const original=context.getImageData(0,0,canvas.width,canvas.height), metrics=staffPhotoMetrics(original), quality=assessStaffPhotoQuality(metrics);
     const cleanedResult=removePaperBackground(original.data,canvas.width,canvas.height), cleaned=new ImageData(cleanedResult.data,canvas.width,canvas.height);
-    staffPhotoReviewData={ file,width:canvas.width,height:canvas.height,original,cleaned,quality,metrics,cleanup:cleanedResult.stats };
+    staffPhotoReviewData={ file,width:canvas.width,height:canvas.height,original,cleaned,quality,metrics,cleanup:cleanedResult.stats,extraction:null };
+    $('#staff-region-result').classList.add('hidden'); $('#show-staff-regions').checked=false; $('#show-staff-regions').disabled=true;
     showStaffPhotoDecision(quality,file,canvas.width,canvas.height); drawStaffPhotoReview('cleaned');
     document.querySelector('input[name="staff-photo-preview"][value="cleaned"]').checked=true;
     $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
@@ -2029,11 +2049,30 @@ async function loadStaffPhoto(file) {
 
 function acceptStaffPhoto() {
   if (!staffPhotoReviewData||staffPhotoReviewData.quality.decision==='reject') return;
-  const { file,width,height,quality,metrics,cleanup,cleaned }=staffPhotoReviewData;
-  state.staffPhoto={ name:file.name,type:file.type,width,height,quality,metrics,cleanup,cleaned,acceptedAt:new Date().toISOString(),stage:'cleaned-awaiting-staff-region-recognition' };
-  $('#staff-photo-status').textContent=`${file.name} accepted${quality.decision==='warning'?' with warnings':''}; ready for staff-region recognition.`;
-  $('#status').textContent='The cleaned staff photo is staged in memory. No photo-derived notes have been written to MusicXML.';
+  if (staffPhotoReviewData.committed) { $('#staff-photo-review').close(); return; }
+  if (!staffPhotoReviewData.extraction) {
+    const { cleaned,width,height }=staffPhotoReviewData;
+    const extraction=extractStaffRegions(cleaned.data,width,height); staffPhotoReviewData.extraction=extraction;
+    showStaffRegionExtraction(extraction); drawStaffPhotoReview('cleaned');
+    $('#accept-staff-photo').disabled=!extraction.systems.length; $('#accept-staff-photo').textContent=extraction.systems.length?'Use extracted regions':'Extraction failed';
+    return;
+  }
+  const { file,width,height,quality,metrics,cleanup,cleaned,extraction }=staffPhotoReviewData;
+  state.staffPhoto={ name:file.name,type:file.type,width,height,quality,metrics,cleanup,cleaned,extraction,acceptedAt:new Date().toISOString(),stage:extraction.stage };
+  $('#staff-photo-status').textContent=`${file.name}: ${extraction.systems.length} staff system${extraction.systems.length===1?'':'s'} extracted${extraction.warnings.length?' with warnings':''}.`;
+  $('#staff-photo-editor-summary').textContent=`${extraction.systems.length} systems · ${extraction.staffs.length} staffs · ${(extraction.boundaries||[]).length} vertical bars · ${Math.round(extraction.confidence*100)}% confidence`;
+  $('#staff-photo-editor-meter').innerHTML='<span class="confidence-high">95–100%</span><span class="confidence-middle">85–94%</span><span class="confidence-low">65–84%</span><span class="confidence-none">0–64%</span>';
+  $('#staff-photo-editor-result').classList.remove('hidden'); staffPhotoReviewData.committed=true;
+  $('#status').textContent='Staff regions are staged in memory for symbol recognition. No photo-derived notes have been written to MusicXML.';
   $('#staff-photo-review').close();
+}
+
+function reviewExtractedStaffRegions() {
+  if (!staffPhotoReviewData?.extraction) return;
+  $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
+  $('#accept-staff-photo').disabled=false; $('#accept-staff-photo').textContent='Close region review';
+  $('#show-staff-regions').checked=true; showStaffRegionExtraction(staffPhotoReviewData.extraction); drawStaffPhotoReview('cleaned');
+  const dialog=$('#staff-photo-review'); if(!dialog.open)dialog.showModal();
 }
 
 $('#file-input').addEventListener('change', async event => {
@@ -2056,8 +2095,10 @@ $('#apply-jianpu-button').addEventListener('click', buildDirectEntryXml);
 $('#prepare-english-button').addEventListener('click', prepareEnglishSyllables);
 $('#staff-photo-input').addEventListener('change', event=>{ const file=event.target.files[0]; if(file) loadStaffPhoto(file); });
 document.querySelectorAll('input[name="staff-photo-preview"]').forEach(control=>control.addEventListener('change',event=>drawStaffPhotoReview(event.target.value)));
+$('#show-staff-regions').addEventListener('change',()=>drawStaffPhotoReview(document.querySelector('input[name="staff-photo-preview"]:checked')?.value||'cleaned'));
 $('#accept-staff-photo').addEventListener('click',acceptStaffPhoto);
 $('#choose-another-staff-photo').addEventListener('click',()=>$('#staff-photo-input').click());
+$('#review-extracted-regions').addEventListener('click',reviewExtractedStaffRegions);
 $('#generate-soprano-button').addEventListener('click', generateSopranoFromJianpu);
 $('#apply-staff-operation').addEventListener('click', applyStaffOperation);
 $('#beam-staff-notes').addEventListener('click', () => beginStaffBeamOperation('beam'));

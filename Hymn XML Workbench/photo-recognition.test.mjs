@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { assessStaffPhotoQuality, buildEvidenceManifest, decideEvidenceEmission, reconcileIndependentReadings, removePaperBackground, removeSmallDarkComponents, runRecognitionDevelopmentPipeline, verifyPhotoEvidence } from './photo-recognition.mjs';
+import { assessStaffPhotoQuality, buildEvidenceManifest, decideEvidenceEmission, extractStaffRegions, reconcileIndependentReadings, removePaperBackground, removeSmallDarkComponents, runRecognitionDevelopmentPipeline, verifyPhotoEvidence } from './photo-recognition.mjs';
 
 const image = { width: 2048, height: 2800, staffLineConfidence: .94, pageCoverage: .9, blurScore: .82, contrastScore: .8, perspectiveSkewDegrees: 2 };
 const observation = (overrides = {}) => ({ id: 'a1', kind: 'note', voice: 'A', measure: 2, onset: 1, duration: .5, value: { step: 'E', alter: -1, octave: 4 }, bbox: { x: 100, y: 200, width: 14, height: 12 }, confidence: .9, source: 'omr', ...overrides });
@@ -10,6 +10,22 @@ test('photo quality rejects only page-level registration failures', () => {
   assert.equal(assessStaffPhotoQuality({ ...image, blurScore: .5 }).decision, 'warning');
   assert.equal(assessStaffPhotoQuality({ ...image, croppedMusicalContent: true }).decision, 'reject');
   assert.equal(assessStaffPhotoQuality({ ...image, staffLineConfidence: .2 }).decision, 'reject');
+});
+
+test('staff-region extraction finds and pairs regular five-line staffs', () => {
+  const width=600,height=500,data=new Uint8ClampedArray(width*height*4).fill(255);
+  const lineGroups=[[70,80,90,100,110],[190,200,210,220,230],[310,320,330,340,350],[420,430,440,450,460]];
+  for(const group of lineGroups)for(const y of group)for(let x=35;x<565;x+=1){const offset=(y*width+x)*4;data[offset]=data[offset+1]=data[offset+2]=20;}
+  for(const [top,bottom] of [[70,230],[310,460]])for(const x of [35,300,564])for(let y=top;y<=bottom;y+=1){const offset=(y*width+x)*4;data[offset]=data[offset+1]=data[offset+2]=20;}
+  for(const [top,bottom] of [[35,62],[275,302]])for(let y=top;y<=bottom;y+=1){const offset=(y*width+300)*4;data[offset]=data[offset+1]=data[offset+2]=20;}
+  const result=extractStaffRegions(data,width,height);
+  assert.equal(result.staffs.length,4);
+  assert.equal(result.systems.length,2);
+  assert.deepEqual(result.systems[0].staffIds,['staff-1','staff-2']);
+  assert.equal(result.boundaries.length,6);
+  assert.equal(result.systems[0].contentX1,35);
+  assert.equal(result.systems[0].contentX2,564);
+  assert.equal(result.stage,'staff-regions-extracted');
 });
 
 test('evidence manifest rejects malformed detections without inventing replacements', () => {
