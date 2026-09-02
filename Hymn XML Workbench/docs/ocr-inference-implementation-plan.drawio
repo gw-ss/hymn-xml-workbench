@@ -1,0 +1,251 @@
+<mxfile host="Electron" modified="2026-09-01T21:57:32.101Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.6.4 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" version="24.6.4" etag="h9QMAqJX03-e3K-sRVhy" type="device" pages="2">
+  <diagram id="architecture" name="Architecture">
+    <mxGraphModel dx="1352" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Photo-to-SATB implementation plan" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#1F2937;" parent="1" vertex="1">
+          <mxGeometry x="40" y="20" width="760" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Evidence-first transcription: corrected musical data anchors the reading; the photo controls engraving and the missing voices." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#4B5563;" parent="1" vertex="1">
+          <mxGeometry x="40" y="65" width="1060" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ground" value="GROUND TRUTH INPUTS" style="swimlane;html=1;startSize=34;rounded=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontStyle=1;fontColor=#334155;" parent="1" vertex="1">
+          <mxGeometry x="40" y="119" width="260" height="431" as="geometry" />
+        </mxCell>
+        <mxCell id="g1" value="Corrected Jianpu&#xa;Pitch · rhythm · measure · onset" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;" parent="ground" vertex="1">
+          <mxGeometry x="20" y="55" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g2" value="Corrected Chinese lyrics&#xa;Text · syllable-to-onset assignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;" parent="ground" vertex="1">
+          <mxGeometry x="20" y="145" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g3" value="Corrected Soprano&#xa;Pitch calibration · timing anchor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;" parent="ground" vertex="1">
+          <mxGeometry x="20" y="235" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="g4" value="Processed hymn photo&#xa;Alto · Tenor · Bass · visual engraving" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=13;" parent="ground" vertex="1">
+          <mxGeometry x="20" y="325" width="220" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="pipeline" value="PROCESSING PIPELINE" style="swimlane;html=1;startSize=34;rounded=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontStyle=1;fontColor=#334155;" parent="1" vertex="1">
+          <mxGeometry x="340" y="120" width="1080" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="1  Load staff photo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="70" y="67" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="2  Quality gate&#xa;Accept · warn · reject" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=12;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="225" y="55" width="170" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="3  Image preprocessing&#xa;Deskew · contrast · staff geometry · variants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;" parent="pipeline" vertex="1">
+          <mxGeometry x="475" y="60" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="p4a" value="4A  OMR detector&#xa;Notes · rests · accidentals · stems · beams" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;" parent="pipeline" vertex="1">
+          <mxGeometry x="745" y="42" width="250" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="p4b" value="4B  Independent visual reader&#xa;Second reading for comparison" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontColor=#1F2937;fontSize=13;" parent="pipeline" vertex="1">
+          <mxGeometry x="745" y="132" width="250" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="p5" value="5  Evidence manifest&#xa;Every detected item + crop + bounding box + confidence + source" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="745" y="248" width="250" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="p6" value="6  Soprano-guided registration&#xa;Map staff geometry to known measures, beats and onset lines" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;" parent="pipeline" vertex="1">
+          <mxGeometry x="409" y="250" width="245" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p7" value="7  Candidate SATB items&#xa;Photo-backed A/T/B notes and engraving attributes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;" parent="pipeline" vertex="1">
+          <mxGeometry x="62" y="250" width="245" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p8" value="8  Inference verification&#xa;Range · harmony · voice-leading · timing · collision checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="62" y="390" width="245" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="p9" value="9  AI review package&#xa;Compare OCR, visual reading and inference; explain conflicts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="365" y="390" width="245" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="p10" value="10  Measure conflict UI&#xa;Red outline · warning marker · pinnable detail popover" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="745" y="390" width="250" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="p11" value="11  User confirmation&#xa;Keep photo · correct reading · defer · reject photo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="745" y="535" width="250" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="p12" value="12  Evidence-emission gate&#xa;Only confirmed or sufficiently supported items may be written" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=12;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="440" y="525" width="255" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="p13" value="13  Workbench state + MusicXML&#xa;Store provenance, confidence, decisions and engraving data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;fontStyle=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="61" y="535" width="250" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="feedback" value="Corrections become evidence fixtures and regression tests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontColor=#374151;fontSize=12;dashed=1;" parent="pipeline" vertex="1">
+          <mxGeometry x="370" y="670" width="450" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;" parent="pipeline" source="p1" target="p2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="accept / warn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;verticalAlign=bottom;labelBackgroundColor=none;" parent="pipeline" source="p2" target="p3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;" parent="pipeline" source="p3" target="p4a" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;" parent="pipeline" source="p3" target="p4b" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4a5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" parent="pipeline" source="p4a" target="p5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="78" />
+              <mxPoint x="1040" y="269" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4b5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="pipeline" source="p4b" target="p5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e56" value="photo evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;verticalAlign=bottom;labelBackgroundColor=none;" parent="pipeline" source="p5" target="p6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e67" value="registered onsets" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;verticalAlign=bottom;labelBackgroundColor=none;" parent="pipeline" source="p6" target="p7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e78" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;" parent="pipeline" source="p7" target="p8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e89" value="checks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;verticalAlign=bottom;labelBackgroundColor=none;align=center;" parent="pipeline" source="p8" target="p9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e910" value="conflicts + explanations" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;verticalAlign=bottom;labelBackgroundColor=none;" parent="pipeline" source="p9" target="p10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1011" value="review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;" parent="pipeline" source="p10" target="p11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1112" value="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;" parent="pipeline" source="p11" target="p12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1213" value="supported only" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;fontSize=11;" parent="pipeline" source="p12" target="p13" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13f" value="learn from corrections" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;dashed=1;fontSize=11;entryX=0;entryY=0.5;entryDx=0;entryDy=0;verticalAlign=bottom;labelBackgroundColor=none;spacingLeft=18;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="pipeline" source="p13" target="feedback" edge="1">
+          <mxGeometry x="0.2551" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ef5" value="future imports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=2;dashed=1;fontSize=11;horizontal=0;verticalAlign=bottom;spacingTop=0;spacingBottom=0;spacingLeft=-3;" parent="pipeline" source="feedback" target="p5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="695" />
+              <mxPoint x="1040" y="288" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="reject" value="Reject / request a clearer crop&#xa;No XML changes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1480" y="182.5" width="250" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="guard" value="NON-NEGOTIABLE GUARDRAILS&#xa;&#xa;• Corrected Jianpu, Chinese lyrics and Soprano are never overwritten by photo inference.&#xa;• Missing Alto/Tenor/Bass photo evidence is not silently filled by harmony inference.&#xa;• Inference challenges a reading; it does not become photo evidence.&#xa;• Unresolved conflicts remain visible and blocked from final emission.&#xa;• Beam direction, stem direction, overlap and connection-line geometry follow supported photo evidence." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#EA580C;fontColor=#374151;fontSize=13;align=left;verticalAlign=top;spacingTop=14;spacingLeft=14;" parent="1" vertex="1">
+          <mxGeometry x="1460" y="320" width="290" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="RESPONSIBILITIES&#xa;&#xa;Blue — OCR/OMR observes&#xa;Orange — inference verifies&#xa;Purple — AI compares and explains&#xa;Green — user/known truth decides&#xa;Yellow — evidence and gates&#xa;Red — conflict or rejection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#374151;fontSize=13;align=left;verticalAlign=top;spacingTop=14;spacingLeft=14;" parent="1" vertex="1">
+          <mxGeometry x="1460" y="620" width="290" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="er" value="reject" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#B85450;strokeWidth=2;fontSize=11;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="p2" target="reject" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="150" />
+              <mxPoint x="1605" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eg1" value="timing and pitch anchors" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#82B366;strokeWidth=2;dashed=1;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.786;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;labelBackgroundColor=none;verticalAlign=bottom;" parent="1" source="g1" target="p6" edge="1">
+          <mxGeometry x="0.0004" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="210" />
+              <mxPoint x="320" y="290" />
+              <mxPoint x="978" y="290" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eg3" value="calibration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#82B366;strokeWidth=2;dashed=1;fontSize=11;entryX=0.25;entryY=0;entryDx=0;entryDy=0;verticalAlign=bottom;labelBackgroundColor=none;" parent="1" source="g3" target="p6" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="390" />
+              <mxPoint x="320" y="330" />
+              <mxPoint x="846" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eg4" value="image" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#D6B656;strokeWidth=2;dashed=1;fontSize=11;entryX=0;entryY=0.5;entryDx=0;entryDy=0;horizontal=0;verticalAlign=bottom;labelBackgroundColor=none;" parent="1" source="g4" target="p1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="486" />
+              <mxPoint x="370" y="217" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="milestones" name="Implementation milestones">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Implementation milestones and acceptance gates" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=28;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="50" y="30" width="850" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="s" value="Each phase ends with a reusable test before the next phase expands the system." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#4B5563;" vertex="1" parent="1">
+          <mxGeometry x="50" y="75" width="850" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="phase1" value="FOUNDATION" style="swimlane;html=1;startSize=34;rounded=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontStyle=1;fontColor=#334155;" vertex="1" parent="1">
+          <mxGeometry x="50" y="130" width="450" height="650" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1  Evidence schema + provenance&#xa;Define photo-backed items, confidence, crop and decision history." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase1">
+          <mxGeometry x="30" y="65" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="2  Sidebar photo loader + busy state&#xa;Load, preview, process, accept/warn/reject with reasons." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase1">
+          <mxGeometry x="30" y="175" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="3  Preprocessing + quality gate&#xa;Deskew, contrast variants, staff detection and clarity scoring." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase1">
+          <mxGeometry x="30" y="285" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="gate1" value="GATE A&#xa;Known clear photo accepted; degraded and ambiguous photos warn or reject reproducibly." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="phase1">
+          <mxGeometry x="30" y="420" width="390" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="phase2" value="RECOGNITION + REGISTRATION" style="swimlane;html=1;startSize=34;rounded=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontStyle=1;fontColor=#334155;" vertex="1" parent="1">
+          <mxGeometry x="560" y="130" width="450" height="650" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="4  Soprano-guided staff registration&#xa;Align the photo to known measure, beat and onset geometry." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase2">
+          <mxGeometry x="30" y="65" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" value="5  Symbol + geometry recognition&#xa;A/T/B notes, rests, accidentals, stems, beams, overlaps and shared connections." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase2">
+          <mxGeometry x="30" y="175" width="390" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" value="6  Independent reader comparison&#xa;Preserve disagreement instead of averaging it away." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase2">
+          <mxGeometry x="30" y="295" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="gate2" value="GATE B&#xa;Hymn 1 fixture reproduces supported pitch, timing, beam direction and shared-line geometry without invented symbols." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="phase2">
+          <mxGeometry x="30" y="420" width="390" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="phase3" value="VERIFICATION + CONTROLLED EMISSION" style="swimlane;html=1;startSize=34;rounded=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontStyle=1;fontColor=#334155;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="130" width="450" height="650" as="geometry" />
+        </mxCell>
+        <mxCell id="m7" value="7  Inference engine&#xa;Check harmony, range, voice-leading, timing and engraving consistency." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase3">
+          <mxGeometry x="30" y="65" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="m8" value="8  AI review + conflict UX&#xa;Explain discrepancies; red-line affected measures; pin or dismiss details." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase3">
+          <mxGeometry x="30" y="175" width="390" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="m9" value="9  Evidence-gated MusicXML write&#xa;Write accepted items and provenance; keep unresolved items blocked." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#1F2937;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="phase3">
+          <mxGeometry x="30" y="295" width="390" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="gate3" value="GATE C&#xa;User can audit every emitted A/T/B item back to photo evidence or an explicit correction; regression suite passes." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=13;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="phase3">
+          <mxGeometry x="30" y="420" width="390" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=3;" edge="1" parent="1" source="phase1" target="phase2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#64748B;strokeWidth=3;" edge="1" parent="1" source="phase2" target="phase3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="outcome" value="OUTCOME&#xa;A reusable photo-import workflow where the machine accelerates transcription, the evidence remains inspectable, and the editor retains final control." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontColor=#1F2937;fontSize=15;fontStyle=1;align=left;spacingLeft=16;" vertex="1" parent="1">
+          <mxGeometry x="300" y="835" width="970" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hymn Photo Dust Cleaner</title>
+  <link rel="stylesheet" href="photo-cleaner.css?v=20260901-file-subpanes-1">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Hymn Photo Dust Cleaner</h1>
+        <p>Remove isolated dust-sized dots while protecting larger musical symbols.</p>
+      </div>
+      <a href="index.html">Return to Workbench</a>
+    </header>
+
+    <section class="controls" aria-label="Cleanup controls">
+      <section class="control-pane file-operations" aria-labelledby="file-operations-heading">
+        <h2 id="file-operations-heading">Image file operations</h2>
+        <section class="file-subpane load-subpane" aria-labelledby="load-photo-heading">
+          <h3 id="load-photo-heading">Load and preview</h3>
+          <fieldset>
+            <legend>Preview</legend>
+            <label><input type="radio" name="preview" value="cleaned" checked> Cleaned</label>
+            <label><input type="radio" name="preview" value="original"> Straightened original</label>
+          </fieldset>
+          <label class="file-control">Photo
+            <input id="photo-file" type="file" accept="image/png,image/jpeg,image/webp,image/heic,image/heif,image/tiff,.tif,.tiff">
+          </label>
+        </section>
+        <section class="file-subpane export-subpane" aria-labelledby="export-photo-heading">
+          <h3 id="export-photo-heading">Export files</h3>
+          <div class="export-stack">
+            <button id="download" type="button" disabled>Export cleaned PNG</button>
+            <button id="download-original" type="button" disabled>Export straightened original</button>
+          </div>
+        </section>
+      </section>
+      <section class="control-pane image-operations" aria-labelledby="image-operations-heading">
+        <h2 id="image-operations-heading">Image operations</h2>
+        <div class="image-option-stack">
+          <label class="check-control"><input id="protect-symbols" type="checkbox" checked> Preserve original symbol detail</label>
+          <label class="check-control"><input id="remove-background" type="checkbox" checked> Remove uneven paper background</label>
+        </div>
+        <div class="eraser-control" role="group" aria-label="Manual photo eraser">
+          <strong>Manual eraser</strong>
+          <div><button id="toggle-eraser" type="button" class="secondary" disabled aria-pressed="false">Eraser off</button><label>Shape <select id="eraser-shape" disabled><option value="circle" selected>Circle</option><option value="square">Square</option></select></label><label>Size <select id="eraser-size" disabled><option value="8">8 px</option><option value="16">16 px</option><option value="32" selected>32 px</option><option value="64">64 px</option><option value="96">96 px</option></select></label><button id="undo-eraser" type="button" class="secondary" disabled>Undo erase</button></div>
+          <small>Turn on, then drag across gray areas, dust, or unwanted black spots. Erased pixels become white.</small>
+        </div>
+        <div class="rotation-control" role="group" aria-label="Photo rotation">
+          <strong>Straighten photo</strong>
+          <div><button id="rotate-left" type="button" class="secondary" disabled>↶ 0.2°</button><output id="rotation-value">0.0°</output><button id="rotate-right" type="button" class="secondary" disabled>0.2° ↷</button><button id="reset-rotation" type="button" class="secondary" disabled>Reset</button></div>
+        </div>
+      </section>
+    </section>
+
+    <p id="status" role="status">Choose a photograph. The original file will not be changed.</p>
+    <div class="canvas-frame"><canvas id="preview" aria-label="Photo cleanup preview"></canvas></div>
+    <div id="eraser-cursor" class="eraser-cursor hidden" aria-hidden="true"></div>
+    <aside>
+      <strong>Cleanup:</strong> paper-background normalization and conservative micro-dust rejection are automatic. Symbol protection keeps grayscale and antialiased ink detail. The cleaner deliberately does not redraw staff lines, beams, barlines, lyrics, or symbols; Oemer and the Workbench recognition stages receive their original geometry.
+    </aside>
+  </main>
+  <script type="module" src="photo-cleaner.js?v=20260901-eraser-cursor-reset-1"></script>
+</body>
+</html>

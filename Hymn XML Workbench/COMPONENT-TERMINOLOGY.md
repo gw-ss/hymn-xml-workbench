@@ -267,6 +267,11 @@ the controls are not implemented yet.
 | **Recognition activity indicator** | Busy/progress feedback shown while a staff photo is being analyzed. |
 | **Recognition decision** | Accepted or rejected result for an imported photo. |
 | **Recognition reason** | Specific explanation accompanying acceptance, rejection, or a request for manual review. |
+| **Evidence manifest** | Development record of every recognized photo item, including its source, confidence, registered measure/onset, bounding box, and crop reference. |
+| **Independent reading** | A second symbol interpretation made separately from the primary OMR result so agreement can strengthen evidence and disagreement remains reviewable. |
+| **Evidence-emission gate** | Boundary that permits supported or explicitly confirmed photo items into the working transcription and blocks unresolved or insufficiently supported items. |
+| **Hymn Photo Dust Cleaner** | Non-destructive preparation tool that removes isolated dust-sized connected components from a black-and-white preview and exports a new PNG. |
+| **Removed-pixel preview** | Dust Cleaner view that colors scheduled removals red so genuine musical marks can be protected before export. |
 | **Photo-transcription draft** | Editable SATB staff entries produced from an accepted image and marked for human verification. |
 | **Beam-direction assessment** | Per-group comparison of photographed Beam side, rendered Beam side, and recognition confidence, producing Accept, Warning, or Reject. |
 | **Photo-conflict outline** | Red outline around a Measure editor window containing one or more unresolved photo/OCR-versus-verification conflicts. | The Capacity meter's red excess-duration segment. |
