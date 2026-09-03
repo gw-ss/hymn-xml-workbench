@@ -188,6 +188,7 @@ test('resizing the Editor realigns Jianpu, lyrics, guides, and staff notation', 
   assert.match(styles, /\.workspace-resize-handle \{[^}]*position:fixed;/);
   assert.match(html, /id="workspace-resize-handle"[^>]*aria-label="Resize notation workspace horizontally and vertically"/);
   assert.match(app, /workspaceResizeHandle\.addEventListener\('pointerdown'/);
+  assert.match(app, /document\.body\.append\(workspaceResizeHandle\)/);
   assert.match(app, /pointer\.clientX - start\.x\) \/ uiZoom/);
   assert.match(app, /pointer\.clientY - start\.y\) \/ uiZoom/);
   assert.match(app, /function positionWorkspaceResizeHandle\(\)/);

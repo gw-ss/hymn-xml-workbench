@@ -2698,6 +2698,8 @@ function resizeWorkspaceTo(width, height) {
   requestAnimationFrame(positionWorkspaceResizeHandle);
 }
 const workspaceResizeHandle = $('#workspace-resize-handle');
+// Keep the fixed control outside the Editor's overflow clipping boundary.
+document.body.append(workspaceResizeHandle);
 function positionWorkspaceResizeHandle() {
   const editor = $('#editor'), workspace = $('.workspace');
   if (!editor || !workspace || editor.classList.contains('hidden')) { workspaceResizeHandle.hidden = true; return; }
