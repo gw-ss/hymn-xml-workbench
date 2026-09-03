@@ -23,7 +23,7 @@ manual. Add new terms here as components and features are introduced.
 | Preferred term | Definition | Avoid or distinguish from |
 | --- | --- | --- |
 | **Hymn XML Workbench** or **Workbench** | The complete application. | “Website” when discussing the local application. |
-| **Open-file panel** | The initial panel used to choose MusicXML or begin direct Jianpu entry. | “Editor,” because editing has not started yet. |
+| **Open-file panel** | The initial panel used to choose MusicXML or begin a Jianpu encoded stream. | “Editor,” because editing has not started yet. |
 | **Editor** | The complete post-load editing interface, including the sidebar and Editor container. | Do not use for only one measure. |
 | **Sidebar** | The left column containing hymn/Jianpu entry, lyric preparation, staff-entry tools, validation, and saving. | “Toolbar”; it contains several panels, not one toolbar. |
 | **Editor container** | The resizable right-hand panel containing the editor heading, spacing controls, editing controls, and Measure viewport. This is the component previously described as the outer editor-container window. | “Measure window,” “screen,” or merely “container window.” |
@@ -151,7 +151,7 @@ Additional layer vocabulary:
 | **Key-signature picker** | Interactive treble/bass staff area used to reproduce a printed key signature. | **Staff-entry palette**; it defines the key, not melody notes. |
 | **Key-signature staff window** | One clickable treble or bass staff inside the Key-signature picker. | **Measure editor window**. |
 | **Score-information controls** | Key signature, time signature, pickup, and tempo inputs. | “Layout settings”; these alter musical metadata. |
-| **Jianpu Direct-Entry field** | The “Numeric notation” text area containing the parseable Jianpu stream. | **Jianpu layer**, which is its rendered result. |
+| **Jianpu Encoded Stream field** | The text editor containing the parseable source defined by the Jianpu Encoding Rules. | **Jianpu layer**, which is its rendered result. |
 | **Lyric-preparation panel** | Sidebar panel containing language tabs, lyric source text, token preparation, and—in English mode—staff-entry controls. | “Lyric layer.” |
 | **Language tabs** | The 中文 and English tabs that select Editor mode. | “Visibility tabs”; inactive layers remain visible. |
 | **Staff-entry palette** | English-mode controls for voice, range group, action, note value, accidental, Soprano generation, and staff operations. | **Lyric-token palette**. |

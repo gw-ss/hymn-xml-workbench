@@ -216,7 +216,8 @@ Open `http://127.0.0.1:4174`, choose a `.musicxml` file, select a lyric token, a
 
 Opening a saved or external MusicXML file also restores its key signature, time
 signature, pickup duration, and printed tempo into the score-information controls.
-It reconstructs the **Numeric notation** box using the Jianpu Direct-Entry Rules,
+It reconstructs the **Jianpu Encoded Stream** using the
+[Jianpu Encoding Rules](JIANPU-ENCODING-RULES.md),
 so the imported tune can be corrected and reapplied without typing it again.
 Each `@` creates an explicit score-system container in the editor, so the new
 system remains honored at every responsive window width.
@@ -229,7 +230,7 @@ display preferences do not alter MusicXML.
 The file name is used to restore the hymn number when it contains a name such as
 `hymn-1-...`. Load that hymn's verse, then use **Automatically align Chinese
 lyrics to notes** in the lyrics section; this adds the lyric layer without
-rebuilding or replacing the imported numeric notation.
+rebuilding or replacing the imported Jianpu notation.
 
 Chinese auto-alignment first uses one character per eligible note, excluding
 explicit connector-stop notes. If that count does not match, it may treat a
@@ -247,7 +248,7 @@ Chinese mode uses a compact vertical score layout. The lyric row begins directly
 after the notation area reserved for octave dots and duration underlines, rather
 than retaining the taller spacing intended for the future staff/English view.
 
-After changing the **Numeric notation** stream, choose **Update notation preview
+After changing the **Jianpu Encoded Stream**, choose **Update notation preview
 from Jianpu** to parse it again and refresh the measure editor. This operation is
 separate from lyric alignment and is shown only in Chinese mode. Existing lyric
 assignments are remapped by measure and beat, and the independent staff layer is

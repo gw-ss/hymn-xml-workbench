@@ -1,4 +1,10 @@
 import { removePaperBackground, removeSmallDarkComponents } from './photo-recognition.mjs';
+import { heicTo } from './vendor/heic-to-1.5.2.min.js';
+
+if(new URLSearchParams(location.search).get('embedded')==='1')document.body.classList.add('embedded');
+const embedded=document.body.classList.contains('embedded');
+let standaloneZoom=1;
+document.addEventListener('keydown',event=>{if(!(event.metaKey||event.ctrlKey))return;let direction=null;if(event.key==='+'||event.key==='=')direction=1;else if(event.key==='-'||event.key==='_')direction=-1;else if(event.key==='0')direction=0;if(direction===null)return;event.preventDefault();if(embedded)window.parent.postMessage({type:'hymn-ui-zoom',direction},location.origin);else{standaloneZoom=direction===0?1:Math.min(2,Math.max(.5,Math.round((standaloneZoom+direction*.1)*10)/10));document.documentElement.style.zoom=String(standaloneZoom);}});
 
 const fileInput = document.querySelector('#photo-file');
 const protectSymbols = document.querySelector('#protect-symbols');
@@ -6,6 +12,8 @@ const removeBackground = document.querySelector('#remove-background');
 const status = document.querySelector('#status');
 const download = document.querySelector('#download');
 const downloadOriginal = document.querySelector('#download-original');
+const savePrepared = document.querySelector('#save-prepared');
+const loadedSourceName = document.querySelector('#loaded-source-name');
 const rotateLeft = document.querySelector('#rotate-left');
 const rotateRight = document.querySelector('#rotate-right');
 const resetRotation = document.querySelector('#reset-rotation');
@@ -49,18 +57,19 @@ function processPhoto() {
     const { removedComponents, removedPixels } = result.stats;
     const backgroundText = result.backgroundStats ? `Removed the uneven paper background while retaining ${result.backgroundStats.foregroundPixels.toLocaleString()} recognized ink pixels; ` : 'Kept the original paper background; ';
     status.textContent = `${backgroundText}removed ${removedComponents.toLocaleString()} dust components (${removedPixels.toLocaleString()} pixels) without redrawing music geometry.`;
-    download.disabled = downloadOriginal.disabled = false;
+    download.disabled = downloadOriginal.disabled = savePrepared.disabled = false;
   });
 }
 
 function processSettledSetting() {
-  download.disabled = downloadOriginal.disabled = true;
+  download.disabled = downloadOriginal.disabled = savePrepared.disabled = true;
+  if(document.body.classList.contains('embedded'))window.parent.postMessage({type:'hymn-photo-dirty'},location.origin);
   processPhoto();
 }
 
 function applyRotation() {
   if (!rawSource) return;
-  download.disabled=downloadOriginal.disabled=true;
+  download.disabled=downloadOriginal.disabled=savePrepared.disabled=true;
   const radians=rotationDegrees*Math.PI/180, cosine=Math.abs(Math.cos(radians)), sine=Math.abs(Math.sin(radians));
   const width=Math.ceil(rawSource.width*cosine+rawSource.height*sine), height=Math.ceil(rawSource.width*sine+rawSource.height*cosine);
   const rawCanvas=document.createElement('canvas'); rawCanvas.width=rawSource.width; rawCanvas.height=rawSource.height; rawCanvas.getContext('2d').putImageData(rawSource,0,0);
@@ -76,25 +85,56 @@ function applyRotation() {
 
 function changeRotation(delta) { rotationDegrees=Math.round(Math.max(-45,Math.min(45,rotationDegrees+delta))*10)/10; applyRotation(); }
 
-async function loadPhoto(file) {
+const isHeifFile=file=>/\.(heic|heif)$/i.test(file.name||'')||/image\/(heic|heif)/i.test(file.type||'');
+async function decodePhoto(file){
+  try{return await createImageBitmap(file);}catch(nativeError){
+    if(!isHeifFile(file))throw nativeError;
+    status.textContent=`Converting ${file.name} from HEIC/HEIF to a browser working image…`;
+    return heicTo({blob:file,type:'bitmap'});
+  }
+}
+
+async function loadPhoto(file,{markDirty=true}={}) {
   status.textContent = `Loading ${file.name}…`;
   try {
-    const bitmap = await createImageBitmap(file);
+    const bitmap = await decodePhoto(file);
     canvas.width = bitmap.width; canvas.height = bitmap.height;
     context.drawImage(bitmap, 0, 0);
     bitmap.close();
     rawSource = context.getImageData(0, 0, canvas.width, canvas.height); source=rawSource; rotationDegrees=0; rotationValue.value='0.0°'; eraseHistory=[]; rotateLeft.disabled=rotateRight.disabled=resetRotation.disabled=toggleEraser.disabled=eraserSize.disabled=eraserShape.disabled=false;
     filename = `${file.name.replace(/\.[^.]+$/, '')}-cleaned.png`;
     originalFilename = `${file.name.replace(/\.[^.]+$/, '')}-straightened.png`;
+    loadedSourceName.textContent=file.name;
+    if(markDirty&&document.body.classList.contains('embedded'))window.parent.postMessage({type:'hymn-photo-dirty'},location.origin);
     processPhoto();
   } catch (error) {
-    rawSource = source = result = null; download.disabled = downloadOriginal.disabled = rotateLeft.disabled = rotateRight.disabled = resetRotation.disabled = toggleEraser.disabled = eraserSize.disabled = eraserShape.disabled = undoEraser.disabled = true;
-    status.textContent = 'This browser could not decode that file. Open it in Preview, choose File → Export, save a PNG, and load the PNG here.';
+    rawSource = source = result = null; download.disabled = downloadOriginal.disabled = savePrepared.disabled = rotateLeft.disabled = rotateRight.disabled = resetRotation.disabled = toggleEraser.disabled = eraserSize.disabled = eraserShape.disabled = undoEraser.disabled = true;
+    status.textContent = isHeifFile(file)?`The HEIC/HEIF converter could not decode this file${error?.message?`: ${error.message}`:'.'} Try exporting this particular photo as PNG in Preview.`:'This browser could not decode that file. Open it in Preview, choose File → Export, save a PNG, and load the PNG here.';
     console.error(error);
   }
 }
 
 fileInput.addEventListener('change', () => { const [file] = fileInput.files; if (file) loadPhoto(file); });
+window.addEventListener('message',event=>{
+  if(event.source!==window.parent||event.origin!==location.origin||event.data?.type!=='hymn-photo-load'||!(event.data.file instanceof Blob))return;
+  loadPhoto(event.data.file,{markDirty:event.data.markDirty!==false});
+});
+
+async function imageDataBlob(imageData){const target=document.createElement('canvas');target.width=imageData.width;target.height=imageData.height;target.getContext('2d').putImageData(imageData,0,0);return new Promise((resolve,reject)=>target.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG encoding failed.')),'image/png'));}
+
+async function preparedPayload(requestId=null){
+  if(!source||!result)throw new Error('Prepare a photo before saving.');
+  return{type:'hymn-photo-prepared',requestId,sourceName:loadedSourceName.textContent,cleaned:await imageDataBlob(new ImageData(result.data,source.width,source.height))};
+}
+
+window.addEventListener('message',async event=>{
+  if(event.source!==window.parent||event.origin!==location.origin||event.data?.type!=='hymn-photo-get-prepared')return;
+  try{window.parent.postMessage(await preparedPayload(event.data.requestId),location.origin);}catch(error){window.parent.postMessage({type:'hymn-photo-prepared-error',requestId:event.data.requestId,message:error.message},location.origin);}
+});
+
+savePrepared.addEventListener('click',async()=>{savePrepared.disabled=true;status.textContent='Preparing both project PNG files…';try{window.parent.postMessage(await preparedPayload(),location.origin);}catch(error){status.textContent=error.message;savePrepared.disabled=false;}});
+
+window.addEventListener('message',event=>{if(event.source!==window.parent||event.origin!==location.origin||event.data?.type!=='hymn-photo-save-result')return;status.textContent=event.data.message;savePrepared.disabled=false;});
 protectSymbols.addEventListener('change', processSettledSetting);
 removeBackground.addEventListener('change', processSettledSetting);
 rotateLeft.addEventListener('click',()=>changeRotation(-.2));
@@ -131,13 +171,13 @@ canvas.addEventListener('pointerdown',event=>{ if(!eraserActive||!source)return;
 canvas.addEventListener('pointermove',event=>{ updateEraserCursor(event); if(erasing)eraseAt(event); });
 canvas.addEventListener('pointerenter',updateEraserCursor);
 canvas.addEventListener('pointerleave',()=>{ if(!erasing)eraserCursor.classList.add('hidden'); });
-canvas.addEventListener('pointerup',event=>{ if(!erasing)return; erasing=false; canvas.releasePointerCapture(event.pointerId); if(currentErase?.size){ eraseHistory.push(currentErase); if(eraseHistory.length>20)eraseHistory.shift(); undoEraser.disabled=false; status.textContent=`Applied a stable ${eraserShape.value} eraser stroke without recalculating the page background.`; } currentErase=null; drawPreview(); download.disabled=downloadOriginal.disabled=false; });
+canvas.addEventListener('pointerup',event=>{ if(!erasing)return; erasing=false; canvas.releasePointerCapture(event.pointerId); if(currentErase?.size){ eraseHistory.push(currentErase); if(eraseHistory.length>20)eraseHistory.shift(); undoEraser.disabled=false; status.textContent=`Applied a stable ${eraserShape.value} eraser stroke without recalculating the page background.`;if(document.body.classList.contains('embedded'))window.parent.postMessage({type:'hymn-photo-dirty'},location.origin); } currentErase=null; drawPreview(); download.disabled=downloadOriginal.disabled=savePrepared.disabled=false; });
 canvas.addEventListener('pointercancel',()=>{ erasing=false; currentErase=null; drawPreview(); });
 undoEraser.addEventListener('click',()=>{ const stroke=eraseHistory.pop(); if(!stroke||!source)return; for(const [index,colors] of stroke){ const offset=index*4,color=colors.source; source.data[offset]=color[0];source.data[offset+1]=color[1];source.data[offset+2]=color[2];source.data[offset+3]=color[3]; if(result&&colors.cleaned){ const cleaned=colors.cleaned;result.data[offset]=cleaned[0];result.data[offset+1]=cleaned[1];result.data[offset+2]=cleaned[2];result.data[offset+3]=cleaned[3]; } } undoEraser.disabled=!eraseHistory.length; drawPreview(); status.textContent='Undid the most recent eraser stroke without recalculating the page background.'; });
 eraserShape.addEventListener('change',()=>eraserCursor.classList.toggle('square',eraserShape.value==='square'));
 document.querySelectorAll('input[name="preview"]').forEach(control => control.addEventListener('change', drawPreview));
 async function savePng(imageData, suggestedName) {
-  download.disabled = downloadOriginal.disabled = true;
+  download.disabled = downloadOriginal.disabled = savePrepared.disabled = true;
   canvas.width=imageData.width; canvas.height=imageData.height; context.putImageData(imageData,0,0);
   try {
     const blob = await new Promise((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('PNG encoding failed.')), 'image/png'));
@@ -159,7 +199,7 @@ async function savePng(imageData, suggestedName) {
     if (error?.name !== 'AbortError') { status.textContent = `The cleaned PNG could not be saved: ${error.message}`; console.error(error); }
     else status.textContent = 'Save canceled; no file was created.';
   } finally {
-    drawPreview(); download.disabled = downloadOriginal.disabled = false;
+    drawPreview(); download.disabled = downloadOriginal.disabled = savePrepared.disabled = false;
   }
 }
 

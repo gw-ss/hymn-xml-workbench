@@ -1,12 +1,27 @@
 # Hymn XML Workbench — Feature and Manual Notes
 
-Last consolidated: September 1, 2026
+Last consolidated: September 2, 2026
 
 This file is the durable source outline for a future user manual. It records the
 features, terminology, workflow decisions, and layout invariants established
 during development. It is not intended to replace task-based user instructions.
 Preferred component names are maintained in
 [`COMPONENT-TERMINOLOGY.md`](COMPONENT-TERMINOLOGY.md).
+
+## Project shell and major workspaces
+
+- The application has two major tabs: **Source Processing** for provisional
+  inputs, image preparation, recognition, and review; and **Hymn Editor** for
+  authoritative correction, approval, and export.
+- Before a project is open, only **Open Project** and **New Project** choices
+  are shown. New projects request a top-folder name such as `Hymn-001` and
+  create `input`, `working`, and `output` under the chosen parent when browser
+  folder access is available.
+- An open project displays its name with a visually separated **Close Project**
+  action. File-level commands live in their own toolbar rather than being mixed
+  with project-level navigation.
+- Existing staff-photo intake is hosted in Source Processing. The complete
+  measure editor and its controls remain in Hymn Editor.
 
 ## Recommended hymn-production workflow
 
@@ -388,3 +403,186 @@ melody/rhythm corrections can otherwise require English realignment.
   count and confidence summary with **Review extracted regions**, which reopens
   the confidence-red overlay. Measure viewports remain unchanged until the
   separate measure-registration stage.
+
+## Project work areas
+
+- The application has two major work areas that share one open hymn project.
+- A newly created or reopened empty project is in **initial input required**
+  status. Its Add controls remain visible and the Hymn Editor tab is disabled
+  until the first photo, MusicXML, PDF, or text input becomes the working file.
+  After selection, the Add controls collapse. **Change working source…** reveals
+  them again only when the user intentionally needs another source.
+- **Source Processing** owns source-file intake, photograph preparation, photo
+  quality decisions, staff/system/boundary extraction, and provisional
+  recognition review. Original source files are copied into the matching
+  `input/photos`, `input/pdf`, `input/musicxml`, or `input/text` folder when the
+  browser has access to the project directory.
+- The Source Processing work area has an independent lower-right resize
+  grabber, matching the Hymn Editor workspace. Enlarging it provides more room
+  for the embedded cleaner, PDF/text preview, and recognition review without
+  resizing the sidebar.
+- Command-plus and Command-minus (Control-plus/minus on non-macOS systems)
+  zoom the complete Workbench interface from 50% through 200% in 10% steps;
+  Command-zero resets it to 100%. The embedded Photo Preparation frame forwards
+  the shortcut to the parent so the entire application scales consistently.
+  This browser-environment preference does not alter source pixels or exports.
+- In embedded project mode the cleaner no longer has a second file loader.
+  The redundant **Image versions** card is also hidden: the chosen filename is
+  already shown in Project Inputs and the canvas always represents the single
+  current working image. **Prepared files** provides one **Save latest working
+  image** action. Standalone cleaner mode retains its own loader, version
+  comparison, and individual export buttons.
+- Embedded Photo Preparation no longer displays the redundant **Prepared
+  files / Save latest working image** card because the file-level **Save**
+  command commits the current prepared pixels. The two preservation/background
+  options share one row by default and wrap only when the available width is
+  narrow. Standalone cleaner exports remain available.
+- Manual Eraser and Straighten Photo are separate bordered tool panes arranged
+  in two equal columns by default. They stack vertically below the responsive
+  breakpoint so their controls remain usable in a narrow preparation window.
+- HEIC and HEIF inputs are preserved unchanged under `input/photos`, then
+  decoded locally in the browser with the vendored `heic-to`/current-libheif
+  converter when Chromium cannot decode them natively. Photo Preparation works
+  on the converted pixels and Save writes the canonical PNG working image; no
+  photograph is uploaded. The third-party LGPL license is stored under `vendor/`.
+- The project keeps immutable originals plus only one canonical
+  `working/photos/<project>-working.png`. Entering **Extract Staff Layout**
+  saves the latest pixels when needed and then extracts from that same working
+  image. Replacing it requires confirmation. Intermediate straightened and
+  cleaned PNGs are not accumulated, and derived outputs can be regenerated.
+- Compact stage status, the chosen input, preparation timestamp, accepted
+  layout geometry, and later recognition/review state live in one
+  `working/workbench-state.json`. Opening a project restores stage availability,
+  so a valid later operation can be selected directly. Changing and saving the
+  working image marks downstream layout, recognition, and review state stale.
+- **Add photo** opens the selected image directly in the embedded preparation
+  workspace. It is intentionally separate from **Load Staff Photo**, which
+  sends an already prepared image into quality review and staff extraction.
+- The former **Show preparation tools** sidebar card was removed after the
+  cleaner became permanently embedded above the working image. Adding,
+  previewing, or choosing a photo opens that preparation workspace directly.
+- The former Staff Photo and Recognition cards are consolidated into one
+  **Processing & Review** pipeline, stacked in intended order: **1. Photo
+  Preparation**, **2. Extract Staff Layout**, **3. Recognize Source Content**,
+  and **4. Review Recognition**. Only the selected stage occupies the main work
+  container: choosing extraction removes the cleaner controls from view and
+  replaces them with layout review. Preparation can be reopened without
+  invalidating results unless the image is actually changed. Extraction is
+  enabled only for the explicitly chosen photo;
+  recognition is enabled only after its layout is accepted; review remains
+  unavailable until recognition has produced results. The current build stops
+  honestly at the symbol-recognition boundary and does not fabricate results.
+- The staff-layout dialog labels its first screen as an **Automatic quality
+  check**, using Passed, Passed with warnings, or Failed. Its action reads
+  **Continue: Extract Staff Layout**. The **Show extracted regions** control is
+  hidden until extraction has actually produced regions; the subsequent action
+  reads **Use Extracted Staff Layout**.
+- The legacy **Choose another photo** action was removed from staff-layout
+  review. That dialog now has only the action appropriate to its current stage;
+  adding or changing a photograph is handled by the file-level Add Input and
+  Change Input commands.
+- Staff Layout Review uses the accepted working image exactly as saved; it no
+  longer applies a second cleanup pass or offers a misleading Cleaned/Original
+  comparison. Ordinary measure-boundary overlays are drawn separately within
+  each five-line staff and do not cross the lyric gap. System-opening and
+  stop/repeat structures may still span the paired system when supported by
+  the photographed evidence.
+- Notes outside the five staff lines remain part of the later symbol-recognition
+  region. Their ledger lines, noteheads, stems, accidentals, ties, and slurs are
+  retained, while pitch is measured relative to the detected five-line staff;
+  the overlay does not extend ordinary measure bars to those ledger notes.
+- Opening a project scans its `input` subfolders instead of relying only on the
+  manifest. Existing files appear in **Project inputs** with an **Open** action;
+  the add controls become **Add another…** for file types already present.
+- Reopening a project restores its recorded active input and immediately loads
+  the corresponding photo/working image or document into the appropriate tab.
+  If an older or not-yet-saved manifest has no active-input entry but exactly
+  one original is discovered, that sole input is selected and opened
+  automatically instead of leaving the preparation canvas empty.
+- Input discovery is recursive and classifies supported files by extension, so
+  it does not depend on an exact filename or on whether a user made additional
+  subfolders beneath `input`. The project records an explicit **active input**;
+  the selected row is highlighted and its name/type remain visible above the
+  inventory. With multiple files, only the file whose Open action the user
+  chooses becomes the working source.
+- For photos, PDFs, and text, **Preview** opens the file without changing the
+  selected project input. The user may compare inputs one by one, then choose
+  **Use this file**. The chosen row is highlighted and saved as the project's
+  `activeInput`. MusicXML uses **Open in Editor**, because loading an editable
+  score is itself the explicit selection action.
+- **Change input…** opens a chooser containing the other existing inputs in the
+  project and makes the selected file active. It does not create another
+  working-image version or alter any original. **Add Input** remains the
+  separate project-level operation for copying another source into the project.
+- The **Working file** card contains only the chosen filename and type. It does
+  not repeat Preview or Chosen buttons. Preview/Use controls are listed only
+  for the remaining candidate inputs, preventing the active file from appearing
+  twice or presenting a disabled action with no purpose.
+- Writing an input or working artifact into a project folder never silently
+  replaces a same-named file. The Workbench asks for confirmation first and
+  leaves the existing file unchanged when replacement is declined. MusicXML,
+  JSON, and photo exports use the system Save chooser where available, which
+  provides the same native replacement confirmation. The internal
+  `hymn-project.json` manifest is updated normally by **Save**.
+- Opening a photo, PDF, or text file keeps the user in **Source Processing**.
+  Photos open in preparation, PDFs open in a source-document viewer, and text
+  opens in a readable source panel. Opening MusicXML switches to **Hymn
+  Editor** and loads it as the editable score.
+- **Hymn Editor** owns Jianpu encoded-stream entry, Chinese and English lyric entry,
+  generated and corrected SATB notation, measure viewports, spacing controls,
+  validation, working-copy saves, and final exports.
+- A newly created project receives the approved `input`, `working`, and
+  `output` subfolder trees. Opening an existing project restores its recorded
+  input-file list and preserves the same shared in-memory editing state while
+  moving between the two tabs.
+- **Add Input** is a file-level operation in the Source Processing context; it
+  is not part of the processing sidebar. Immediately after
+  **Choose parent and create**, a new project must receive its first photo,
+  MusicXML, PDF, or text input before the input dialog can be closed. The same
+  requirement is restored when an existing project has no discoverable input.
+  Until that first input is successfully added, the Open Project/New Project
+  landing view remains behind the dialog; the project workspace, tabs, and
+  project action bar are revealed only after a working input exists.
+  Choosing the parent folder and project name only stages a new project in
+  memory. The application creates the named project folder and its standard
+  folder tree only after the user actually selects the first input file, so an
+  abandoned New Project flow leaves no empty project folder behind.
+- **Delete** first asks for the parent project folder, scans it for child
+  folders containing `hymn-project.json`, and lets the user select the project
+  by name from that list. A separate confirmation is required before the
+  entire selected project folder is permanently removed. The operation is
+  available both in the initial project-management window and while a project
+  is open. Its chooser searches nested folders (up to the supported project
+  discovery depth), displays each matching relative path, and deletes that
+  exact selected project rather than assuming projects are immediate children
+  of the initially chosen folder. The chooser also recognizes when the folder
+  selected by the user is itself an individual hymn project and, when supported
+  by the browser, deletes that directly selected project folder.
+- The project-management command is named **Delete Project(s)**. Selecting an
+  individual hymn project deletes only that project. Selecting a collection
+  folder containing multiple hymn projects displays their count and exact
+  paths, warns that every listed hymn project will be deleted, and requires a
+  separate confirmation. The collection folder itself and unrelated files are
+  preserved.
+- The application distinguishes three command levels: project management
+  (**Open Project**, **New Project**, **Delete Project**, and the separately
+  placed **Close Project**); input/working-file management (**Save**, **Reset**,
+  **Add Input**, **Change Input**, and **Delete Input**); and local object or
+  operation controls such as erasing, rotation, notation edits, and Undo.
+- **Save** writes current in-memory edits and processing status to the working
+  files and establishes the new **Reset** baseline. **Reset** discards changes
+  made since that Save without modifying original inputs.
+- In Source Processing, all five file-level commands are shown. In Hymn Editor,
+  only Save and Reset apply to the working MusicXML, so Add Input, Change Input,
+  and Delete Input are hidden.
+- **Delete Input** lists only inactive originals under `input/`. It cannot
+  delete the currently open input or the project's sole remaining input. It
+  updates the input inventory and manifest without deleting the current working
+  file.
+- **Close Project** closes the current project and returns to the initial **Open
+  Project** / **New Project** choices. It asks for confirmation when the current
+  session contains source files or unsaved editor work; it does not delete the
+  project folder.
+- Accepting extracted staff regions updates the Source Processing recognition
+  summary and keeps the result available to the Editor for later recognition
+  and measure-registration stages; it does not create inferred XML notes.

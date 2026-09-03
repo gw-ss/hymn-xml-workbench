@@ -4,6 +4,36 @@ export function measureCapacityInQuarterNotes(beats, beatType) {
   return Number(beats) * 4 / Number(beatType);
 }
 
+export function parseJianpuMeterMarker(text) {
+  const match = String(text).match(/^\{\s*(\d+)\s*\/\s*(2|4|8|16)\s*\}/u);
+  if (!match || Number(match[1]) < 1 || Number(match[1]) > 32) return null;
+  return { beats: Number(match[1]), beatType: Number(match[2]), length: match[0].length };
+}
+
+export function jianpuSymbolTime(onset, beatType) {
+  return Number(onset) + (4 / Number(beatType)) / 2;
+}
+
+export function applyJianpuOctaveModifier(event, modifier) {
+  if (["'", '’', '′'].includes(modifier)) { event.octave += 1; return true; }
+  if ([',', '，'].includes(modifier)) { event.octave -= 1; return true; }
+  return false;
+}
+
+export function jianpuParenthesisIssues(text) {
+  const parentheses = [], issues = new Map();
+  for (let index = 0; index < text.length;) {
+    if (text.startsWith('s(', index)) { parentheses.push(index + 1); index += 2; continue; }
+    if (text[index] === '(') parentheses.push(index);
+    else if (text[index] === ')') {
+      if (parentheses.length) parentheses.pop(); else issues.set(index, 'closing parenthesis has no opening parenthesis');
+    }
+    index += 1;
+  }
+  for (const index of parentheses) issues.set(index, 'opening parenthesis has no closing parenthesis');
+  return issues;
+}
+
 export function pickupDurationInQuarterNotes(count, noteValue) {
   return Number(count) * Number(noteValue);
 }
@@ -34,7 +64,7 @@ export function jianpuDurationSuffix(duration) {
   if (value === 1) return '';
   if (value === 1.5) return '·';
   if (Number.isInteger(value) && value >= 2 && value <= 4) return '−'.repeat(value - 1);
-  throw new Error(`The ${value}-beat duration cannot be represented by the current Jianpu Direct-Entry Rules.`);
+  throw new Error(`The ${value}-beat duration cannot be represented by the current Jianpu Encoding Rules.`);
 }
 
 export function chooseChineseLyricAnchors(events, tokenCount) {

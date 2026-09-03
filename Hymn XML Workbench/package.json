@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test core.test.mjs",
+    "test": "node --check app.js && node --check photo-cleaner.js && node --test core.test.mjs photo-recognition.test.mjs ui-contract.test.mjs",
     "sync:hymn-display:help": "node scripts/sync-hymn-display.mjs --help",
     "sync:hymn-display:check": "node scripts/sync-hymn-display.mjs --check",
     "sync:hymn-display:pull": "node scripts/sync-hymn-display.mjs --from-display",

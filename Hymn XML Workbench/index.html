@@ -4,31 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hymn MusicXML Workbench</title>
-    <link rel="stylesheet" href="./styles.css?v=20260901-confidence-bands-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260902-sticky-resize-handle-83" />
   </head>
   <body>
     <header class="topbar">
       <div class="page-shell topbar-inner">
-        <div><p class="eyebrow">Hymn Play · First working version</p><h1>MusicXML Correction &amp; Lyric Workbench</h1></div>
-        <div class="privacy">Runs locally · files stay on this computer</div>
+        <div class="title-and-project-actions"><p class="eyebrow">Hymn Play · First working version</p><h1>MusicXML Correction &amp; Lyric Workbench</h1><div id="project-open-actions" class="project-open-actions hidden"><strong>Project: <span id="project-name-display">Hymn-001</span></strong><button id="project-quit" title="Return to project management">Close Project</button></div></div>
       </div>
     </header>
 
     <main class="page-shell">
+      <section id="project-launcher" class="project-launcher">
+        <button id="open-project"><strong>Open Project</strong><span>Open an existing project.</span></button>
+        <button id="new-project"><strong>New Project</strong><span>Start a hymn in a photo, PDF, or another file type.</span></button>
+        <button id="delete-project-launcher" class="danger"><strong>Delete Project(s)</strong><span>Delete one hymn project or all hymn projects in a selected collection.</span></button>
+      </section>
+      <section id="file-level-actions" class="file-level-actions card hidden" aria-label="Working file operations"><strong>Working file</strong><button id="project-save">Save</button><button id="project-reset" title="Reset changes made since the most recent Save">Reset</button><button id="project-add-input" class="source-file-action">Add Input</button><button id="project-change-input" class="source-file-action">Change Input</button><button id="project-delete-input" class="source-file-action danger">Delete Input</button></section>
+      <nav id="major-tabs" class="major-tabs hidden" aria-label="Workbench areas">
+        <button class="major-tab active" data-major-tab="source" aria-selected="true">Source Processing</button>
+        <button class="major-tab" data-major-tab="editor" aria-selected="false">Hymn Editor</button>
+      </nav>
+
+      <section id="source-processing-tab" class="major-tab-panel hidden">
+        <div class="source-notice"><strong>Source work is provisional.</strong><span>Original files remain unchanged. Reviewed results can be sent to the Hymn Editor.</span></div>
+        <div class="source-layout">
+          <aside class="source-sidebar">
+            <section class="card source-card"><p class="step">Source files</p><h2>Project inputs</h2><p id="initial-input-prompt" class="initial-input-prompt hidden">Use Add Input before continuing.</p><div id="source-active-file" class="source-active-file"><small>Selected input</small><strong>None selected</strong></div><div id="source-file-list" class="source-file-list"><span>No other project inputs.</span></div></section>
+            <section class="card source-card processing-pipeline"><p class="step">Processing &amp; review</p><h2>Process chosen photo</h2><p class="hint">Select a stage below. Only that stage's controls appear in the work area.</p><button id="prepare-photo" class="secondary pipeline-operation active" aria-pressed="true">1. Photo Preparation</button><button id="extract-staff-layout" class="primary pipeline-operation" aria-pressed="false" disabled>2. Extract Staff Layout</button><button id="recognize-source-content" class="primary pipeline-operation" aria-pressed="false" disabled title="Available after the extracted layout is accepted">3. Recognize Source Content</button><button id="review-recognition" class="secondary pipeline-operation" aria-pressed="false" disabled title="Available after source recognition completes">4. Review Recognition</button><span id="staff-photo-status" class="photo-intake-status">Choose a photo above to begin.</span><div id="staff-photo-editor-result" class="staff-photo-editor-result hidden"><strong id="staff-photo-editor-summary"></strong><div id="staff-photo-editor-meter" class="confidence-meter compact" aria-label="Extraction confidence colors"></div></div></section>
+          </aside>
+          <section class="card source-preview"><p class="source-resize-hint">Drag the lower-right grabber to resize this work area.</p><div id="photo-preparation-panel"><div class="source-preview-heading"><p class="step">Working source</p><h2>Photo preparation</h2><p class="instructions">Prepare the chosen photograph. Only the latest working image is saved; original inputs remain unchanged.</p></div><iframe id="photo-cleaner-frame" class="photo-cleaner-frame" src="photo-cleaner.html?embedded=1&amp;v=20260902-modern-heic-decode-8" title="Hymn photo preparation tools"></iframe></div><div id="document-source-panel" class="hidden"><div class="source-preview-heading"><p class="step">Project input</p><h2 id="document-source-title">Source document</h2><p id="document-source-description" class="instructions"></p></div><iframe id="pdf-source-preview" class="document-source-frame hidden" title="PDF source preview"></iframe><pre id="text-source-preview" class="text-source-preview hidden"></pre></div><div id="recognition-review-panel" class="hidden"><div class="source-preview-heading"><p class="step">Working source</p><h2 id="source-stage-title">Staff layout extraction</h2><p id="source-stage-description" class="instructions">Quality decisions, page-layout confidence, staff lines, and boundaries appear here.</p></div><div id="source-recognition-summary" class="source-empty-preview"><strong>Extraction results will appear after analysis</strong><span>Staff-photo processing remains provisional and does not modify MusicXML.</span></div></div></section>
+        </div>
+      </section>
+
+      <section id="editor-tab" class="major-tab-panel hidden">
       <section class="load-panel card">
         <div>
-          <p class="step">Step 1</p>
           <h2>Open a MusicXML file</h2>
           <p>Correct the melody, inspect jianpu by measure, and align Chinese and English lyrics.</p>
         </div>
-        <div class="load-actions"><label class="file-button">Choose MusicXML<input id="file-input" type="file" accept=".musicxml,.xml,application/xml" /></label><button id="start-entry-button" class="secondary">Enter Jianpu directly</button><a class="secondary tool-link" href="photo-cleaner.html">Clean a hymn photo</a></div>
+        <div class="load-actions"><label class="file-button">Choose MusicXML<input id="file-input" type="file" accept=".musicxml,.xml,application/xml" /></label><button id="start-entry-button" class="secondary">Enter Jianpu directly</button></div>
         <div id="file-summary" class="summary">No score loaded</div>
       </section>
 
       <section id="editor" class="editor hidden">
         <aside class="sidebar">
+          <nav class="language-tabs sidebar-language-tabs" role="tablist" aria-label="Hymn Editor language">
+            <button class="language-tab active" data-language="1" role="tab" aria-selected="true" aria-controls="chinese-sidebar-pane">Chinese</button>
+            <button class="language-tab" data-language="2" role="tab" aria-selected="false" aria-controls="english-sidebar-pane">English</button>
+          </nav>
+          <div id="chinese-sidebar-pane" class="sidebar-language-pane" role="tabpanel">
           <section class="card direct-entry">
-            <p class="step">Step 1A</p><h2>Enter Jianpu</h2>
+            <h2>Enter Jianpu</h2>
             <div class="hymn-picker"><label>Hymn number<input id="hymn-number" type="number" min="1" max="848" value="705" list="hymn-number-list" /></label><button id="load-hymn-button">Load hymn</button></div>
             <datalist id="hymn-number-list"></datalist>
             <p id="hymn-title" class="hint">Choose any hymn from 1 through 848.</p>
@@ -55,38 +81,29 @@
             </div>
             <div class="score-basics">
               <label>Generated key signature<input id="entry-key-display" type="text" value="Not generated yet" readonly aria-readonly="true" /><input id="entry-key" type="hidden" value="" /></label>
-              <label>Beats/measure<input id="entry-beats" type="number" min="1" max="12" value="4" /></label>
-              <label>Time-signature beat unit<select id="entry-beat-type"><option value="2">Half note</option><option value="4" selected>Quarter note</option><option value="8">Eighth note</option><option value="16">Sixteenth note</option></select></label><span aria-hidden="true"></span>
               <label>Pickup note value<select id="entry-pickup-type"><option value="4">Whole note</option><option value="2">Half note</option><option value="1" selected>Quarter note</option><option value="0.5">Eighth note</option><option value="0.25">Sixteenth note</option></select></label>
               <label>Pickup count<input id="entry-pickup-count" type="number" min="0" max="12" step="1" value="0" /></label>
               <label>Tempo marking<select id="entry-tempo-text"><option value="" selected>Not printed / unknown</option><option>Grave</option><option>Largo</option><option>Lento</option><option>Adagio</option><option>Andante</option><option>Moderato</option><option>Allegretto</option><option>Allegro</option><option>Vivace</option><option>Presto</option><option>Prestissimo</option></select></label>
               <label>Quarter-note BPM<input id="entry-tempo" type="number" min="20" max="300" value="" placeholder="Optional" /></label>
             </div>
-            <label>Numeric notation<textarea id="jianpu-input" rows="5" wrap="soft" placeholder="5|3311|6/16/5·0/|..."></textarea></label>
-            <p class="hint"><code>|</code> measure · <code>@</code> new system (after <code>|</code>) · <code>||</code> verse stop · <code>|:</code>/<code>:|</code> repeat · <code>|]</code> end · <code>/</code> half-beat · <code>//</code> quarter-beat · <code>(4/3/)</code> connected underline · <code>s(6/·1)</code> slur · <code>#4</code>/<code>♯4</code> sharp · <code>b7</code>/<code>♭7</code> flat · <code>·</code> or <code>*</code> duration dot · <code>-</code> one-beat prolongation · <code>0</code> pause.</p>
+            <label>Jianpu Encoded Stream<div id="jianpu-input" class="jianpu-content-editor" contenteditable="plaintext-only" role="textbox" aria-multiline="true" aria-describedby="jianpu-encoding-hint jianpu-entry-status" data-placeholder="5|3311|6/16/5·0/|..."></div></label>
+            <p id="jianpu-encoding-hint" class="hint">Enter Jianpu using the Workbench encoding rules below.</p>
+            <p class="hint"><code>{3/4}</code> meter (continues until changed) · <code>|</code> measure · <code>@</code> new system (after <code>|</code>) · <code>||</code> verse stop · <code>|:</code>/<code>:|</code> repeat · <code>|]</code> end · <code>/</code> half-beat · <code>//</code> quarter-beat · <code>(4/3/)</code> connected underline · <code>s(6/·1)</code> slur · <code>#4</code>/<code>♯4</code> sharp · <code>b7</code>/<code>♭7</code> flat · <code>·</code> or <code>*</code> attached duration dot · <code>-</code> one-beat prolongation · <code>0</code> pause.</p>
             <button id="apply-jianpu-button" class="primary">Update notation preview from Jianpu</button>
+            <p id="jianpu-entry-status" class="status jianpu-entry-status" role="status" aria-live="polite"></p>
             </div>
           </section>
           <section class="card token-editor">
-            <p class="step">Step 2</p><h2>Prepare lyrics</h2>
-            <div class="language-tabs" role="tablist">
-              <button class="language-tab active" data-language="1">中文</button>
-              <button class="language-tab" data-language="2">English</button>
-            </div>
+            <h2>Chinese lyrics</h2>
             <label id="zh-input-label">Chinese lyrics<textarea id="zh-input" rows="5" placeholder="每個漢字會成為一個標記"></textarea></label>
-            <label id="en-input-label" class="hidden">English lyrics<textarea id="en-input" rows="5" placeholder="Separate sung syllables with hyphens: lift-ed"></textarea></label>
-            <section id="staff-entry-palette" class="staff-entry-palette hidden" aria-label="SATB staff entry palette">
+          </section>
+          </div>
+          <div id="english-sidebar-pane" class="sidebar-language-pane hidden" role="tabpanel">
+          <section class="card token-editor">
+            <h2>English lyrics and staff</h2>
+            <label id="en-input-label">English lyrics<textarea id="en-input" rows="5" placeholder="Separate sung syllables with hyphens: lift-ed"></textarea></label>
+            <section id="staff-entry-palette" class="staff-entry-palette" aria-label="SATB staff entry palette">
               <strong>Staff notation palette</strong>
-              <section class="staff-photo-intake" aria-label="Staff photo intake">
-                <div><strong>Staff photo</strong><p class="hint">Load a printed score photo for cleanup and quality review. Recognition remains provisional until conflicts are accepted.</p></div>
-                <label class="file-button">Load Staff Photo<input id="staff-photo-input" type="file" accept="image/png,image/jpeg,image/tiff,image/webp,image/heic,image/heif,.tif,.tiff,.heic,.heif" /></label>
-                <span id="staff-photo-status" class="photo-intake-status">No staff photo loaded.</span>
-                <div id="staff-photo-editor-result" class="staff-photo-editor-result hidden">
-                  <strong id="staff-photo-editor-summary"></strong>
-                  <div id="staff-photo-editor-meter" class="confidence-meter compact" aria-label="Extraction confidence colors"></div>
-                  <button id="review-extracted-regions" type="button" class="secondary">Review extracted regions</button>
-                </div>
-              </section>
               <button id="generate-soprano-button" class="primary">Generate Soprano from corrected Jianpu</button>
               <div class="staff-palette-grid">
                 <label>Voice<select id="staff-voice"><option value="S">Soprano · treble</option><option value="A">Alto · treble</option><option value="T">Tenor · bass</option><option value="B">Bass · bass</option></select></label>
@@ -108,13 +125,17 @@
               <button id="prepare-english-button" class="secondary">Prepare English syllables</button>
               <p class="hint">Choose a voice and symbol, then click its staff. Drag an existing note vertically to another line/space or horizontally to another beat. Select a note for split, merge, pitch, octave, stem, or delete operations. For a shared beam, choose Beam Notes, then click the first and last short note in one voice and measure. Click a Soprano note after selecting an English token to assign that syllable.</p>
             </section>
-            <p class="hint">Select a token in this palette, then select its jianpu note. The selection clears after one assignment so later note clicks cannot replace lyrics accidentally. Assigned tokens show a checkmark.</p>
+          </section>
+          </div>
+          <section id="language-token-card" class="card token-editor language-token-card">
+            <h2 id="language-token-heading">Chinese lyric tokens</h2>
+            <p id="language-token-instructions" class="hint">Select a token in this palette, then select its Jianpu note. The selection clears after one assignment so later note clicks cannot replace lyrics accidentally. Assigned tokens show a checkmark.</p>
             <div id="token-palette" class="token-palette"></div>
           </section>
           <section class="card actions">
-            <p class="step">Step 4</p><h2>Check and save</h2>
+            <h2>Check and save</h2>
             <div id="validation-summary" class="validation-summary">Open a score to validate it.</div>
-            <button id="save-button" class="primary">Save working copy</button>
+            <button id="save-button" class="primary">Save project working MusicXML</button>
             <button id="export-button" class="primary">Export revised MusicXML</button>
             <button id="export-review-button" class="secondary">Export alignment JSON</button>
             <p id="status" class="status" role="status"></p>
@@ -123,12 +144,12 @@
 
         <section class="workspace card">
           <div class="workspace-heading">
-            <div><p class="step">Step 3</p><h2>Assign lyrics to jianpu</h2></div>
+            <div><h2>Assign lyrics to jianpu</h2></div>
             <div class="legend"><span><i class="underline"></i> short note</span><span>“-” sustained note</span><span id="key-label">1 = —</span></div>
           </div>
           <p class="instructions">Select a note to edit it. Select a lyric token and then choose a note to align it. Jianpu octave dots use the key tonic nearest the melody's normal register; they do not transpose the XML.</p>
           <div class="layout-controls" aria-label="Notation spacing controls">
-            <label>Measures per line <select id="measures-per-line"><option value="auto">Automatic</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>
+            <label>Measures per line <select id="measures-per-line"><option value="auto">Automatic (use exact @ breaks)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></label>
             <label>All measure windows <input id="all-measure-width-slider" type="range" min="120" max="500" step="1" value="320" /><output id="all-measure-width-value">Default</output></label>
             <label>Default measure width <input id="measure-width-slider" type="range" min="120" max="640" step="10" value="320" /><output id="measure-width-value">320 px</output></label>
             <label>Minimum symbol space <input id="symbol-width-slider" type="range" min="0" max="100" step="2" value="56" /><output id="symbol-width-value">56 px</output></label>
@@ -155,7 +176,7 @@
             </div>
           </section>
           <section class="symbol-command-bar" aria-label="Generic numeric notation operation">
-            <label>Layer<select id="operation-layer"><option value="notation">Numeric notation</option><option value="1">Chinese lyrics</option><option value="2">English lyrics</option></select></label>
+            <label>Layer<select id="operation-layer"><option value="notation">Numeric notation</option><option value="1">Chinese lyrics</option></select></label>
             <label>Operation<select id="symbol-operation"><option value="insert">Insert</option><option value="replace">Replace</option><option value="remove">Remove</option><option value="split">Split current</option><option value="merge-previous">Merge previous</option><option value="merge-next">Merge next</option><option value="pitch-down">Lower semitone</option><option value="pitch-up">Raise semitone</option><option value="octave-down">Lower octave</option><option value="octave-up">Raise octave</option><option value="shift-left">Shift left</option><option value="shift-right">Shift right</option></select></label>
             <label>Target<select id="symbol-target"><option value="previous">Previous symbol</option><option value="current" selected>Current symbol</option><option value="next">Next symbol</option></select></label>
             <label>Symbol<select id="symbol-value"><option value="0">0 (pause)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="sustain">− (prolongation)</option><option value="dot">· (duration dot)</option><option value="double-bar">|| (section/verse barline)</option><option value="repeat-start">|: (repeat begins)</option><option value="repeat-end">:| (repeat ends)</option><option value="final-bar">|] (final barline)</option></select></label>
@@ -171,22 +192,29 @@
             <div id="score-grid" class="score-grid"></div>
           </div>
         </section>
+        <button id="workspace-resize-handle" class="workspace-resize-handle" type="button" aria-label="Resize notation workspace horizontally and vertically" title="Drag to resize the notation workspace horizontally and vertically"></button>
+      </section>
       </section>
     </main>
+    <dialog id="new-project-dialog" class="project-dialog"><form method="dialog"><h2>New Project</h2><p>Name the top project folder. Its input, working, and output folders will be created together.</p><label>Project folder name<input id="new-project-name" value="Hymn-001" pattern="[A-Za-z0-9_-]+" required /></label><div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="create-project" value="default" class="primary">Choose parent and create</button></div></form></dialog>
+    <dialog id="project-input-dialog" class="project-dialog"><form method="dialog"><h2>Add Project Input</h2><p>Choose the first working input, or intentionally add another source to the open project.</p><div id="source-add-controls"><label class="file-button"><span id="source-photo-action">Add photo</span><input id="source-photo-input" type="file" accept="image/png,image/jpeg,image/tiff,image/webp,image/heic,image/heif,.tif,.tiff,.heic,.heif" /></label><label class="file-button"><span id="source-musicxml-action">Add MusicXML</span><input id="source-musicxml-input" type="file" accept=".musicxml,.xml,application/xml" /></label><label class="file-button secondary-source"><span id="source-reference-action">Add PDF or text</span><input id="source-reference-input" type="file" accept=".pdf,.txt,text/plain,application/pdf" multiple /></label></div><div class="dialog-actions"><button id="close-project-input" value="cancel" class="secondary">Close</button></div></form></dialog>
+    <dialog id="change-input-dialog" class="project-dialog"><form method="dialog"><h2>Change input</h2><p>Select another existing input file from this project. The original files remain unchanged.</p><label>Project input<select id="change-input-selection"></select></label><div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="confirm-change-input" type="button" class="primary">Use selected input</button></div></form></dialog>
+    <dialog id="delete-input-dialog" class="project-dialog danger-dialog"><form method="dialog"><h2>Delete Input</h2><p>Delete an inferior original from this project's input folder. The currently open input and the project's only input cannot be deleted.</p><label>Inactive input<select id="delete-input-selection"></select></label><label class="delete-confirm"><input id="delete-input-confirmation" type="checkbox" /> I understand this permanently deletes the selected original input.</label><div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="confirm-delete-input" type="button" class="danger">Delete Input</button></div></form></dialog>
+    <dialog id="delete-project-dialog" class="project-dialog danger-dialog"><form method="dialog"><h2 id="delete-project-title">Delete Project(s)</h2><p id="delete-project-message">Choose either an individual hymn project folder or a collection folder containing hymn projects.</p><div id="delete-project-list" class="delete-project-list" aria-label="Hymn projects to be deleted"></div><label class="delete-confirm"><input id="delete-project-confirmation" type="checkbox" /> <span id="delete-project-confirmation-text">I understand this permanently deletes the listed hymn project.</span></label><div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="confirm-project-delete" type="button" class="danger">Delete Project(s)</button></div></form></dialog>
     <dialog id="staff-photo-review" class="staff-photo-review" aria-labelledby="staff-photo-review-title">
       <form method="dialog" class="staff-photo-review-shell">
         <header><div><p class="step">Staff Photo Review</p><h2 id="staff-photo-review-title">Preparing photo…</h2></div><button id="close-staff-photo-review" class="secondary" value="cancel" aria-label="Close photo review">Close</button></header>
         <div id="staff-photo-progress" class="photo-progress"><span class="busy-spinner" aria-hidden="true"></span><span>Processing the photograph…</span></div>
         <div id="staff-photo-review-content" class="hidden">
-          <div class="photo-review-toolbar" role="group" aria-label="Photo preview"><label><input type="radio" name="staff-photo-preview" value="cleaned" checked /> Cleaned</label><label><input type="radio" name="staff-photo-preview" value="original" /> Original</label><label><input id="show-staff-regions" type="checkbox" disabled /> Show extracted regions</label></div>
+          <div class="photo-review-toolbar" role="group" aria-label="Working image review"><strong>Working image</strong><label id="show-staff-regions-control" class="hidden"><input id="show-staff-regions" type="checkbox" /> Show extracted regions</label></div>
           <div id="staff-photo-decision" class="photo-review-decision"></div>
           <div id="staff-region-result" class="staff-region-result hidden" aria-live="polite"></div>
           <div class="photo-review-canvas"><canvas id="staff-photo-canvas" aria-label="Staff photo review preview"></canvas></div>
-          <div class="photo-review-actions"><button id="accept-staff-photo" type="button" class="primary">Accept cleaned photo</button><button id="choose-another-staff-photo" type="button" class="secondary">Choose another photo</button></div>
+          <div class="photo-review-actions"><button id="accept-staff-photo" type="button" class="primary">Continue: Extract Staff Layout</button></div>
         </div>
       </form>
     </dialog>
     <div id="photo-conflict-popover" class="photo-conflict-popover hidden" role="dialog" aria-label="Staff-photo conflicts"></div>
-    <script type="module" src="./app.js?v=20260901-vertical-boundaries-1"></script>
+    <script type="module" src="./app.js?v=20260902-sticky-resize-handle-83"></script>
   </body>
 </html>

@@ -1,7 +1,15 @@
-import { MAJOR_STEPS, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
-import { assessStaffPhotoQuality, extractStaffRegions, removePaperBackground } from './photo-recognition.mjs';
+import { MAJOR_STEPS, applyJianpuOctaveModifier, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, jianpuParenthesisIssues, jianpuSymbolTime, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, parseJianpuMeterMarker, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
+import { assessStaffPhotoQuality, extractStaffRegions } from './photo-recognition.mjs';
 
 const $ = selector => document.querySelector(selector);
+const jianpuEditor = $('#jianpu-input');
+Object.defineProperty(jianpuEditor, 'value', { configurable:true, get(){return this.innerText.replace(/\u00a0/g,' ');}, set(value){this.textContent=String(value??'');} });
+const UI_ZOOM_KEY='hymn-workbench-ui-zoom';
+let uiZoom=Math.min(2,Math.max(.5,Number(localStorage.getItem(UI_ZOOM_KEY))||1));
+function applyUiZoom(){document.documentElement.style.zoom=String(uiZoom);localStorage.setItem(UI_ZOOM_KEY,String(uiZoom));}
+function changeUiZoom(direction){uiZoom=direction===0?1:Math.min(2,Math.max(.5,Math.round((uiZoom+direction*.1)*10)/10));applyUiZoom();}
+function handleUiZoomShortcut(event){if(!(event.metaKey||event.ctrlKey))return;const key=event.key;if(key==='+'||key==='='){event.preventDefault();changeUiZoom(1);}else if(key==='-'||key==='_'){event.preventDefault();changeUiZoom(-1);}else if(key==='0'){event.preventDefault();changeUiZoom(0);}}
+applyUiZoom();document.addEventListener('keydown',handleUiZoomShortcut);
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 const KEYS = { '-7': ['Cb', 11], '-6': ['Gb', 6], '-5': ['Db', 1], '-4': ['Ab', 8], '-3': ['Eb', 3], '-2': ['Bb', 10], '-1': ['F', 5], 0: ['C', 0], 1: ['G', 7], 2: ['D', 2], 3: ['A', 9], 4: ['E', 4], 5: ['B', 11], 6: ['F#', 6], 7: ['C#', 1] };
 const state = { xml: null, filename: '', events: [], measures: [], fifths: 0, activeLanguage: '1', tokens: { 1: [], 2: [] }, assignments: { 1: new Map(), 2: new Map() }, staffNotes: [], staffAssignments: new Map(), photoConflicts: [], staffPhoto: null, staffRegisters: { treble: 0, bass: 0 }, spacing: { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' }, containerSize: null, layoutProfiles: {}, firstNoteOffsets: new Map(), measureWidths: new Map(), nextStaffNoteId: 1, selectedStaffNoteId: null, staffBeamMode: null, staffBeamStartId: null, selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null, history: [], future: [] };
@@ -108,7 +116,7 @@ function setupKeySignaturePicker() {
   });
   $('#clear-key-signature').addEventListener('click', () => { if (!locked) { selections.splice(0); selectedId = null; $('#key-position-readout').textContent = 'No symbols selected.'; $('#entry-key').value = ''; $('#entry-key-display').value = 'Not generated yet'; redraw(); } });
   document.addEventListener('keydown', event => {
-    if (locked || selectedId === null || !['Delete', 'Backspace'].includes(event.key) || event.target.matches('input, textarea, select')) return;
+    if (locked || selectedId === null || !['Delete', 'Backspace'].includes(event.key) || event.target.matches('input, textarea, select, [contenteditable]')) return;
     const index = selections.findIndex(item => item.id === selectedId); if (index < 0) return;
     const [removed] = selections.splice(index, 1); selectedId = null; event.preventDefault();
     $('#key-position-readout').textContent = `Removed ${removed.letter}${removed.kind === 'flat' ? '♭' : '♯'}.`;
@@ -180,7 +188,9 @@ function parseScore(xml) {
       const note = pitched.length ? pitched.toSorted((a, b) => midi(b) - midi(a))[0] : notes[0];
       const isRest = !note.querySelector(':scope > pitch');
       const beam = note.querySelector(':scope > beam[number="1"]')?.textContent || null;
+      const encodedOctave = note.getAttribute('hymn-play-jianpu-octave');
       const event = { id: `m${String(measureNumber).padStart(3, '0')}-n${String(++eventNumber).padStart(3, '0')}`, index: -1, measure: measureNumber, beat: onset / divisions + 1, duration: Number(note.querySelector(':scope > duration')?.textContent || 0) / divisions, divisions, midi: isRest ? null : midi(note), isRest, beam, note };
+      event.jianpuOctave = encodedOctave === null ? null : Number(encodedOctave);
       measureEvents.push(event);
     }
     // Many notation programs encode an incomplete pickup as leading rests in
@@ -214,8 +224,6 @@ function reflectImportedScore(filename) {
   const firstMeasure = state.measures[0];
   keySignaturePicker.setFromFifths(state.fifths);
   if (firstMeasure) {
-    $('#entry-beats').value = String(firstMeasure.timeSignatureBeats);
-    $('#entry-beat-type').value = String(firstMeasure.beatType);
     const pickup = pickupControlsForDuration(firstMeasure.isPickup ? firstMeasure.expectedBeats : 0);
     $('#entry-pickup-type').value = String(pickup.noteValue);
     $('#entry-pickup-count').value = String(pickup.count);
@@ -230,6 +238,7 @@ function reflectImportedScore(filename) {
   const hymnMatch = filename.match(/hymn[-_ ]?0*(\d+)/i);
   if (hymnMatch) $('#hymn-number').value = hymnMatch[1];
   $('#jianpu-input').value = directEntryTextFromScore();
+  updateJianpuPairCheck();
 }
 
 function directEntryTokenForEvent(event) {
@@ -239,7 +248,7 @@ function directEntryTokenForEvent(event) {
     const accidental = token.startsWith('#') ? 1 : token.startsWith('b') ? -1 : 0;
     const [, tonicPc] = KEYS[state.fifths] || KEYS[0];
     const directEntryBase = 60 + tonicPc + MAJOR_STEPS[degree - 1] + accidental;
-    const octave = Math.round((event.midi - directEntryBase) / 12);
+    const octave = Number.isInteger(event.jianpuOctave) ? event.jianpuOctave : Math.round((event.midi - directEntryBase) / 12);
     if (octave > 0) token += "'".repeat(octave);
     if (octave < 0) token += ','.repeat(-octave);
   }
@@ -249,6 +258,8 @@ function directEntryTokenForEvent(event) {
 function directEntryTextFromScore() {
   let output = '';
   state.measures.forEach((measure, measureIndex) => {
+    const previous = state.measures[measureIndex - 1];
+    if (!previous || previous.timeSignatureBeats !== measure.timeSignatureBeats || previous.beatType !== measure.beatType) output += `{${measure.timeSignatureBeats}/${measure.beatType}}`;
     if (measureIndex === 0 && measure.repeatStart) output += '|:';
     if (measure.newSystem) output += `${measureIndex ? '\n' : ''}@`;
     for (const event of measure.events) {
@@ -393,20 +404,20 @@ function assignmentFor(language, eventId) {
 
 function tonicMidi() {
   const [, tonicPc] = KEYS[state.fifths] || KEYS[0];
-  // Choose the tonic at or below the melody's median pitch. A fixed C4-based
-  // reference made flat keys such as A-flat appear an octave too high even
-  // though their MusicXML pitches were unchanged.
-  const pitches = state.events.filter(event => !event.isRest).map(event => event.midi).toSorted((a, b) => a - b);
-  const median = pitches.length ? pitches[Math.floor(pitches.length / 2)] : 60;
-  return median - ((median - tonicPc + 120) % 12);
+  // Jianpu octave marks are relative to the stable octave-4 tonic used by the
+  // encoded stream. Deriving this reference from the melody would let raised
+  // notes move the reference itself and make an explicitly entered ' vanish.
+  return 60 + ((tonicPc + 12) % 12);
 }
 
 function octaveMarks(event) {
-  if (event.isRest) return ['', ''];
-  const distance = Math.floor((event.midi - tonicMidi()) / 12);
-  if (!distance) return ['', ''];
-  const dots = '·'.repeat(Math.min(3, Math.abs(distance)));
-  return distance > 0 ? [dots, ''] : ['', dots];
+  if (event.isRest) return [0, 0];
+  const distance = Number.isInteger(event.jianpuOctave) ? event.jianpuOctave : Math.floor((event.midi - tonicMidi()) / 12);
+  return distance > 0 ? [Math.min(3, distance), 0] : [0, Math.min(3, Math.abs(distance))];
+}
+
+function octaveDotsHtml(count) {
+  return Array.from({ length: count }, () => '<i class="octave-dot" aria-hidden="true"></i>').join('');
 }
 
 function connectorSpan(event) {
@@ -595,6 +606,7 @@ function staffOnsetKey(onset) { return Number(onset).toFixed(6); }
 function staffX(note, measure, anchors = null) {
   if (note.sourceEventId && anchors?.byEventId.has(note.sourceEventId)) return anchors.byEventId.get(note.sourceEventId);
   if (anchors?.byOnset.has(staffOnsetKey(note.onset))) return anchors.byOnset.get(staffOnsetKey(note.onset));
+  if (anchors?.xAtTime) return anchors.xAtTime(Number(note.onset) + Math.min(Number(note.duration) || anchors.beatUnit, anchors.beatUnit) / 2);
   return 42 + Number(note.onset) / measure.timeBeats * 266;
 }
 
@@ -753,37 +765,107 @@ function createStaffEditor(measure, anchors = null) {
   return editor;
 }
 
+function eventAnchorTime(measure, event) {
+  return jianpuSymbolTime(event.beat - 1, measure.beatType || 4);
+}
+
+function measureTimingMap(eventsElement, measure) {
+  const cells = [...eventsElement.querySelectorAll('.event')], capacity = Number(measure.timeBeats) || 1;
+  const unitWidth = cells.length ? Math.max(...cells.map(cell => cell.offsetWidth / Math.max(.000001, Number(measure.events.find(item => item.id === cell.dataset.eventId)?.duration) || 1))) : eventsElement.clientWidth / capacity;
+  const width = Math.max(eventsElement.clientWidth, unitWidth * capacity, eventsElement.scrollWidth || 0, 1);
+  const pxAtTime = time => Math.max(0, Number(time)) * unitWidth;
+  return { beatUnit: 4 / Number(measure.beatType || 4), pxAtTime, xAtTime: time => pxAtTime(time) / width * 330, width };
+}
+
+function renderConnectedUnderlines(eventsElement) {
+  eventsElement.querySelectorAll('.beam-group-underline').forEach(line => line.remove());
+  const cells = [...eventsElement.querySelectorAll('.event')], eventsBox = eventsElement.getBoundingClientRect();
+  const renderedScale = eventsElement.offsetWidth ? eventsBox.width / eventsElement.offsetWidth : 1;
+  for (let index = 0; index < cells.length; index += 1) {
+    if (!cells[index].classList.contains('beam-begin')) continue;
+    const members = [cells[index]];
+    while (++index < cells.length) {
+      members.push(cells[index]);
+      if (cells[index].classList.contains('beam-end')) break;
+    }
+    if (!members.at(-1).classList.contains('beam-end')) continue;
+    const first = members[0].querySelector('.degree')?.getBoundingClientRect(), last = members.at(-1).querySelector('.degree')?.getBoundingClientRect();
+    if (!first || !last) continue;
+    const line = document.createElement('span'); line.className = `beam-group-underline${members.some(cell => cell.classList.contains('sixteenth')) ? ' double' : ''}`;
+    const firstCenter = (first.left + first.right) / 2, lastCenter = (last.left + last.right) / 2;
+    const groupCenter = ((firstCenter + lastCenter) / 2 - eventsBox.left) / renderedScale + eventsElement.scrollLeft;
+    const width = (lastCenter - firstCenter + Math.max(first.width, last.width)) / renderedScale;
+    line.style.left = `${groupCenter - width / 2}px`;
+    line.style.width = `${width}px`;
+    line.style.top = `${(Math.max(first.bottom, last.bottom) - eventsBox.top) / renderedScale + eventsElement.scrollTop + 2}px`;
+    eventsElement.append(line);
+  }
+}
+
 function alignStaffEditorToJianpu(section, measure) {
   const events = section.querySelector('.events'), current = section.querySelector('.measure-staff-editor');
   if (!events || !current || !events.scrollWidth) return;
   applyMeasureContentScale(section);
-  const byEventId = new Map(), byOnset = new Map(), width = events.scrollWidth;
+  const byEventId = new Map(), byOnset = new Map(), timing = measureTimingMap(events, measure), width = timing.width;
   for (const cell of events.querySelectorAll('.event')) {
     const event = measure.events.find(item => item.id === cell.dataset.eventId); if (!event) continue;
-    const x = (cell.offsetLeft + cell.offsetWidth / 2) / width * 330;
+    const anchorTime = eventAnchorTime(measure, event), anchorPx = timing.pxAtTime(anchorTime), x = timing.xAtTime(anchorTime);
+    const pitch = cell.querySelector('.pitch'); pitch.style.transform = 'none';
+    const eventsBox = events.getBoundingClientRect(), degreeBox = cell.querySelector('.degree-glyph').getBoundingClientRect();
+    const renderedScale = events.offsetWidth ? eventsBox.width / events.offsetWidth : 1;
+    const targetCenter = eventsBox.left + (anchorPx - events.scrollLeft) * renderedScale;
+    const renderedCenter = degreeBox.left + degreeBox.width / 2;
+    pitch.style.transform = `translateX(${(targetCenter - renderedCenter) / renderedScale}px)`;
+    const upperMark = cell.querySelector('.octave-mark.upper'), lowerMark = cell.querySelector('.octave-mark.lower');
+    upperMark.style.transform = 'none'; lowerMark.style.transform = 'none';
+    const upperDot = upperMark.querySelector('.octave-dot'), lowerDot = lowerMark.querySelector('.octave-dot');
+    if (upperDot) upperMark.style.transform = `translateY(${upperDot.getBoundingClientRect().height / renderedScale}px)`;
+    if (lowerDot) lowerMark.style.transform = `translateY(${-lowerDot.getBoundingClientRect().height / renderedScale}px)`;
+    const parts = continuationParts(event), marks = [...cell.querySelectorAll('.continuation')];
+    marks.forEach((mark, index) => {
+      const part = parts[index];
+      if (part?.name === 'duration dot') {
+        mark.style.transform = 'none';
+        const markBox = mark.getBoundingClientRect(), currentDegreeBox = cell.querySelector('.degree-glyph').getBoundingClientRect();
+        const verticalOffset = ((currentDegreeBox.top + currentDegreeBox.bottom) / 2 - (markBox.top + markBox.bottom) / 2) / renderedScale;
+        mark.style.transform = `translateY(${verticalOffset}px)`;
+        return;
+      }
+      if (part?.name !== 'sustain line') return;
+      mark.style.transform = 'none';
+      const markBox = mark.getBoundingClientRect();
+      const sustainTime = Number(event.beat - 1) + Number(part.offset) + timing.beatUnit / 2;
+      const sustainTarget = eventsBox.left + (timing.pxAtTime(sustainTime) - events.scrollLeft) * renderedScale;
+      const sustainCenter = markBox.left + markBox.width / 2;
+      mark.style.transform = `translateX(${(sustainTarget - sustainCenter) / renderedScale}px)`;
+    });
     byEventId.set(event.id, x); byOnset.set(staffOnsetKey(event.beat - 1), x);
   }
-  const editor = createStaffEditor(measure, { byEventId, byOnset });
+  renderConnectedUnderlines(events);
+  const editor = createStaffEditor(measure, { byEventId, byOnset, xAtTime: timing.xAtTime, beatUnit: timing.beatUnit });
   editor.style.width = `${width}px`;
   editor.style.transform = `translateX(${-events.scrollLeft}px)`;
   current.replaceWith(editor);
-  events.onscroll = () => { editor.style.transform = `translateX(${-events.scrollLeft}px)`; renderAlignmentGuides(section); };
-  renderAlignmentGuides(section);
+  events.onscroll = () => { editor.style.transform = `translateX(${-events.scrollLeft}px)`; renderAlignmentGuides(section, measure); };
+  renderAlignmentGuides(section, measure);
 }
 
 function applyMeasureContentScale(section) {
   const scale = measureContentScale(section.getBoundingClientRect().width);
   section.style.setProperty('--measure-scale', String(scale));
-  const fontSizes = { '--measure-header-font': 12, '--jianpu-font': 24.8, '--octave-font': 12.8, '--lower-octave-font': 21.6, '--zh-font': 16, '--en-font': 11.2, '--staff-lyric-font': 12.16, '--staff-en-font': 10.88, '--badge-font': 9.6 };
+  const fontSizes = { '--measure-header-font': 12, '--jianpu-font': 18, '--octave-font': 10.4, '--lower-octave-font': 16, '--zh-font': 20, '--en-font': 11.2, '--staff-lyric-font': 12.16, '--staff-en-font': 10.88, '--badge-font': 9.6 };
   for (const [property, baseSize] of Object.entries(fontSizes)) section.style.setProperty(property, `${baseSize * scale}px`);
 }
 
-function renderAlignmentGuides(section) {
+function renderAlignmentGuides(section, measure) {
   section.querySelectorAll('.alignment-guide').forEach(guide => guide.remove());
-  const sectionBox = section.getBoundingClientRect(), headerHeight = section.querySelector(':scope > header')?.getBoundingClientRect().height || 0;
-  for (const degree of section.querySelectorAll('.event .degree')) {
-    const box = degree.getBoundingClientRect(), guide = document.createElement('span');
-    guide.className = 'alignment-guide'; guide.style.left = `${box.left + box.width / 2 - sectionBox.left}px`; guide.style.top = `${headerHeight}px`; section.append(guide);
+  const headerHeight = section.querySelector(':scope > header')?.offsetHeight || 0;
+  const events = section.querySelector('.events'); if (!events?.querySelector('.event')) return;
+  const timing = measureTimingMap(events, measure);
+  const beatUnit = 4 / Number(measure.beatType || 4), beatCount = Math.max(1, Math.round(measure.expectedBeats / beatUnit));
+  for (let beat = 0; beat < beatCount; beat += 1) {
+    const guide = document.createElement('span'); guide.className = 'alignment-guide';
+    guide.style.left = `${events.offsetLeft + timing.pxAtTime((beat + .5) * beatUnit) - events.scrollLeft}px`; guide.style.top = `${headerHeight}px`; section.append(guide);
   }
 }
 
@@ -795,6 +877,8 @@ function scheduleStaffRealignment() {
       const measure = state.measures.find(item => item.number === Number(section.dataset.measureNumber));
       if (measure) alignStaffEditorToJianpu(section, measure);
     }
+    const grid = $('#score-grid');
+    if (grid) renderSlurOverlays(grid);
   });
 }
 
@@ -926,6 +1010,8 @@ function setupPhotoConflictIndicator(section, measure, conflicts) {
 function renderGrid() {
   hidePhotoConflictPopover(true);
   const grid = $('#score-grid'); grid.replaceChildren();
+  const authoredSystems = state.spacing.measuresPerLine === 'auto' && state.measures.some((measure, index) => index > 0 && measure.newSystem);
+  grid.classList.toggle('authored-systems', authoredSystems);
   const [, tonicPc] = KEYS[state.fifths] || KEYS[0];
   let system = null;
   for (const measure of state.measures) {
@@ -956,14 +1042,17 @@ function renderGrid() {
     for (const event of measure.events) {
       const beamClass = event.beam ? `beam-${event.beam}` : '';
       const cell = document.createElement('div'); cell.className = `event ${durationClass(event.duration)} ${beamClass} ${state.selectedEventId === event.id ? 'selected' : ''}`; cell.dataset.eventId = event.id;
+      cell.style.setProperty('--duration-beats', String(Math.max(1, Math.round(event.duration))));
+      cell.style.setProperty('--event-duration', String(event.duration));
+      cell.style.flex = `0 0 ${event.duration / Math.max(.000001, measure.timeBeats) * 100}%`;
+      cell.style.minWidth = `calc(var(--symbol-width) * var(--measure-scale) * ${event.duration})`;
       if (event === measure.events[0]) cell.style.marginLeft = `${state.firstNoteOffsets.get(measure.number) || 0}px`;
-      cell.style.flexGrow = String(event.duration);
       const continuations = continuationParts(event);
       const zh = assignmentFor('1', event.id), en = assignmentFor('2', event.id);
-      const [upperDots, lowerDots] = octaveMarks(event);
+      const [upperDotCount, lowerDotCount] = octaveMarks(event);
       const span = connectorSpan(event);
       const continuationHtml = continuations.map((part, index) => `<span class="continuation ${state.selectedContinuation?.eventId === event.id && state.selectedContinuation?.index === index ? 'selected' : ''}" role="button" tabindex="0" data-index="${index}" title="Select ${part.name}">${part.symbol}</span>`).join('');
-      cell.innerHTML = `${event.beam ? '<span class="beam-link" aria-hidden="true"></span>' : ''}<button class="pitch" title="${event.isRest ? 'Pause' : 'Jianpu note'} in measure ${event.measure}"><span class="notation-core"><span class="octave-mark upper">${upperDots}</span><span class="degree">${event.isRest ? '0' : jianpuForEvent(event)}</span><span class="octave-mark lower">${lowerDots}</span></span><span class="continuation-group">${continuationHtml}</span></button><div class="lyric-slot zh" data-language="1">${zh ? `${chineseLyricHtml(zh.text)}<button class="clear" aria-label="Clear Chinese">×</button>` : ''}</div><div class="lyric-slot en" data-language="2">${en ? `<span>${escapeHtml(en.text)}</span><button class="clear" aria-label="Clear English">×</button>` : ''}</div>`;
+      cell.innerHTML = `${event.beam ? '<span class="beam-link" aria-hidden="true"></span>' : ''}<button class="pitch" title="${event.isRest ? 'Pause' : 'Jianpu note'} in measure ${event.measure}"><span class="notation-core"><span class="octave-mark upper">${octaveDotsHtml(upperDotCount)}</span><span class="degree"><span class="degree-glyph">${event.isRest ? '0' : jianpuForEvent(event)}</span></span><span class="octave-mark lower">${octaveDotsHtml(lowerDotCount)}</span></span><span class="continuation-group">${continuationHtml}</span></button><div class="lyric-slot zh" data-language="1">${zh ? `${chineseLyricHtml(zh.text)}<button class="clear" aria-label="Clear Chinese">×</button>` : ''}</div><div class="lyric-slot en" data-language="2">${en ? `<span>${escapeHtml(en.text)}</span><button class="clear" aria-label="Clear English">×</button>` : ''}</div>`;
       cell.querySelector('.pitch').addEventListener('click', () => {
         if (state.selectedTokenId) { assign(event.id); return; }
         if (state.activeLanguage === '2') { $('#status').textContent = 'English mode keeps Jianpu read-only. Select an English lyric token to align it, or switch to Chinese mode to edit notation.'; return; }
@@ -998,7 +1087,11 @@ function renderGrid() {
       render();
     }));
     system.append(section);
-    alignStaffEditorToJianpu(section, measure);
+  }
+  for (const renderedSystem of grid.querySelectorAll('.score-system')) renderedSystem.style.setProperty('--system-measure-count', String(renderedSystem.querySelectorAll(':scope > .measure').length));
+  for (const section of grid.querySelectorAll('.measure')) {
+    const measure = state.measures.find(item => item.number === Number(section.dataset.measureNumber));
+    if (measure) alignStaffEditorToJianpu(section, measure);
   }
   renderSlurOverlays(grid);
 }
@@ -1013,12 +1106,25 @@ function measureCapacityMeterHtml(measure, usedBeats) {
 }
 
 function eventPercentInMeasure(event, measure) {
-  const total = measure.events.reduce((sum, item) => sum + item.duration, 0) || 1;
-  const before = measure.events.slice(0, measure.events.indexOf(event)).reduce((sum, item) => sum + item.duration, 0);
-  return ((before + Math.min(event.duration, 1) / 2) / total) * 100;
+  return jianpuSymbolTime(event.beat - 1, measure.beatType || 4) / Math.max(.000001, measure.timeBeats) * 100;
+}
+
+function positionSlurFromRenderedDotSize(section, svg, endpointEvents) {
+  const endpointCells = endpointEvents.map(event => [...section.querySelectorAll('.event')]
+    .find(cell => cell.dataset.eventId === event.id)).filter(Boolean);
+  const sectionBox = section.getBoundingClientRect();
+  const renderedScale = section.offsetWidth ? sectionBox.width / section.offsetWidth : 1;
+  if (!(renderedScale > 0)) return;
+  const renderedUpperDots = endpointCells.flatMap(cell => [...cell.querySelectorAll('.octave-mark.upper .octave-dot')]);
+  const renderedDotDiameter = renderedUpperDots.length
+    ? Math.max(...renderedUpperDots.map(dot => dot.getBoundingClientRect().height)) / renderedScale
+    : 0;
+  const currentTop = Number.parseFloat(getComputedStyle(svg).top) || 0;
+  svg.style.top = `${currentTop - renderedDotDiameter}px`;
 }
 
 function renderSlurOverlays(grid) {
+  grid.querySelectorAll('.slur-overlay').forEach(svg => svg.remove());
   const starts = state.events.flatMap(event => slurs(event.note).filter(slur => slur.getAttribute('type') === 'start').map(slur => ({ event, number: slur.getAttribute('number') || '1' })));
   for (const start of starts) {
     const stop = state.events.slice(start.event.index + 1).find(event => slurs(event.note).some(slur => slur.getAttribute('type') === 'stop' && (slur.getAttribute('number') || '1') === start.number));
@@ -1028,8 +1134,11 @@ function renderSlurOverlays(grid) {
       if (!section) continue;
       const x1 = measure.number === start.event.measure ? eventPercentInMeasure(start.event, measure) : 1;
       const x2 = measure.number === stop.measure ? eventPercentInMeasure(stop, measure) : 99;
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'slur-overlay'); svg.setAttribute('viewBox', '0 0 100 36'); svg.setAttribute('preserveAspectRatio', 'none');
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); const rise = Math.min(12, Math.max(6, (x2 - x1) * .18)); path.setAttribute('d', `M ${x1} 29 C ${x1 + (x2-x1)*.25} ${29-rise}, ${x1 + (x2-x1)*.75} ${29-rise}, ${x2} 29`); svg.append(path); section.append(svg);
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'slur-overlay'); svg.dataset.slurNumber = start.number; svg.setAttribute('viewBox', '0 0 100 36'); svg.setAttribute('preserveAspectRatio', 'none');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'), baseline = 22; const rise = Math.min(10, Math.max(5, (x2 - x1) * .16)); path.setAttribute('d', `M ${x1} ${baseline} C ${x1 + (x2-x1)*.25} ${baseline-rise}, ${x1 + (x2-x1)*.75} ${baseline-rise}, ${x2} ${baseline}`); svg.append(path); section.append(svg);
+      const endpointEvents = [measure.number === start.event.measure && start.event, measure.number === stop.measure && stop].filter(Boolean);
+      if (!endpointEvents.length) endpointEvents.push(...measure.events.filter(event => event.isAttack));
+      positionSlurFromRenderedDotSize(section, svg, endpointEvents);
     }
   }
 }
@@ -1054,8 +1163,13 @@ function canAddBeats(event, delta) {
   return true;
 }
 function render() {
-  document.querySelectorAll('.language-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.language === state.activeLanguage));
+  document.querySelectorAll('.language-tab').forEach(tab => { const active=tab.dataset.language===state.activeLanguage;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active)); });
   const englishMode = state.activeLanguage === '2';
+  $('#chinese-sidebar-pane').classList.toggle('hidden', englishMode);
+  $('#english-sidebar-pane').classList.toggle('hidden', !englishMode);
+  (englishMode ? $('#english-sidebar-pane') : $('#chinese-sidebar-pane')).append($('#language-token-card'));
+  $('#language-token-heading').textContent=englishMode?'English lyric tokens':'Chinese lyric tokens';
+  $('#language-token-instructions').textContent=englishMode?'Select an English syllable, then select its Soprano note. Assigned syllables show a checkmark.':'Select a token in this palette, then select its Jianpu note. The selection clears after one assignment so later note clicks cannot replace lyrics accidentally. Assigned tokens show a checkmark.';
   $('#zh-input-label').classList.toggle('hidden', englishMode);
   $('#en-input-label').classList.toggle('hidden', !englishMode);
   $('#staff-treble-register').value = String(state.staffRegisters.treble);
@@ -1069,7 +1183,7 @@ function render() {
   $('#score-grid').classList.toggle('chinese-mode', !englishMode);
   $('#score-grid').classList.toggle('english-mode', englishMode);
   $('#jianpu-entry-controls').classList.toggle('hidden', englishMode);
-  $('#jianpu-input').readOnly = englishMode;
+  $('#jianpu-input').contentEditable = englishMode ? 'false' : 'plaintext-only';
   $('#zh-input').readOnly = englishMode;
   $('#en-input').readOnly = !englishMode;
   const staffNote = selectedStaffNote();
@@ -1130,16 +1244,33 @@ function adjustFirstNotePosition(delta = 0, center = false) {
   render();
 }
 
-function setPitch(delta) {
-  const event = selectedEvent(); if (!event || event.isRest) return;
-  recordChange();
-  const next = pitchFromMidi(event.midi + delta, state.fifths < 0), pitch = event.note.querySelector(':scope > pitch');
+function writeEventMidi(event, nextMidi) {
+  const next = pitchFromMidi(nextMidi, state.fifths < 0), pitch = event.note.querySelector(':scope > pitch');
   pitch.querySelector('step').textContent = next.step;
   let alter = pitch.querySelector('alter');
   if (next.alter) { if (!alter) { alter = state.xml.createElement('alter'); pitch.insertBefore(alter, pitch.querySelector('octave')); } alter.textContent = String(next.alter); }
   else alter?.remove();
   pitch.querySelector('octave').textContent = String(next.octave);
-  event.midi += delta; render();
+  event.midi = nextMidi;
+}
+
+function setEventJianpuOctave(event, nextOctave) {
+  const currentOctave = Number.isInteger(event.jianpuOctave) ? event.jianpuOctave : Math.floor((event.midi - tonicMidi()) / 12);
+  writeEventMidi(event, event.midi + (nextOctave - currentOctave) * 12);
+  event.jianpuOctave = nextOctave;
+  event.note.setAttribute('hymn-play-jianpu-octave', String(nextOctave));
+}
+
+function setPitch(delta, octaveDelta = 0) {
+  const event = selectedEvent(); if (!event || event.isRest) return;
+  recordChange();
+  if (octaveDelta) {
+    const currentOctave = Number.isInteger(event.jianpuOctave) ? event.jianpuOctave : Math.floor((event.midi - tonicMidi()) / 12);
+    setEventJianpuOctave(event, currentOctave + octaveDelta);
+    $('#jianpu-input').value = directEntryTextFromScore();
+    updateJianpuPairCheck();
+  } else writeEventMidi(event, event.midi + delta);
+  render();
 }
 
 function setDuration(beats) {
@@ -1442,7 +1573,7 @@ function applyNotationOperation(operation, symbol) {
   }
   if (['pitch-down', 'pitch-up', 'octave-down', 'octave-up'].includes(operation)) {
     const delta = operation === 'pitch-down' ? -1 : operation === 'pitch-up' ? 1 : operation === 'octave-down' ? -12 : 12;
-    setPitch(delta); return;
+    setPitch(delta, operation === 'octave-down' ? -1 : operation === 'octave-up' ? 1 : 0); return;
   }
   if (operation === 'split') { recordChange(); if (splitEvent(event)) { $('#status').textContent = 'Current symbol split into two equal rhythmic symbols.'; render(); } else state.history.pop(); return; }
   if (operation === 'remove') { recordChange(); removeEvent(event); $('#status').textContent = 'Symbol and its time removed; check the measure total.'; render(); return; }
@@ -1653,15 +1784,21 @@ function revisedXml() {
   return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone.documentElement)}\n`;
 }
 
-function download(content, filename, type) { const url = URL.createObjectURL(new Blob([content], { type })); const a = document.createElement('a'); a.href = url; a.download = filename; a.hidden = true; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+async function download(content, filename, type) {
+  const blob=new Blob([content],{type});
+  if('showSaveFilePicker'in window){
+    try{const extension=`.${filename.split('.').pop()}`,handle=await window.showSaveFilePicker({suggestedName:filename,startIn:'downloads',types:[{description:type.includes('json')?'JSON':'MusicXML',accept:{[type]:[extension]}}]}),writable=await handle.createWritable();await writable.write(blob);await writable.close();return true;}catch(error){if(error?.name==='AbortError')return false;throw error;}
+  }
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.hidden=true;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return true;
+}
 function outputStem(filename) { return filename.replace(/\.(musicxml|xml)$/i, '').replace(/(?:-aligned)+$/i, ''); }
-function exportXml() { download(revisedXml(), outputStem(state.filename) + '-aligned.musicxml', 'application/vnd.recordare.musicxml+xml'); $('#status').textContent = 'Revised MusicXML exported.'; }
+async function exportXml() { const saved=await download(revisedXml(),outputStem(state.filename)+'-aligned.musicxml','application/vnd.recordare.musicxml+xml');$('#status').textContent=saved?'Revised MusicXML exported.':'Export cancelled; no file was changed.'; }
 function reviewPayload() {
   return { schemaVersion: 7, source: state.filename, keyFifths: state.fifths, environment: currentEnvironmentKey(), sourceLyrics: { zhHant: $('#zh-input').value, en: $('#en-input').value }, layout: currentLayoutProfile(), satb: { notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'], photoConflicts: state.photoConflicts }, assignments: state.events.map(event => ({ id: event.id, measure: event.measure, beat: event.beat, jianpu: event.isRest ? '0' : jianpuForEvent(event), durationBeats: event.duration, zhHant: assignmentFor('1', event.id)?.text || null, en: assignmentFor('2', event.id)?.text || null })) };
 }
-function exportReview() {
+async function exportReview() {
   const payload = reviewPayload();
-  download(JSON.stringify(payload, null, 2) + '\n', outputStem(state.filename) + '-alignment.json', 'application/json');
+  const saved=await download(JSON.stringify(payload,null,2)+'\n',outputStem(state.filename)+'-alignment.json','application/json');$('#status').textContent=saved?'Alignment JSON exported.':'Export cancelled; no file was changed.';
 }
 async function saveWorkingCopy() {
   if (!state.xml || !state.filename) { $('#status').textContent = 'Choose a MusicXML file before saving.'; return; }
@@ -1755,7 +1892,7 @@ async function loadHymnCatalog() {
 }
 
 function parseJianpuText(text) {
-  const normalized = text.trim().replaceAll('｜', '|');
+  const normalized = text.trim().replaceAll('｜', '|').replace(/(\{\s*\d+\s*\/\s*(?:2|4|8|16)\s*\})\s*\|(?=\s*(?:@|\{|s\(|[0-7#♯b♭]))/gu, '$1');
   const pieces = normalized.split(/(\|:|:\||\|\]|\|\||\|)/).filter(piece => piece !== '');
   const rawMeasures = []; let pendingRepeatStart = false;
   for (const piece of pieces) {
@@ -1766,17 +1903,23 @@ function parseJianpuText(text) {
     if (piece === '|:') { pendingRepeatStart = true; continue; }
     if (rawMeasures.length) rawMeasures.at(-1).rightMark = piece === '||' ? 'double' : piece === ':|' ? 'repeat-end' : piece === '|]' ? 'final' : rawMeasures.at(-1).rightMark;
   }
-  if (!rawMeasures.length) throw new Error('Enter numeric notation with | between measures.');
-  const parsed = [], groups = []; let slurNumber = 1, lastPitchedEvent = null;
+  if (!rawMeasures.length) throw new Error('Enter a Jianpu encoded stream with | between measures.');
+  const parsed = [], groups = []; let slurNumber = 1, lastPitchedEvent = null, currentMeter = { beats: 4, beatType: 4 };
   for (let measureIndex = 0; measureIndex < rawMeasures.length; measureIndex += 1) {
     const { source, repeatStart, rightMark } = rawMeasures[measureIndex];
-    const events = []; let newSystem = false;
+    const events = []; let newSystem = false, meterChanged = false;
     for (let index = 0; index < source.length;) {
       const char = source[index];
-      if (/\s|[，。；;]/u.test(char)) { index += 1; continue; }
+      if (/\s|[。；;]/u.test(char)) { index += 1; continue; }
       if (char === '@') {
         if (events.length) throw new Error(`Measure ${measureIndex + 1}: @ must appear at the beginning of a measure, immediately after a barline.`);
         newSystem = true; index += 1; continue;
+      }
+      if (char === '{') {
+        if (events.length) throw new Error(`Measure ${measureIndex + 1}: a meter change must appear before its first timed symbol.`);
+        const marker = parseJianpuMeterMarker(source.slice(index));
+        if (!marker) throw new Error(`Measure ${measureIndex + 1}: use a meter marker such as {3/4}, {6/8}, or {2/2}.`);
+        currentMeter = { beats: marker.beats, beatType: marker.beatType }; meterChanged = true; index += marker.length; continue;
       }
       if (source.startsWith('s(', index)) { groups.push({ type: 'slur', number: String(slurNumber++), started: false }); index += 2; continue; }
       if (char === '(') { groups.push({ type: 'beam', measureIndex, start: events.length }); index += 1; continue; }
@@ -1797,6 +1940,11 @@ function parseJianpuText(text) {
         if (!events.length) throw new Error(`Measure ${measureIndex + 1}: a prolongation must follow a note or pause.`);
         events.at(-1).duration += 1; index += 1; continue;
       }
+      if (["'", '’', '′', ',', '，'].includes(char)) {
+        const previous = events.at(-1);
+        if (!previous || previous.degree === 0) throw new Error(`Measure ${measureIndex + 1}: an octave modifier must follow a numbered Jianpu note.`);
+        applyJianpuOctaveModifier(previous, char); index += 1; continue;
+      }
       let accidental = 0;
       if (char === '#' || char === '♯') { accidental = 1; index += 1; }
       else if (char === 'b' || char === '♭') { accidental = -1; index += 1; }
@@ -1809,8 +1957,7 @@ function parseJianpuText(text) {
         const modifier = source[index];
         if (modifier === '/') { slashCount += 1; index += 1; continue; }
         if (modifier === '·' || modifier === '.' || modifier === '*') { dotted = true; index += 1; continue; }
-        if (modifier === "'") { event.octave += 1; index += 1; continue; }
-        if (modifier === ',') { event.octave -= 1; index += 1; continue; }
+        if (applyJianpuOctaveModifier(event, modifier)) { index += 1; continue; }
         break;
       }
       event.duration = 1 / (2 ** slashCount);
@@ -1823,7 +1970,7 @@ function parseJianpuText(text) {
       }
     }
     if (groups.some(group => group.type === 'beam')) throw new Error(`Measure ${measureIndex + 1}: close the connected underline group before the barline.`);
-    parsed.push({ events, repeatStart, rightMark, newSystem });
+    parsed.push({ events, repeatStart, rightMark, newSystem, ...currentMeter, meterChanged: meterChanged || measureIndex === 0 });
   }
   if (groups.length) throw new Error('Close every s(…) slur with a right parenthesis.');
   return parsed;
@@ -1837,7 +1984,82 @@ function remapEventId(oldId, oldEvents, newEvents) {
   return exact?.id || newEvents.find(event => event.id === oldId)?.id || null;
 }
 
+function setDirectEntryStatus(message, severity = false) {
+  const localStatus = $('#jianpu-entry-status');
+  localStatus.textContent = message;
+  localStatus.classList.toggle('error', severity === true || severity === 'error');
+  localStatus.classList.toggle('warning', severity === 'warning');
+  $('#status').textContent = message;
+}
+
+function validateParsedJianpuRender(parsedMeasures) {
+  const warnings = [], grid = $('#score-grid');
+  grid.querySelectorAll('.render-warning').forEach(element => { element.classList.remove('render-warning'); element.removeAttribute('data-render-warning'); });
+  const warn = (message, element) => {
+    warnings.push(message);
+    if (element) { element.classList.add('render-warning'); element.dataset.renderWarning = message; }
+  };
+  if (state.measures.length !== parsedMeasures.length) warn(`Expected ${parsedMeasures.length} measures but rendered ${state.measures.length}.`, grid);
+  parsedMeasures.forEach((expectedMeasure, measureIndex) => {
+    const actualMeasure = state.measures[measureIndex], section = grid.querySelector(`.measure[data-measure-number="${measureIndex + 1}"]`);
+    if (!actualMeasure || !section) { warn(`Measure ${measureIndex + 1} is missing from the preview.`, grid); return; }
+    const prefix = `Measure ${measureIndex + 1}`;
+    if (actualMeasure.timeSignatureBeats !== expectedMeasure.beats || actualMeasure.beatType !== expectedMeasure.beatType) warn(`${prefix}: meter {${expectedMeasure.beats}/${expectedMeasure.beatType}} was not preserved.`, section);
+    if (Boolean(actualMeasure.newSystem) !== Boolean(expectedMeasure.newSystem && measureIndex > 0)) warn(`${prefix}: @ system break was not preserved.`, section);
+    if (Boolean(actualMeasure.repeatStart) !== Boolean(expectedMeasure.repeatStart)) warn(`${prefix}: repeat-start marker was not preserved.`, section);
+    const expectedRight = expectedMeasure.rightMark || (measureIndex === parsedMeasures.length - 1 ? 'final' : null);
+    const actualRight = actualMeasure.repeatEnd ? 'repeat-end' : actualMeasure.barStyle === 'light-light' ? 'double' : actualMeasure.barStyle === 'light-heavy' ? 'final' : null;
+    if (actualRight !== expectedRight) warn(`${prefix}: ${expectedRight || 'ordinary'} ending barline rendered as ${actualRight || 'ordinary'}.`, section);
+    if (actualMeasure.events.length !== expectedMeasure.events.length) warn(`${prefix}: expected ${expectedMeasure.events.length} timed symbols but rendered ${actualMeasure.events.length}.`, section);
+    expectedMeasure.events.forEach((expected, eventIndex) => {
+      const actual = actualMeasure.events[eventIndex], cell = section.querySelectorAll('.event')[eventIndex];
+      if (!actual || !cell) { warn(`${prefix}, symbol ${eventIndex + 1} is missing.`, section); return; }
+      const expectedDegree = `${expected.accidental > 0 ? '#' : expected.accidental < 0 ? 'b' : ''}${expected.degree}`;
+      const renderedDegree = cell.querySelector('.degree')?.textContent || '';
+      if (renderedDegree !== expectedDegree) warn(`${prefix}, symbol ${eventIndex + 1}: expected ${expectedDegree} but rendered ${renderedDegree || 'nothing'}.`, cell);
+      const expectedMidi = expected.degree === 0 ? null : tonicMidi() + MAJOR_STEPS[expected.degree - 1] + expected.accidental + expected.octave * 12;
+      if (expectedMidi !== actual.midi) warn(`${prefix}, symbol ${eventIndex + 1}: octave or accidental was not preserved.`, cell);
+      if (expected.degree !== 0 && actual.jianpuOctave !== expected.octave) warn(`${prefix}, symbol ${eventIndex + 1}: encoded octave count was not preserved.`, cell);
+      if (Math.abs(expected.duration - actual.duration) > .001) warn(`${prefix}, symbol ${eventIndex + 1}: duration was not preserved.`, cell);
+      const upperCount = cell.querySelectorAll('.octave-mark.upper .octave-dot').length, lowerCount = cell.querySelectorAll('.octave-mark.lower .octave-dot').length;
+      if (upperCount !== Math.max(0, expected.octave) || lowerCount !== Math.max(0, -expected.octave)) warn(`${prefix}, symbol ${eventIndex + 1}: octave mark was not rendered.`, cell);
+      const expectedContinuations = continuationParts({ duration: expected.duration }).map(part => part.symbol).join('');
+      const renderedContinuations = [...cell.querySelectorAll('.continuation')].map(mark => mark.textContent).join('');
+      if (renderedContinuations !== expectedContinuations) warn(`${prefix}, symbol ${eventIndex + 1}: sustain or duration dot was not rendered.`, cell);
+      if (Boolean(expected.beam) !== Boolean(cell.querySelector('.beam-link'))) warn(`${prefix}, symbol ${eventIndex + 1}: connected underline was not rendered.`, cell);
+      if (expected.slurStart && !section.querySelector(`.slur-overlay[data-slur-number="${expected.slurStart}"]`)) warn(`${prefix}, symbol ${eventIndex + 1}: slur was not rendered.`, cell);
+    });
+    const beatUnit = 4 / Number(actualMeasure.beatType || 4), expectedGuides = Math.max(1, Math.round(actualMeasure.expectedBeats / beatUnit));
+    if (section.querySelectorAll('.alignment-guide').length !== expectedGuides) warn(`${prefix}: meter beat guides were not rendered correctly.`, section);
+  });
+  return [...new Set(warnings)];
+}
+
+function updateJianpuPairCheck() {
+  const input = $('#jianpu-input'), text = input.value, issues = jianpuParenthesisIssues(text), selection = window.getSelection();
+  let caretOffset = null;
+  if (document.activeElement === input && selection?.rangeCount) {
+    const range = selection.getRangeAt(0), before = range.cloneRange(); before.selectNodeContents(input); before.setEnd(range.endContainer, range.endOffset); caretOffset = before.toString().length;
+  }
+  const invalid = issues.size > 0; input.classList.toggle('pair-error', invalid); input.setAttribute('aria-invalid', String(invalid));
+  input.title = invalid ? [...new Set(issues.values())].join('; ') : '';
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < text.length; index += 1) {
+    if (!issues.has(index)) { fragment.append(document.createTextNode(text[index])); continue; }
+    const mark = document.createElement('mark'); mark.className = 'jianpu-pair-error'; mark.textContent = text[index]; mark.title = issues.get(index); fragment.append(mark);
+  }
+  input.replaceChildren(fragment);
+  if (caretOffset !== null) {
+    const walker = document.createTreeWalker(input, NodeFilter.SHOW_TEXT); let remaining = caretOffset, node = walker.nextNode(), target = input, offset = 0;
+    while (node) { if (remaining <= node.data.length) { target = node; offset = remaining; break; } remaining -= node.data.length; node = walker.nextNode(); }
+    const range = document.createRange(); range.setStart(target, offset); range.collapse(true); selection.removeAllRanges(); selection.addRange(range);
+  }
+  return !invalid;
+}
+
 function buildDirectEntryXml() {
+  setDirectEntryStatus('');
+  if (!updateJianpuPairCheck()) { setDirectEntryStatus('Correct the red pairing errors before updating the notation preview.', true); return; }
   const preserved = {
     events: state.events,
     tokens: { 1: state.tokens['1'], 2: state.tokens['2'] },
@@ -1850,28 +2072,23 @@ function buildDirectEntryXml() {
     measureWidths: new Map(state.measureWidths),
     nextStaffNoteId: state.nextStaffNoteId,
   };
-  if (!$('#entry-key').value) { $('#status').textContent = $('#entry-key-display').value.startsWith('Unusual') ? 'This unusual key signature needs review before Jianpu can be generated.' : 'Match the printed key signature and choose Done before applying Jianpu.'; return; }
+  if (!$('#entry-key').value) { setDirectEntryStatus($('#entry-key-display').value.startsWith('Unusual') ? 'This unusual key signature needs review before Jianpu can be generated.' : 'Match the printed key signature and choose Done before applying Jianpu.', true); return; }
   let measures;
   try { measures = parseJianpuText($('#jianpu-input').value); }
-  catch (error) { $('#status').textContent = error.message; return; }
-  const fifths = Number($('#entry-key').value), beats = Number($('#entry-beats').value), beatType = Number($('#entry-beat-type').value);
+  catch (error) { setDirectEntryStatus(error.message, true); return; }
+  const fifths = Number($('#entry-key').value), firstMeter = measures[0], beats = firstMeter.beats, beatType = firstMeter.beatType;
   const pickupCount = Number($('#entry-pickup-count').value), pickupNoteValue = Number($('#entry-pickup-type').value);
   const pickupCheck = validatePickupDuration(pickupCount, pickupNoteValue, beats, beatType);
-  if (!pickupCheck.valid) { $('#status').textContent = pickupCheck.error; return; }
+  if (!pickupCheck.valid) { setDirectEntryStatus(pickupCheck.error, true); return; }
   const pickup = pickupDurationInQuarterNotes(pickupCount, pickupNoteValue), measureCapacity = measureCapacityInQuarterNotes(beats, beatType);
-  const firstMeasureDuration = measures[0].events.reduce((sum, event) => sum + event.duration, 0), expectedFirstDuration = pickup || measureCapacity;
-  if (Math.abs(firstMeasureDuration - expectedFirstDuration) > .001) {
-    $('#status').textContent = pickup
-      ? `The first measure contains ${formatBeat(firstMeasureDuration)} quarter-note beats, but the selected pickup duration is ${formatBeat(pickup)}.`
-      : `No pickup is selected, so the first measure must contain the full ${formatBeat(measureCapacity)} quarter-note beats.`;
-    return;
-  }
   const tempoText = $('#entry-tempo-text').value, tempoValue = $('#entry-tempo').value.trim(), tempo = tempoValue ? Number(tempoValue) : null;
-  if (tempo !== null && (!Number.isFinite(tempo) || tempo < 20 || tempo > 300)) { $('#status').textContent = 'Quarter-note BPM must be between 20 and 300, or left blank.'; return; }
+  if (tempo !== null && (!Number.isFinite(tempo) || tempo < 20 || tempo > 300)) { setDirectEntryStatus('Quarter-note BPM must be between 20 and 300, or left blank.', true); return; }
   const hymnNumber = Number($('#hymn-number').value) || 'new';
-  const xml = new DOMParser().parseFromString('<?xml version="1.0"?><score-partwise version="4.0"><work><work-title/></work><identification><encoding><software>Hymn Play direct Jianpu entry</software></encoding></identification><part-list><score-part id="P1"><part-name>Melody</part-name><midi-instrument id="P1-I1"><midi-channel>1</midi-channel><midi-program>1</midi-program></midi-instrument></score-part></part-list><part id="P1"/></score-partwise>', 'application/xml');
-  xml.querySelector('work-title').textContent = `Hymn ${hymnNumber} - direct Jianpu entry`;
-  const part = xml.querySelector('part#P1');
+  const xml = new DOMParser().parseFromString('<?xml version="1.0"?><score-partwise version="4.0"><work><work-title/></work><identification><encoding><software>Hymn Play Jianpu Encoding Rules</software></encoding></identification><part-list><score-part id="P1"><part-name>Melody</part-name><midi-instrument id="P1-I1"><midi-channel>1</midi-channel><midi-program>1</midi-program></midi-instrument></score-part></part-list><part id="P1"/></score-partwise>', 'application/xml');
+  if (xml.querySelector('parsererror')) throw new Error('The internal MusicXML template is malformed.');
+  xml.querySelector('work-title').textContent = `Hymn ${hymnNumber} - Jianpu encoded source`;
+  const part = xml.querySelector('score-partwise > part[id="P1"]');
+  if (!part) throw new Error('The generated MusicXML melody part could not be created.');
   const [, tonicPc] = KEYS[fifths] || KEYS[0];
   const tonicMidiValue = 60 + ((tonicPc - 0 + 12) % 12);
   measures.forEach((measureData, measureIndex) => {
@@ -1885,11 +2102,13 @@ function buildDirectEntryXml() {
     const measure = xml.createElement('measure'); measure.setAttribute('number', String(measureIndex + 1));
     if (measureData.newSystem && measureIndex > 0) { const print = xml.createElement('print'); print.setAttribute('new-system', 'yes'); measure.append(print); }
     if (measureIndex === 0 && pickup > 0) measure.setAttribute('implicit', 'yes');
-    if (measureIndex === 0) {
+    if (measureIndex === 0 || measureData.meterChanged) {
       const attributes = xml.createElement('attributes'); appendXmlText(xml, attributes, 'divisions', 4);
-      const key = xml.createElement('key'); appendXmlText(xml, key, 'fifths', fifths); attributes.append(key);
-      const time = xml.createElement('time'); appendXmlText(xml, time, 'beats', beats); appendXmlText(xml, time, 'beat-type', beatType); attributes.append(time);
-      appendXmlText(xml, attributes, 'staves', 1); const clef = xml.createElement('clef'); appendXmlText(xml, clef, 'sign', 'G'); appendXmlText(xml, clef, 'line', 2); attributes.append(clef); measure.append(attributes);
+      if (measureIndex === 0) { const key = xml.createElement('key'); appendXmlText(xml, key, 'fifths', fifths); attributes.append(key); }
+      const time = xml.createElement('time'); appendXmlText(xml, time, 'beats', measureData.beats); appendXmlText(xml, time, 'beat-type', measureData.beatType); attributes.append(time);
+      if (measureIndex === 0) { appendXmlText(xml, attributes, 'staves', 1); const clef = xml.createElement('clef'); appendXmlText(xml, clef, 'sign', 'G'); appendXmlText(xml, clef, 'line', 2); attributes.append(clef); }
+      measure.append(attributes);
+      if (measureIndex === 0) {
       if (tempoText || tempo !== null) {
         const direction = xml.createElement('direction'), directionType = xml.createElement('direction-type');
         if (tempoText) appendXmlText(xml, directionType, 'words', tempoText);
@@ -1898,12 +2117,14 @@ function buildDirectEntryXml() {
         if (tempo !== null) { const sound = xml.createElement('sound'); sound.setAttribute('tempo', String(tempo)); direction.append(sound); }
         measure.append(direction);
       }
+      }
     }
     if (measureData.repeatStart) { const barline = xml.createElement('barline'); barline.setAttribute('location', 'left'); appendXmlText(xml, barline, 'bar-style', 'heavy-light'); const repeat = xml.createElement('repeat'); repeat.setAttribute('direction', 'forward'); barline.append(repeat); measure.append(barline); }
     for (const entry of entries) {
       const note = xml.createElement('note');
       if (entry.degree === 0) note.append(xml.createElement('rest'));
       else {
+        note.setAttribute('hymn-play-jianpu-octave', String(entry.octave));
         const pitch = xml.createElement('pitch'); const natural = tonicMidiValue + MAJOR_STEPS[entry.degree - 1] + entry.accidental + entry.octave * 12; const value = pitchFromMidi(natural, entry.accidental < 0 || (entry.accidental === 0 && fifths < 0));
         appendXmlText(xml, pitch, 'step', value.step); if (value.alter) appendXmlText(xml, pitch, 'alter', value.alter); appendXmlText(xml, pitch, 'octave', value.octave); note.append(pitch);
       }
@@ -1928,6 +2149,10 @@ function buildDirectEntryXml() {
   });
   const rebuilt = parseScore(xml);
   Object.assign(state, { xml, filename: `hymn-${hymnNumber}-jianpu.musicxml`, ...rebuilt, history: [], future: [], selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null, selectedContinuation: null });
+  measures.forEach((parsedMeasure, measureIndex) => parsedMeasure.events.forEach((parsedEvent, eventIndex) => {
+    const rebuiltEvent = state.measures[measureIndex]?.events[eventIndex];
+    if (rebuiltEvent && !rebuiltEvent.isRest) setEventJianpuOctave(rebuiltEvent, parsedEvent.octave);
+  }));
   state.tokens = preserved.tokens;
   state.assignments = { 1: new Map(), 2: new Map() };
   for (const language of ['1', '2']) for (const [oldEventId, tokenId] of preserved.assignments[language]) {
@@ -1939,7 +2164,21 @@ function buildDirectEntryXml() {
   const restoredChineseAlignment = restoreChineseAlignmentIfMissing();
   const [keyName] = KEYS[fifths] || KEYS[0]; $('#key-label').textContent = `1 = ${keyName}`; $('#file-summary').textContent = `${state.filename} · ${state.measures.length} measures · direct entry`; $('#editor').classList.remove('hidden');
   const keptChinese = state.assignments['1'].size, keptEnglish = state.assignments['2'].size, staffMessage = state.staffNotes.length ? ' Existing staff notes were kept; regenerate Soprano if the melody changed.' : '';
-  $('#status').textContent = `Jianpu preview updated. ${restoredChineseAlignment ? 'Restored' : 'Preserved'} ${keptChinese} Chinese and preserved ${keptEnglish} Jianpu English assignment${keptEnglish === 1 ? '' : 's'}.${staffMessage}`; render();
+  const successMessage = `Jianpu preview updated. ${restoredChineseAlignment ? 'Restored' : 'Preserved'} ${keptChinese} Chinese and preserved ${keptEnglish} Jianpu English assignment${keptEnglish === 1 ? '' : 's'}.${staffMessage}`;
+  render();
+  const renderWarnings = validateParsedJianpuRender(measures);
+  setDirectEntryStatus(renderWarnings.length ? `Warning: ${renderWarnings.join(' ')}` : successMessage, renderWarnings.length ? 'warning' : false);
+}
+
+function updateNotationPreviewFromJianpu() {
+  setDirectEntryStatus('Reading the Jianpu Encoded Stream…');
+  try {
+    buildDirectEntryXml();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    setDirectEntryStatus(`Update failed after parsing the Jianpu stream: ${message}`, true);
+    console.error('Jianpu preview update failed', error);
+  }
 }
 
 function autoApplyChineseLyrics() {
@@ -1990,19 +2229,19 @@ function staffPhotoMetrics(imageData) {
 }
 
 function showStaffPhotoDecision(quality, file, width, height) {
-  const panel=$('#staff-photo-decision'), labels={ accept:'Accepted for recognition staging', warning:'Accepted with review warnings', reject:'Photo rejected' };
+  const panel=$('#staff-photo-decision'), labels={ accept:'Automatic quality check: Passed', warning:'Automatic quality check: Passed with warnings', reject:'Automatic quality check: Failed' };
   panel.className=`photo-review-decision ${quality.decision}`;
   const details=[...(quality.reasons||[]),...(quality.recommendations||[])];
   panel.innerHTML=`<strong>${labels[quality.decision]}</strong><div>${escapeHtml(file.name)} · ${width} × ${height}px · ${escapeHtml(file.type||'image')}</div>${details.length?`<ul>${details.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:''}`;
   $('#accept-staff-photo').disabled=quality.decision==='reject';
-  $('#accept-staff-photo').textContent=quality.decision==='warning'?'Accept warnings and extract regions':'Extract staff regions';
+  $('#accept-staff-photo').textContent='Continue: Extract Staff Layout';
 }
 
-function drawStaffPhotoReview(mode='cleaned') {
+function drawStaffPhotoReview() {
   if (!staffPhotoReviewData) return;
   const canvas=$('#staff-photo-canvas'), context=canvas.getContext('2d');
   canvas.width=staffPhotoReviewData.width; canvas.height=staffPhotoReviewData.height;
-  context.putImageData(mode==='original'?staffPhotoReviewData.original:staffPhotoReviewData.cleaned,0,0);
+  context.putImageData(staffPhotoReviewData.cleaned,0,0);
   if (!staffPhotoReviewData.extraction||!$('#show-staff-regions').checked) return;
   const confidenceColor=confidence=>{const percent=(Number(confidence)||0)*100;return percent>=95?'#0b5d3b':percent>=85?'#00a9b8':percent>=65?'#e07a00':'#c62828';};
   context.save(); context.lineWidth=Math.max(2,Math.round(canvas.width/700)); context.font=`${Math.max(16,Math.round(canvas.width/70))}px system-ui`;
@@ -2011,7 +2250,7 @@ function drawStaffPhotoReview(mode='cleaned') {
   }
   context.lineWidth=Math.max(2,Math.round(canvas.width/850));
   for (const staff of staffPhotoReviewData.extraction.staffs) { const system=staffPhotoReviewData.extraction.systems.find(item=>item.staffIds.includes(staff.id)),left=system?.contentX1??0,right=system?.contentX2??canvas.width;context.strokeStyle=confidenceColor(staff.confidence); for (const y of staff.lines) { context.beginPath(); context.moveTo(left,y); context.lineTo(right,y); context.stroke(); } }
-  for(const boundary of staffPhotoReviewData.extraction.boundaries||[]){const system=staffPhotoReviewData.extraction.systems.find(item=>item.id===boundary.systemId),staffs=system?.staffIds.map(id=>staffPhotoReviewData.extraction.staffs.find(item=>item.id===id));if(!staffs?.every(Boolean))continue;context.strokeStyle=confidenceColor(boundary.confidence);context.lineWidth=Math.max(boundary.kind==='stop-or-repeat'?3:2,Math.round(canvas.width/900));context.beginPath();context.moveTo(boundary.x,staffs[0].lines[0]);context.lineTo(boundary.x,staffs[1].lines[4]);context.stroke();}
+  for(const boundary of staffPhotoReviewData.extraction.boundaries||[]){const system=staffPhotoReviewData.extraction.systems.find(item=>item.id===boundary.systemId),staffs=system?.staffIds.map(id=>staffPhotoReviewData.extraction.staffs.find(item=>item.id===id));if(!staffs?.every(Boolean))continue;context.strokeStyle=confidenceColor(boundary.confidence);context.lineWidth=Math.max(boundary.kind==='stop-or-repeat'?3:2,Math.round(canvas.width/900));const spans=boundary.kind==='measure'?staffs.map(staff=>[staff.lines[0],staff.lines[4]]):[[staffs[0].lines[0],staffs.at(-1).lines[4]]];for(const [top,bottom] of spans){context.beginPath();context.moveTo(boundary.x,top);context.lineTo(boundary.x,bottom);context.stroke();}}
   context.restore();
 }
 
@@ -2020,7 +2259,7 @@ function showStaffRegionExtraction(extraction) {
   const confidenceMeter='<div class="confidence-meter" aria-label="Extraction confidence colors"><span class="confidence-high">High<br><small>95–100%</small></span><span class="confidence-middle">Middle<br><small>85–94%</small></span><span class="confidence-low">Low<br><small>65–84%</small></span><span class="confidence-none">No confidence<br><small>0–64%</small></span></div>';
   panel.className=`staff-region-result ${success?'accept':'reject'}`;
   panel.innerHTML=`<strong>${success?`${extraction.systems.length} hymn system${extraction.systems.length===1?'':'s'} extracted`:'Staff-region extraction failed'}</strong><div>${extraction.staffs.length} five-line staff region${extraction.staffs.length===1?'':'s'} · ${(extraction.boundaries||[]).length} vertical boundaries · ${Math.round(extraction.confidence*100)}% geometry confidence</div>${confidenceMeter}${extraction.warnings.length?`<ul>${extraction.warnings.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:''}<div class="photo-stage-note">System boxes, staff guides, and extracted measure/system/stop boundaries use the confidence colors above. Horizontal guides stop at the detected outer bars. No notes or MusicXML were created.</div>`;
-  panel.classList.remove('hidden'); $('#show-staff-regions').disabled=!success; $('#show-staff-regions').checked=success;
+  panel.classList.remove('hidden');$('#show-staff-regions-control').classList.toggle('hidden',!success);$('#show-staff-regions').disabled=!success; $('#show-staff-regions').checked=success;
 }
 
 async function loadStaffPhoto(file) {
@@ -2034,11 +2273,10 @@ async function loadStaffPhoto(file) {
     const bitmap=await createImageBitmap(file), canvas=document.createElement('canvas');
     canvas.width=bitmap.width; canvas.height=bitmap.height; const context=canvas.getContext('2d',{willReadFrequently:true}); context.drawImage(bitmap,0,0); bitmap.close();
     const original=context.getImageData(0,0,canvas.width,canvas.height), metrics=staffPhotoMetrics(original), quality=assessStaffPhotoQuality(metrics);
-    const cleanedResult=removePaperBackground(original.data,canvas.width,canvas.height), cleaned=new ImageData(cleanedResult.data,canvas.width,canvas.height);
-    staffPhotoReviewData={ file,width:canvas.width,height:canvas.height,original,cleaned,quality,metrics,cleanup:cleanedResult.stats,extraction:null };
-    $('#staff-region-result').classList.add('hidden'); $('#show-staff-regions').checked=false; $('#show-staff-regions').disabled=true;
-    showStaffPhotoDecision(quality,file,canvas.width,canvas.height); drawStaffPhotoReview('cleaned');
-    document.querySelector('input[name="staff-photo-preview"][value="cleaned"]').checked=true;
+    const cleaned=new ImageData(new Uint8ClampedArray(original.data),canvas.width,canvas.height);
+    staffPhotoReviewData={ file,width:canvas.width,height:canvas.height,original,cleaned,quality,metrics,cleanup:{skipped:true,reason:'accepted-working-image'},extraction:null };
+    $('#staff-region-result').classList.add('hidden');$('#show-staff-regions-control').classList.add('hidden'); $('#show-staff-regions').checked=false; $('#show-staff-regions').disabled=true;
+    showStaffPhotoDecision(quality,file,canvas.width,canvas.height); drawStaffPhotoReview();
     $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
   } catch (error) {
     staffPhotoReviewData=null; $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
@@ -2053,16 +2291,21 @@ function acceptStaffPhoto() {
   if (!staffPhotoReviewData.extraction) {
     const { cleaned,width,height }=staffPhotoReviewData;
     const extraction=extractStaffRegions(cleaned.data,width,height); staffPhotoReviewData.extraction=extraction;
-    showStaffRegionExtraction(extraction); drawStaffPhotoReview('cleaned');
-    $('#accept-staff-photo').disabled=!extraction.systems.length; $('#accept-staff-photo').textContent=extraction.systems.length?'Use extracted regions':'Extraction failed';
+    showStaffRegionExtraction(extraction); drawStaffPhotoReview();
+    $('#accept-staff-photo').disabled=!extraction.systems.length; $('#accept-staff-photo').textContent=extraction.systems.length?'Use Extracted Staff Layout':'Extraction failed';
     return;
   }
   const { file,width,height,quality,metrics,cleanup,cleaned,extraction }=staffPhotoReviewData;
   state.staffPhoto={ name:file.name,type:file.type,width,height,quality,metrics,cleanup,cleaned,extraction,acceptedAt:new Date().toISOString(),stage:extraction.stage };
+  projectSession.processing.layout={status:'accepted',updatedAt:new Date().toISOString(),data:extraction};projectSession.processing.recognition={status:'not-started',updatedAt:null};projectSession.processing.review={status:'not-started',updatedAt:null};saveProcessingState().catch(error=>console.error(error));updatePipelineAvailability();
   $('#staff-photo-status').textContent=`${file.name}: ${extraction.systems.length} staff system${extraction.systems.length===1?'':'s'} extracted${extraction.warnings.length?' with warnings':''}.`;
   $('#staff-photo-editor-summary').textContent=`${extraction.systems.length} systems · ${extraction.staffs.length} staffs · ${(extraction.boundaries||[]).length} vertical bars · ${Math.round(extraction.confidence*100)}% confidence`;
   $('#staff-photo-editor-meter').innerHTML='<span class="confidence-high">95–100%</span><span class="confidence-middle">85–94%</span><span class="confidence-low">65–84%</span><span class="confidence-none">0–64%</span>';
-  $('#staff-photo-editor-result').classList.remove('hidden'); staffPhotoReviewData.committed=true;
+  $('#staff-photo-editor-result').classList.remove('hidden'); $('#recognize-source-content').disabled=false; staffPhotoReviewData.committed=true;
+  const review=$('#source-recognition-summary');
+  review.classList.add('has-result');
+  review.innerHTML=`<strong>${escapeHtml(file.name)} · staff layout staged</strong><span>${extraction.systems.length} systems · ${extraction.staffs.length} staffs · ${(extraction.boundaries||[]).length} vertical boundaries · ${Math.round(extraction.confidence*100)}% confidence</span>${extraction.warnings.length?`<ul>${extraction.warnings.map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul>`:'<span>No layout-extraction warnings.</span>'}<span>These results remain provisional. No photo-derived notes were written to MusicXML.</span>`;
+  showSourcePanel('recognition');
   $('#status').textContent='Staff regions are staged in memory for symbol recognition. No photo-derived notes have been written to MusicXML.';
   $('#staff-photo-review').close();
 }
@@ -2071,12 +2314,283 @@ function reviewExtractedStaffRegions() {
   if (!staffPhotoReviewData?.extraction) return;
   $('#staff-photo-progress').classList.add('hidden'); $('#staff-photo-review-content').classList.remove('hidden');
   $('#accept-staff-photo').disabled=false; $('#accept-staff-photo').textContent='Close region review';
-  $('#show-staff-regions').checked=true; showStaffRegionExtraction(staffPhotoReviewData.extraction); drawStaffPhotoReview('cleaned');
+  $('#show-staff-regions-control').classList.remove('hidden');$('#show-staff-regions').checked=true; showStaffRegionExtraction(staffPhotoReviewData.extraction); drawStaffPhotoReview();
   const dialog=$('#staff-photo-review'); if(!dialog.open)dialog.showModal();
 }
 
-$('#file-input').addEventListener('change', async event => {
-  const file = event.target.files[0]; if (!file) return;
+const emptyProcessingState=()=>({schemaVersion:1,activeInput:null,workingImage:null,preparation:{status:'not-started',updatedAt:null},layout:{status:'not-started',updatedAt:null,data:null},recognition:{status:'not-started',updatedAt:null},review:{status:'not-started',updatedAt:null}});
+let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
+let sourcePreviewUrl=null;
+let deleteParentHandle=null;
+let deleteProjectTargets=new Map();
+const preparedPhotoRequests=new Map();
+
+function showProjectInputDialog(){
+  $('#close-project-input').disabled=projectSession.requiresInitialInput;
+  const dialog=$('#project-input-dialog');if(!dialog.open)dialog.showModal();
+}
+
+function setProjectWorkspaceVisible(visible){
+  $('#project-launcher').classList.toggle('hidden',visible);
+  $('#project-open-actions').classList.toggle('hidden',!visible);
+  $('#file-level-actions').classList.toggle('hidden',!visible);
+  $('#major-tabs').classList.toggle('hidden',!visible);
+  if(!visible){$('#source-processing-tab').classList.add('hidden');$('#editor-tab').classList.add('hidden');}
+}
+
+function showMajorTab(name) {
+  if(name==='editor'&&projectSession.requiresInitialInput)return;
+  document.querySelectorAll('.major-tab').forEach(button=>{const active=button.dataset.majorTab===name;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active));});
+  document.querySelectorAll('.source-file-action').forEach(button=>button.classList.toggle('tab-inapplicable',name!=='source'));
+  $('#source-processing-tab').classList.toggle('hidden',name!=='source'); $('#editor-tab').classList.toggle('hidden',name!=='editor');
+}
+
+function selectPipelineOperation(name){document.querySelectorAll('.pipeline-operation').forEach(button=>{const active=button.id===name;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});}
+
+function showSourcePanel(name){
+  $('#photo-preparation-panel').classList.toggle('hidden',name!=='preparation');
+  $('#document-source-panel').classList.toggle('hidden',name!=='document');
+  $('#recognition-review-panel').classList.toggle('hidden',name!=='recognition');
+  if(name==='preparation')selectPipelineOperation('prepare-photo');
+  else if(name==='document')selectPipelineOperation('');
+}
+
+function activateProject(name,{handle=null,parentHandle=null,requiresInitialInput=false}={}) {
+  projectSession={name,handle,parentHandle,savedSnapshot:state.xml?snapshot():null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput,addControlsVisible:requiresInitialInput};
+  $('#project-name-display').textContent=name;
+  setProjectWorkspaceVisible(!requiresInitialInput);
+  if(!requiresInitialInput)showMajorTab('source'); refreshSourceFileList();
+}
+
+function clearProjectSession() {
+  projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
+  $('#project-open-actions').classList.add('hidden');$('#file-level-actions').classList.add('hidden'); $('#major-tabs').classList.add('hidden'); $('#source-processing-tab').classList.add('hidden'); $('#editor-tab').classList.add('hidden'); $('#project-launcher').classList.remove('hidden');
+}
+
+function clearProjectWorkspace() {
+  Object.assign(state,{xml:null,filename:'',events:[],measures:[],fifths:0,activeLanguage:'1',tokens:{1:[],2:[]},assignments:{1:new Map(),2:new Map()},staffNotes:[],staffAssignments:new Map(),photoConflicts:[],staffPhoto:null,staffRegisters:{treble:0,bass:0},spacing:{measureWidth:320,symbolWidth:56,measuresPerLine:'auto'},containerSize:null,layoutProfiles:{},firstNoteOffsets:new Map(),measureWidths:new Map(),nextStaffNoteId:1,selectedStaffNoteId:null,staffBeamMode:null,staffBeamStartId:null,selectedTokenId:null,shiftAnchorTokenId:null,selectedEventId:null,selectedContinuation:null,history:[],future:[]});
+  projectSession.sources=[]; projectSession.savedSources=[]; projectSession.activeSource=null;projectSession.processing=emptyProcessingState();projectSession.preparationDirty=false;projectSession.requiresInitialInput=true;projectSession.addControlsVisible=true; projectSession.savedSnapshot=null; staffPhotoReviewData=null;
+  $('#file-input').value=''; $('#source-photo-input').value=''; $('#source-musicxml-input').value=''; $('#source-reference-input').value='';
+  $('#jianpu-input').value=''; updateJianpuPairCheck(); $('#zh-input').value=''; $('#en-input').value=''; $('#file-summary').textContent='No score loaded'; $('#editor').classList.add('hidden');
+  $('#staff-photo-status').textContent='Choose a photo above to begin.'; $('#staff-photo-editor-result').classList.add('hidden');$('#extract-staff-layout').disabled=true;$('#recognize-source-content').disabled=true;$('#review-recognition').disabled=true;selectPipelineOperation('prepare-photo');
+  const review=$('#source-recognition-summary'); review.className='source-empty-preview'; review.innerHTML='<strong>Recognition results will appear after analysis</strong><span>Staff-photo recognition remains provisional and does not modify MusicXML.</span>';
+  const frame=$('#photo-cleaner-frame'); frame.src=frame.src; refreshSourceFileList(); showMajorTab('source'); showSourcePanel('preparation');
+}
+
+async function projectFileHandle(directory,name,{confirmReplace=false}={}){
+  let exists=false;try{await directory.getFileHandle(name);exists=true;}catch(error){if(error.name!=='NotFoundError')throw error;}
+  if(exists&&confirmReplace&&!confirm(`${name} already exists. Replace it?`))return null;
+  return directory.getFileHandle(name,{create:true});
+}
+
+async function writeProjectFile(directory,name,content,type='application/json',options={}) {
+  const fileHandle=await projectFileHandle(directory,name,options);if(!fileHandle)return null;const writable=await fileHandle.createWritable();await writable.write(new Blob([content],{type}));await writable.close();return fileHandle;
+}
+
+async function ensureProjectFolders(handle){const structure={input:['photos','pdf','musicxml','text'],working:['photos','layout','recognition','review','draft'],output:['musicxml','pdf','images','reports']};for(const [root,children] of Object.entries(structure)){const directory=await handle.getDirectoryHandle(root,{create:true});for(const child of children)await directory.getDirectoryHandle(child,{create:true});}}
+
+const sourceFolders={Photo:'photos',PDF:'pdf',MusicXML:'musicxml',Text:'text'};
+
+async function materializePendingProject(){
+  if(projectSession.handle)return projectSession.handle;
+  if(!projectSession.parentHandle||!projectSession.name)throw new Error('Choose a project parent folder before adding the first input.');
+  const handle=await projectSession.parentHandle.getDirectoryHandle(projectSession.name,{create:true});
+  await ensureProjectFolders(handle);
+  await writeProjectFile(handle,'hymn-project.json',JSON.stringify({schemaVersion:1,name:projectSession.name,createdAt:new Date().toISOString(),inputs:[],stage:'new'},null,2)+'\n');
+  projectSession.handle=handle;
+  return handle;
+}
+
+async function copySourceIntoProject(file,kind){const projectHandle=await materializePendingProject();const folder=sourceFolders[kind]||'text',input=await projectHandle.getDirectoryHandle('input',{create:true}),directory=await input.getDirectoryHandle(folder,{create:true}),fileHandle=await projectFileHandle(directory,file.name,{confirmReplace:true});if(!fileHandle)return null;const writable=await fileHandle.createWritable();await writable.write(file);await writable.close();return fileHandle;}
+
+async function discoverProjectInputs(handle){
+  const input=await handle.getDirectoryHandle('input',{create:true}),sources=[],kindForName=name=>{const extension=name.split('.').pop()?.toLowerCase();if(['png','jpg','jpeg','tif','tiff','webp','heic','heif'].includes(extension))return'Photo';if(extension==='pdf')return'PDF';if(['musicxml','xml','mxl'].includes(extension))return'MusicXML';if(['txt','md','rtf'].includes(extension))return'Text';return null;};
+  async function scan(directory,prefix){for await(const entry of directory.values()){const path=`${prefix}/${entry.name}`;if(entry.kind==='directory')await scan(entry,path);else{const kind=kindForName(entry.name);if(kind)sources.push({name:entry.name,kind,path,handle:entry});}}}
+  await scan(input,'input');
+  return sources.sort((a,b)=>a.kind.localeCompare(b.kind)||a.name.localeCompare(b.name));
+}
+
+function manifestSources(){return projectSession.sources.map(({name,kind,path})=>({name,kind,path:path||`input/${sourceFolders[kind]||'text'}/${name}`}));}
+
+function sendPhotoToPreparation(file,{markDirty=true,sourcePath=null}={}){projectSession.preparationSourcePath=sourcePath;showMajorTab('source');showSourcePanel('preparation');const frame=$('#photo-cleaner-frame'),send=()=>frame.contentWindow?.postMessage({type:'hymn-photo-load',file,markDirty},location.origin);if(frame.contentDocument?.readyState==='complete')send();else frame.addEventListener('load',send,{once:true});}
+
+async function showActivePhotoPreparation(){const source=projectSession.sources.find(item=>item.path===projectSession.activeSource&&item.kind==='Photo');if(!source?.handle){showSourcePanel('preparation');return;}if(projectSession.preparationDirty&&projectSession.preparationSourcePath===source.path){showSourcePanel('preparation');return;}const working=projectSession.processing.activeInput===source.path?await currentWorkingImage():null;sendPhotoToPreparation(working||await source.handle.getFile(),{markDirty:!working,sourcePath:source.path});}
+
+function requestPreparedPhoto(){return new Promise((resolve,reject)=>{const requestId=crypto.randomUUID(),timer=setTimeout(()=>{preparedPhotoRequests.delete(requestId);reject(new Error('Photo preparation did not respond.'));},30000);preparedPhotoRequests.set(requestId,{resolve:value=>{clearTimeout(timer);resolve(value);},reject:error=>{clearTimeout(timer);reject(error);}});$('#photo-cleaner-frame').contentWindow?.postMessage({type:'hymn-photo-get-prepared',requestId},location.origin);});}
+
+async function savePreparedPhotoFiles(payload){
+  if(!projectSession.handle)throw new Error('Open a project folder before saving prepared files.');
+  if(projectSession.preparationSourcePath!==projectSession.activeSource)throw new Error('The displayed preview is not the photo chosen for processing. Select “Use this file” first.');
+  const working=await projectSession.handle.getDirectoryHandle('working',{create:true}),photos=await working.getDirectoryHandle('photos',{create:true}),name=`${projectSession.name}-working.png`;let exists=false;
+  try{await photos.getFileHandle(name);exists=true;}catch(error){if(error.name!=='NotFoundError')throw error;}
+  if(exists&&!confirm(`${name} already exists. Replace it with the latest prepared image?`))return false;
+  const changed=projectSession.preparationDirty||projectSession.processing.activeInput!==projectSession.activeSource;await writeProjectFile(photos,name,payload.cleaned,'image/png');projectSession.processing=changed?{...emptyProcessingState(),activeInput:projectSession.activeSource,workingImage:`working/photos/${name}`,preparation:{status:'complete',updatedAt:new Date().toISOString()}}:{...projectSession.processing,workingImage:`working/photos/${name}`,preparation:{status:'complete',updatedAt:new Date().toISOString()}};projectSession.preparationDirty=false;await saveProcessingState();updatePipelineAvailability();return true;
+}
+
+async function saveProcessingState(){if(!projectSession.handle)return;const working=await projectSession.handle.getDirectoryHandle('working',{create:true});await writeProjectFile(working,'workbench-state.json',JSON.stringify(projectSession.processing,null,2)+'\n');}
+
+async function loadProcessingState(){if(!projectSession.handle)return;try{const working=await projectSession.handle.getDirectoryHandle('working'),file=await(await working.getFileHandle('workbench-state.json')).getFile(),saved=JSON.parse(await file.text());projectSession.processing={...emptyProcessingState(),...saved};if(saved.activeInput&&projectSession.sources.some(source=>source.path===saved.activeInput))projectSession.activeSource=saved.activeInput;}catch(error){if(error.name!=='NotFoundError')console.warn('Could not restore workbench state',error);}}
+
+async function currentWorkingImage(){if(!projectSession.handle||!projectSession.processing.workingImage)return null;try{const working=await projectSession.handle.getDirectoryHandle('working'),photos=await working.getDirectoryHandle('photos'),handle=await photos.getFileHandle(projectSession.processing.workingImage.split('/').pop());return await handle.getFile();}catch{return null;}}
+
+async function loadProjectEditorDraft(){
+  if(!projectSession.handle)return false;
+  try{
+    const working=await projectSession.handle.getDirectoryHandle('working'),draft=await working.getDirectoryHandle('draft'),handle=await draft.getFileHandle(`${projectSession.name}-working.musicxml`),file=await handle.getFile();
+    await loadMusicXmlFile(file);
+    projectSession.savedSnapshot=snapshot();
+    return true;
+  }catch(error){
+    if(error.name!=='NotFoundError')console.warn('Could not restore the saved Hymn Editor working file',error);
+    return false;
+  }
+}
+
+window.addEventListener('message',async event=>{
+  if(event.source!==$('#photo-cleaner-frame').contentWindow||event.origin!==location.origin)return;
+  if(event.data?.type==='hymn-ui-zoom'){changeUiZoom(event.data.direction);return;}
+  if(event.data?.type==='hymn-photo-dirty'){projectSession.preparationDirty=true;projectSession.processing.layout={status:'stale',updatedAt:projectSession.processing.layout.updatedAt,data:projectSession.processing.layout.data};projectSession.processing.recognition={status:'stale',updatedAt:projectSession.processing.recognition.updatedAt};projectSession.processing.review={status:'stale',updatedAt:projectSession.processing.review.updatedAt};updatePipelineAvailability();return;}
+  if(event.data?.type==='hymn-photo-prepared-error'){const pending=preparedPhotoRequests.get(event.data.requestId);if(pending){preparedPhotoRequests.delete(event.data.requestId);pending.reject(new Error(event.data.message));}return;}
+  if(event.data?.type!=='hymn-photo-prepared')return;
+  const pending=preparedPhotoRequests.get(event.data.requestId);if(pending){preparedPhotoRequests.delete(event.data.requestId);pending.resolve(event.data);return;}
+  try{const saved=await savePreparedPhotoFiles(event.data);event.source.postMessage({type:'hymn-photo-save-result',message:saved?'Saved the latest working image in working/photos.':'Save cancelled; the existing working image was not changed.'},location.origin);}catch(error){event.source.postMessage({type:'hymn-photo-save-result',message:`Could not save the working image: ${error.message}`},location.origin);}
+});
+
+async function openProjectSource(source,{select=false}={}){
+  if(!source.handle){alert(`${source.name} is listed in the older project manifest but was not found in its input folder.`);return;}
+  const file=await source.handle.getFile();if(select){const changed=projectSession.activeSource!==source.path;projectSession.activeSource=source.path;projectSession.requiresInitialInput=false;projectSession.addControlsVisible=false;if($('#project-input-dialog').open)$('#project-input-dialog').close();setProjectWorkspaceVisible(true);if(changed&&source.kind==='Photo'){staffPhotoReviewData=null;state.staffPhoto=null;$('#staff-photo-editor-result').classList.add('hidden');$('#recognize-source-content').disabled=true;$('#review-recognition').disabled=true;$('#staff-photo-status').textContent=`${source.name} is chosen. Extract its staff layout when ready.`;}refreshSourceFileList();}
+  if(source.kind==='MusicXML'){await loadMusicXmlFile(file);showMajorTab('editor');return;}
+  if(source.kind==='Photo'){sendPhotoToPreparation(file,{sourcePath:source.path});return;}
+  showMajorTab('source');showSourcePanel('document');$('#document-source-title').textContent=source.name;
+  $('#document-source-description').textContent=source.kind==='PDF'?'PDF reference · available only in Source Processing.':'Text reference · available only in Source Processing.';
+  if(sourcePreviewUrl){URL.revokeObjectURL(sourcePreviewUrl);sourcePreviewUrl=null;}
+  $('#pdf-source-preview').classList.toggle('hidden',source.kind!=='PDF');$('#text-source-preview').classList.toggle('hidden',source.kind!=='Text');
+  if(source.kind==='PDF'){sourcePreviewUrl=URL.createObjectURL(file);$('#pdf-source-preview').src=sourcePreviewUrl;}else $('#text-source-preview').textContent=await file.text();
+}
+
+async function createProjectFromDialog(event) {
+  event.preventDefault(); const input=$('#new-project-name'),name=input.value.trim();
+  if(!/^[A-Za-z0-9_-]+$/.test(name)){input.setCustomValidity('Use letters, numbers, hyphens, or underscores.');input.reportValidity();return;} input.setCustomValidity('');
+  let parentHandle=null;
+  try {
+    if(window.showDirectoryPicker){parentHandle=await window.showDirectoryPicker({mode:'readwrite',startIn:'documents'});try{await parentHandle.getDirectoryHandle(name);alert(`${name} already exists in that folder. Open the existing project or choose a different project name.`);return;}catch(error){if(error.name!=='NotFoundError')throw error;}}
+    activateProject(name,{parentHandle,requiresInitialInput:true}); $('#new-project-dialog').close();showProjectInputDialog();
+  } catch(error){if(error.name!=='AbortError')alert(`Could not create the project folder: ${error.message}`);}
+}
+
+async function openProjectFolder() {
+  try {
+    if(!window.showDirectoryPicker){const name=prompt('Project folder name','Hymn-001');if(name)activateProject(name);return;}
+    const handle=await window.showDirectoryPicker({mode:'readwrite',startIn:'documents'});let name=handle.name;
+    let manifest;
+    try{const manifestHandle=await handle.getFileHandle('hymn-project.json');manifest=JSON.parse(await (await manifestHandle.getFile()).text());name=manifest.name||name;}catch{alert('This folder does not contain hymn-project.json.');return;}
+    await ensureProjectFolders(handle);
+    activateProject(name,{handle});
+    const discovered=await discoverProjectInputs(handle);
+    projectSession.sources=discovered.length?discovered:(Array.isArray(manifest.inputs)?manifest.inputs:[]);
+    projectSession.activeSource=manifest.activeInput&&projectSession.sources.some(source=>source.path===manifest.activeInput)?manifest.activeInput:null;
+    await loadProcessingState();
+    if(!projectSession.activeSource&&projectSession.sources.length===1)projectSession.activeSource=projectSession.sources[0].path;
+    projectSession.requiresInitialInput=projectSession.sources.length===0;
+    projectSession.addControlsVisible=projectSession.requiresInitialInput;
+    projectSession.savedSources=structuredClone(manifestSources());
+    setProjectWorkspaceVisible(!projectSession.requiresInitialInput);
+    refreshSourceFileList();
+    if(projectSession.requiresInitialInput){showProjectInputDialog();return;}
+    const active=projectSession.sources.find(source=>source.path===projectSession.activeSource);
+    if(!active){showMajorTab('source');return;}
+    if(active.kind==='Photo')await showActivePhotoPreparation();else await openProjectSource(active);
+    const restoredEditor=await loadProjectEditorDraft();
+    if(restoredEditor&&manifest.stage==='editor-working')showMajorTab('editor');
+  } catch(error){if(error.name!=='AbortError')alert(`Could not open the project: ${error.message}`);}
+}
+
+function refreshSourceFileList(){
+  const list=$('#source-file-list'),has=kind=>projectSession.sources.some(source=>source.kind===kind);
+  const active=projectSession.sources.find(source=>source.path===projectSession.activeSource),activeCard=$('#source-active-file');activeCard.innerHTML=active?`<small>Selected input</small><strong>${escapeHtml(active.name)} · ${escapeHtml(active.kind)}</strong>`:'<small>Selected input</small><strong>None selected</strong>';
+  $('#initial-input-prompt').classList.toggle('hidden',!projectSession.requiresInitialInput);document.querySelector('.major-tab[data-major-tab="editor"]').disabled=projectSession.requiresInitialInput;
+  updatePipelineAvailability();
+  $('#source-photo-action').textContent=has('Photo')?'Add another photo':'Add photo';$('#source-musicxml-action').textContent=has('MusicXML')?'Add another MusicXML':'Add MusicXML';$('#source-reference-action').textContent=has('PDF')||has('Text')?'Add another PDF or text':'Add PDF or text';
+  const candidates=projectSession.sources.filter(source=>source.path!==projectSession.activeSource);if(!candidates.length){list.replaceChildren(Object.assign(document.createElement('span'),{textContent:'No other project inputs.'}));return;}
+  list.replaceChildren(...candidates.map(source=>{const row=document.createElement('div');row.className='source-file-row';const label=document.createElement('span');label.textContent=`${source.name} · ${source.kind}`;row.append(label);return row;}));
+}
+
+function showChangeInputDialog(){
+  const candidates=projectSession.sources.filter(source=>source.path!==projectSession.activeSource&&source.handle);
+  if(!candidates.length){alert('There are no other project inputs yet. Use Add Input to add another photo, MusicXML, PDF, or text file.');return;}
+  const select=$('#change-input-selection');select.replaceChildren(...candidates.map(source=>Object.assign(document.createElement('option'),{value:source.path,textContent:`${source.name} · ${source.kind}`})));
+  $('#change-input-dialog').showModal();
+}
+
+function showDeleteInputDialog(){
+  if(projectSession.sources.length<=1){alert('The project’s only original input cannot be deleted. Add another input first.');return;}
+  const candidates=projectSession.sources.filter(source=>source.path!==projectSession.activeSource&&source.handle);
+  if(!candidates.length){alert('The currently open input cannot be deleted. Change Input first.');return;}
+  $('#delete-input-selection').replaceChildren(...candidates.map(source=>Object.assign(document.createElement('option'),{value:source.path,textContent:`${source.name} · ${source.kind}`})));
+  $('#delete-input-confirmation').checked=false;$('#delete-input-dialog').showModal();
+}
+
+async function deleteSelectedInput(){
+  const path=$('#delete-input-selection').value,source=projectSession.sources.find(item=>item.path===path);
+  if(!source||source.path===projectSession.activeSource||projectSession.sources.length<=1||!$('#delete-input-confirmation').checked){alert('Choose an inactive input and confirm its deletion.');return;}
+  const parts=source.path.split('/'),filename=parts.pop();let directory=projectSession.handle;for(const part of parts)directory=await directory.getDirectoryHandle(part);await directory.removeEntry(filename);
+  projectSession.sources=projectSession.sources.filter(item=>item.path!==path);projectSession.savedSources=projectSession.savedSources.filter(item=>item.path!==path);
+  const manifest={schemaVersion:1,name:projectSession.name,savedAt:new Date().toISOString(),inputs:manifestSources(),activeInput:projectSession.activeSource,stage:state.xml?'editor-working':'source-processing'};await writeProjectFile(projectSession.handle,'hymn-project.json',JSON.stringify(manifest,null,2)+'\n');
+  $('#delete-input-dialog').close();refreshSourceFileList();
+}
+
+function updatePipelineAvailability(){const active=projectSession.sources.find(source=>source.path===projectSession.activeSource),matching=projectSession.processing.activeInput===projectSession.activeSource;$('#extract-staff-layout').disabled=active?.kind!=='Photo'||(!active.handle&&!matching)||(!projectSession.preparationDirty&&projectSession.processing.preparation.status!=='complete'&&!active.handle);$('#recognize-source-content').disabled=!(matching&&projectSession.processing.layout.status==='accepted');$('#review-recognition').disabled=!(matching&&projectSession.processing.recognition.status==='complete');}
+
+async function extractChosenStaffLayout(){
+  const source=projectSession.sources.find(item=>item.path===projectSession.activeSource&&item.kind==='Photo');
+  if(!source?.handle){alert('Choose a photo with “Use this file” before extracting its staff layout.');return;}
+  let workingFile;if(projectSession.preparationDirty&&projectSession.preparationSourcePath===projectSession.activeSource){const prepared=await requestPreparedPhoto(),saved=await savePreparedPhotoFiles(prepared);if(!saved)return;workingFile=new File([prepared.cleaned],`${projectSession.name}-working.png`,{type:'image/png'});}else workingFile=await currentWorkingImage();
+  if(!workingFile){alert('Open Photo Preparation and save the current working image before extracting its layout.');return;}
+  selectPipelineOperation('extract-staff-layout');$('#source-stage-title').textContent='Staff layout extraction';$('#source-stage-description').textContent='Quality decisions, page-layout confidence, staff lines, and boundaries appear here.';showMajorTab('source');showSourcePanel('recognition');await loadStaffPhoto(workingFile);
+}
+
+async function saveProjectSession() {
+  const active=projectSession.sources.find(source=>source.path===projectSession.activeSource);
+  if(active?.kind==='Photo'&&projectSession.preparationDirty&&projectSession.preparationSourcePath===projectSession.activeSource){const prepared=await requestPreparedPhoto(),saved=await savePreparedPhotoFiles(prepared);if(!saved)return false;}
+  let savedEditorPath='';
+  if(state.xml){
+    if(!projectSession.handle)throw new Error('The project folder is not available. Reopen the project and save again.');
+    const working=await projectSession.handle.getDirectoryHandle('working',{create:true}),draft=await working.getDirectoryHandle('draft',{create:true}),draftName=`${projectSession.name}-working.musicxml`;
+    const saved=await writeProjectFile(draft,draftName,revisedXml(),'application/vnd.recordare.musicxml+xml',{confirmReplace:true});
+    if(!saved){$('#status').textContent='Save cancelled; the existing project working MusicXML was not changed.';return false;}
+    savedEditorPath=`working/draft/${draftName}`;
+  }
+  await saveProcessingState();
+  if(projectSession.handle){const manifest={schemaVersion:1,name:projectSession.name,savedAt:new Date().toISOString(),inputs:manifestSources(),activeInput:projectSession.activeSource,stage:state.xml?'editor-working':'source-processing'};await writeProjectFile(projectSession.handle,'hymn-project.json',JSON.stringify(manifest,null,2)+'\n');}
+  projectSession.savedSnapshot=state.xml?snapshot():null; projectSession.savedSources=structuredClone(manifestSources());
+  $('#status').textContent=savedEditorPath?`Saved project working MusicXML: ${savedEditorPath}`:'Project source-processing state saved.';
+  return true;
+}
+
+async function resetProjectWorkingState(){
+  if(!confirm('Reset all changes made since the most recent Save? Original input files will not be changed.'))return;
+  if(projectSession.savedSnapshot)restore(projectSession.savedSnapshot);
+  projectSession.preparationDirty=false;await loadProcessingState();state.history=[];state.future=[];refreshSourceFileList();
+  const active=projectSession.sources.find(source=>source.path===projectSession.activeSource);if(active?.kind==='Photo')await showActivePhotoPreparation();
+  $('#status').textContent='Working state reset to the most recent Save.';
+}
+
+async function chooseProjectToDelete(){
+  if(!window.showDirectoryPicker){alert('This browser cannot choose and delete project folders.');return;}
+  try{deleteParentHandle=await window.showDirectoryPicker({mode:'readwrite',startIn:'documents'});deleteProjectTargets=new Map();
+    let selectedFolderIsProject=false;try{await deleteParentHandle.getFileHandle('hymn-project.json');selectedFolderIsProject=true;}catch{}
+    if(selectedFolderIsProject)deleteProjectTargets.set(deleteParentHandle.name,{handle:deleteParentHandle,name:deleteParentHandle.name,direct:true});
+    async function scan(directory,prefix='',depth=0){if(depth>4)return;for await(const entry of directory.values())if(entry.kind==='directory'){const path=prefix?`${prefix}/${entry.name}`:entry.name;let isProject=false;try{await entry.getFileHandle('hymn-project.json');isProject=true;}catch{}if(isProject)deleteProjectTargets.set(path,{parent:directory,handle:entry,name:entry.name});else await scan(entry,path,depth+1);}}
+    if(!selectedFolderIsProject)await scan(deleteParentHandle);
+    const projects=[...deleteProjectTargets.keys()].sort();if(!projects.length){alert('No Hymn Workbench projects were found. Choose either an individual hymn project folder or the collection folder that contains your hymn projects.');return;}
+    const plural=projects.length>1;$('#delete-project-title').textContent=plural?'Delete Projects':'Delete Project';$('#delete-project-message').textContent=plural?`The selected folder contains ${projects.length} hymn projects. Continuing will permanently delete all of the hymn projects listed below. The selected collection folder and unrelated files will remain.`:'Continuing will permanently delete the hymn project listed below, including its input, working, and output files.';$('#delete-project-list').replaceChildren(...projects.map(path=>Object.assign(document.createElement('div'),{textContent:path})));$('#delete-project-confirmation-text').textContent=plural?'I understand that all listed hymn projects will be permanently deleted.':'I understand that the listed hymn project will be permanently deleted.';$('#confirm-project-delete').textContent=plural?`Delete All ${projects.length} Projects`:'Delete Project';$('#delete-project-confirmation').checked=false;$('#delete-project-dialog').showModal();
+  }catch(error){if(error.name!=='AbortError')alert(`Could not inspect that folder: ${error.message}`);}
+}
+
+async function deleteProjectSession(){const targets=[...deleteProjectTargets.values()];if(!targets.length||!$('#delete-project-confirmation').checked){alert('Confirm permanent deletion of the listed hymn project or projects.');return;}const direct=targets.find(target=>target.direct&&typeof target.handle.remove!=='function');if(direct)throw new Error('This browser cannot delete a directly selected folder. Select its project collection folder instead.');let deletingOpenProject=false;for(const target of targets){if(projectSession.handle){try{deletingOpenProject=deletingOpenProject||await target.handle.isSameEntry(projectSession.handle);}catch{deletingOpenProject=deletingOpenProject||target.name===projectSession.name;}}if(target.direct)await target.handle.remove({recursive:true});else await target.parent.removeEntry(target.name,{recursive:true});}$('#delete-project-dialog').close();if(deletingOpenProject)location.reload();}
+
+async function loadMusicXmlFile(file) {
+  if (!file) return;
   const xml = new DOMParser().parseFromString(await file.text(), 'application/xml');
   if (xml.querySelector('parsererror') || !xml.querySelector('score-partwise')) { $('#file-summary').textContent = 'This is not valid partwise MusicXML.'; return; }
   Object.assign(state, { xml, filename: file.name, ...parseScore(xml), history: [], future: [], selectedTokenId: null, shiftAnchorTokenId: null, selectedEventId: null });
@@ -2086,19 +2600,43 @@ $('#file-input').addEventListener('change', async event => {
   $('#key-label').textContent = `1 = ${key}`; $('#file-summary').textContent = `${file.name} · ${state.measures.length} measures · ${state.events.length} melody events · 1 = ${key}`;
   $('#editor').classList.remove('hidden'); render();
   if (restoredMissingLyrics || restoredChineseAlignment) $('#status').textContent = `${restoredMissingLyrics ? 'Missing Chinese or English text was restored from the Hymn Display database. ' : ''}${restoredChineseAlignment ? 'Chinese lyrics were aligned to the existing Jianpu. ' : ''}Save the working copy again to preserve the restored layers.`;
+}
+$('#file-input').addEventListener('change', event => loadMusicXmlFile(event.target.files[0]));
+$('#source-musicxml-input').addEventListener('change',async event=>{const file=event.target.files[0];if(!file)return;try{const handle=await copySourceIntoProject(file,'MusicXML');if(!handle)return;const source={name:file.name,kind:'MusicXML',path:`input/musicxml/${file.name}`,handle};projectSession.sources.push(source);await openProjectSource(source,{select:true});}catch(error){alert(`Could not add ${file.name}: ${error.message}`);}});
+$('#source-reference-input').addEventListener('change',async event=>{let firstAdded=null;for(const file of event.target.files){const kind=file.type==='application/pdf'?'PDF':'Text';try{const handle=await copySourceIntoProject(file,kind);if(!handle)continue;const source={name:file.name,kind,path:`input/${sourceFolders[kind]}/${file.name}`,handle};projectSession.sources.push(source);firstAdded||=source;}catch(error){alert(`Could not add ${file.name}: ${error.message}`);}}refreshSourceFileList();if(firstAdded)await openProjectSource(firstAdded,{select:projectSession.requiresInitialInput});});
+$('#source-photo-input').addEventListener('change',async event=>{const file=event.target.files[0];if(!file)return;try{const handle=await copySourceIntoProject(file,'Photo');if(!handle)return;const existing=projectSession.sources.find(source=>source.name===file.name&&source.kind==='Photo'),source=existing||{name:file.name,kind:'Photo'};Object.assign(source,{handle,path:`input/photos/${file.name}`});if(!existing)projectSession.sources.push(source);await openProjectSource(source,{select:true});}catch(error){alert(`Could not add ${file.name}: ${error.message}`);}});
+$('#prepare-photo').addEventListener('click',()=>showActivePhotoPreparation().catch(error=>alert(`Could not open Photo Preparation: ${error.message}`)));
+$('#confirm-change-input').addEventListener('click',async()=>{const source=projectSession.sources.find(item=>item.path===$('#change-input-selection').value);if(!source)return;try{await openProjectSource(source,{select:true});$('#change-input-dialog').close();}catch(error){alert(`Could not change input: ${error.message}`);}});
+$('#extract-staff-layout').addEventListener('click',()=>extractChosenStaffLayout().catch(error=>alert(`Could not extract the staff layout: ${error.message}`)));
+$('#recognize-source-content').addEventListener('click',()=>{selectPipelineOperation('recognize-source-content');$('#source-stage-title').textContent='Source-content recognition';$('#source-stage-description').textContent='Recognition results, confidence, and warnings will appear here.';showSourcePanel('recognition');const review=$('#source-recognition-summary');review.classList.add('has-result');review.innerHTML='<strong>Staff layout accepted; symbol recognition is ready</strong><span>The symbol-recognition engine is the next implementation stage. No notes, lyrics, or other symbols have been inferred or written yet.</span>';});
+document.querySelectorAll('.major-tab').forEach(button=>button.addEventListener('click',()=>showMajorTab(button.dataset.majorTab)));
+$('#new-project').addEventListener('click',()=>$('#new-project-dialog').showModal());
+$('#open-project').addEventListener('click',openProjectFolder);
+$('#delete-project-launcher').addEventListener('click',chooseProjectToDelete);
+$('#create-project').addEventListener('click',createProjectFromDialog);
+$('#project-add-input').addEventListener('click',showProjectInputDialog);
+$('#project-change-input').addEventListener('click',showChangeInputDialog);
+$('#project-delete-input').addEventListener('click',showDeleteInputDialog);
+$('#confirm-delete-input').addEventListener('click',()=>deleteSelectedInput().catch(error=>alert(`Could not delete the input: ${error.message}`)));
+$('#project-input-dialog').addEventListener('cancel',event=>{if(projectSession.requiresInitialInput)event.preventDefault();});
+$('#project-save').addEventListener('click',async()=>{const button=$('#project-save');button.disabled=true;try{await saveProjectSession();}catch(error){alert(`Could not save the project: ${error.message}`);}finally{button.disabled=false;}});
+$('#project-reset').addEventListener('click',()=>resetProjectWorkingState().catch(error=>alert(`Could not reset the working state: ${error.message}`)));
+$('#project-quit').addEventListener('click',()=>{
+  const hasUnsavedWork=state.history.length>0||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null);
+  if(hasUnsavedWork&&!confirm('Close this project and return to Open Project / New Project? Any work not saved in the project manifest or working copy will be discarded.'))return;
+  location.reload();
 });
+$('#confirm-project-delete').addEventListener('click',()=>deleteProjectSession().catch(error=>alert(`Could not delete the project: ${error.message}`)));
 $('#start-entry-button').addEventListener('click', () => { $('#editor').classList.remove('hidden'); $('#jianpu-input').focus(); });
 $('#load-hymn-button').addEventListener('click', loadHymnFromDisplay);
 $('#hymn-verse').addEventListener('change', fillSelectedHymnLyrics);
 loadHymnCatalog();
-$('#apply-jianpu-button').addEventListener('click', buildDirectEntryXml);
+$('#apply-jianpu-button').addEventListener('click', updateNotationPreviewFromJianpu);
+$('#jianpu-input').addEventListener('input', updateJianpuPairCheck);
+updateJianpuPairCheck();
 $('#prepare-english-button').addEventListener('click', prepareEnglishSyllables);
-$('#staff-photo-input').addEventListener('change', event=>{ const file=event.target.files[0]; if(file) loadStaffPhoto(file); });
-document.querySelectorAll('input[name="staff-photo-preview"]').forEach(control=>control.addEventListener('change',event=>drawStaffPhotoReview(event.target.value)));
-$('#show-staff-regions').addEventListener('change',()=>drawStaffPhotoReview(document.querySelector('input[name="staff-photo-preview"]:checked')?.value||'cleaned'));
+$('#show-staff-regions').addEventListener('change',drawStaffPhotoReview);
 $('#accept-staff-photo').addEventListener('click',acceptStaffPhoto);
-$('#choose-another-staff-photo').addEventListener('click',()=>$('#staff-photo-input').click());
-$('#review-extracted-regions').addEventListener('click',reviewExtractedStaffRegions);
 $('#generate-soprano-button').addEventListener('click', generateSopranoFromJianpu);
 $('#apply-staff-operation').addEventListener('click', applyStaffOperation);
 $('#beam-staff-notes').addEventListener('click', () => beginStaffBeamOperation('beam'));
@@ -2114,7 +2652,7 @@ $('#photo-conflict-popover').addEventListener('mouseleave', () => { photoConflic
 document.addEventListener('click', event => { if (!event.target.closest('.photo-conflict-popover,.photo-conflict-indicator')) hidePhotoConflictPopover(true); });
 $('#workspace-undo-button').addEventListener('click', undo);
 $('#workspace-redo-button').addEventListener('click', redo);
-$('#save-button').addEventListener('click', saveWorkingCopy);
+$('#save-button').addEventListener('click',async()=>{const button=$('#save-button');button.disabled=true;try{await saveProjectSession();}catch(error){$('#status').textContent=`Could not save the project working MusicXML: ${error.message}`;}finally{button.disabled=false;}});
 $('#export-button').addEventListener('click', exportXml);
 $('#export-review-button').addEventListener('click', exportReview);
 $('#duration-select').addEventListener('change', event => setDuration(Number(event.target.value)));
@@ -2130,9 +2668,12 @@ $('#symbol-operation').addEventListener('change', updateGenericControls);
 $('#apply-symbol-operation').addEventListener('click', applyGenericOperation);
 updateGenericControls();
 const keySignaturePicker = setupKeySignaturePicker();
-$('#measure-width-slider').addEventListener('input', () => applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)));
-$('#symbol-width-slider').addEventListener('input', () => applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)));
-$('#measures-per-line').addEventListener('change', () => applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)));
+$('#measure-width-slider').addEventListener('input', () => {
+  state.measureWidths.clear(); allMeasureWidthChanging = false; $('#all-measure-width-value').textContent = 'Default'; $('#all-measure-width-slider').value = $('#measure-width-slider').value;
+  applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)); if (state.measures.length) render();
+});
+$('#symbol-width-slider').addEventListener('input', () => { applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)); if (state.measures.length) render(); });
+$('#measures-per-line').addEventListener('change', () => { applySpacing(Number($('#measure-width-slider').value), Number($('#symbol-width-slider').value)); if (state.measures.length) render(); });
 $('#reset-spacing-button').addEventListener('click', () => {
   if (state.measureWidths.size) recordChange();
   state.measureWidths.clear(); allMeasureWidthChanging = false;
@@ -2142,21 +2683,49 @@ $('#reset-spacing-button').addEventListener('click', () => {
   if (state.measures.length) render();
   $('#status').textContent = 'Spacing reset, including all individual measure-window widths.';
 });
-$('#all-measure-width-slider').addEventListener('input', event => applyAllMeasureWidths(Number(event.target.value)));
+$('#all-measure-width-slider').addEventListener('input', event => { applyAllMeasureWidths(Number(event.target.value)); if (state.measures.length) render(); });
 $('#all-measure-width-slider').addEventListener('change', () => { allMeasureWidthChanging = false; render(); });
 loadSpacing();
 new ResizeObserver(entries => {
   const workspace = entries[0]?.target; if (!workspace?.style.width && !workspace?.style.height) return;
   const box = workspace.getBoundingClientRect(); state.containerSize = { width: Math.round(box.width), height: Math.round(box.height) };
+  if (state.measures.length) scheduleStaffRealignment();
 }).observe($('.workspace'));
+function resizeWorkspaceTo(width, height) {
+  applyContainerSize({ width, height });
+  if (state.measures.length) scheduleStaffRealignment();
+}
+const workspaceResizeHandle = $('#workspace-resize-handle');
+workspaceResizeHandle.addEventListener('pointerdown', event => {
+  event.preventDefault();
+  const workspace = $('.workspace');
+  const start = { x: event.clientX, y: event.clientY, width: workspace.offsetWidth, height: workspace.offsetHeight };
+  workspaceResizeHandle.setPointerCapture(event.pointerId);
+  const move = pointer => resizeWorkspaceTo(start.width + (pointer.clientX - start.x) / uiZoom, start.height + (pointer.clientY - start.y) / uiZoom);
+  const finish = pointer => {
+    workspaceResizeHandle.removeEventListener('pointermove', move);
+    workspaceResizeHandle.removeEventListener('pointerup', finish);
+    workspaceResizeHandle.removeEventListener('pointercancel', finish);
+    if (workspaceResizeHandle.hasPointerCapture(pointer.pointerId)) workspaceResizeHandle.releasePointerCapture(pointer.pointerId);
+  };
+  workspaceResizeHandle.addEventListener('pointermove', move);
+  workspaceResizeHandle.addEventListener('pointerup', finish);
+  workspaceResizeHandle.addEventListener('pointercancel', finish);
+});
+workspaceResizeHandle.addEventListener('keydown', event => {
+  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+  event.preventDefault();
+  const workspace = $('.workspace'), step = event.shiftKey ? 50 : 10;
+  resizeWorkspaceTo(workspace.offsetWidth + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0), workspace.offsetHeight + (event.key === 'ArrowDown' ? step : event.key === 'ArrowUp' ? -step : 0));
+});
 window.addEventListener('resize', scheduleStaffRealignment);
 document.addEventListener('keydown', event => {
-  if (state.activeLanguage !== '2' || !state.selectedStaffNoteId || !['Delete', 'Backspace'].includes(event.key) || event.target.matches('input, textarea, select')) return;
+  if (state.activeLanguage !== '2' || !state.selectedStaffNoteId || !['Delete', 'Backspace'].includes(event.key) || event.target.matches('input, textarea, select, [contenteditable]')) return;
   const note = selectedStaffNote(); if (!note) return; event.preventDefault(); recordChange(); removeStaffNote(note); $('#status').textContent = 'Selected staff note deleted.'; render();
 });
 document.addEventListener('keydown', event => {
   if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'z') return;
-  if (event.target.matches('textarea, input')) return;
+  if (event.target.matches('textarea, input, [contenteditable]')) return;
   event.preventDefault();
   event.shiftKey ? redo() : undo();
 });

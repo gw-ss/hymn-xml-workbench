@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Hymn Photo Dust Cleaner</title>
-  <link rel="stylesheet" href="photo-cleaner.css?v=20260901-file-subpanes-1">
+  <link rel="stylesheet" href="photo-cleaner.css?v=20260902-parallel-tools-5">
 </head>
 <body>
   <main>
@@ -17,12 +17,12 @@
     </header>
 
     <section class="controls" aria-label="Cleanup controls">
-      <section class="control-pane file-operations" aria-labelledby="file-operations-heading">
-        <h2 id="file-operations-heading">Image file operations</h2>
+      <section class="file-operations" aria-label="Image versions and prepared files">
         <section class="file-subpane load-subpane" aria-labelledby="load-photo-heading">
-          <h3 id="load-photo-heading">Load and preview</h3>
+          <h3 id="load-photo-heading">Image versions</h3>
+          <strong id="loaded-source-name">No project photo loaded</strong>
           <fieldset>
-            <legend>Preview</legend>
+            <legend>View</legend>
             <label><input type="radio" name="preview" value="cleaned" checked> Cleaned</label>
             <label><input type="radio" name="preview" value="original"> Straightened original</label>
           </fieldset>
@@ -31,8 +31,9 @@
           </label>
         </section>
         <section class="file-subpane export-subpane" aria-labelledby="export-photo-heading">
-          <h3 id="export-photo-heading">Export files</h3>
+          <h3 id="export-photo-heading">Prepared files</h3>
           <div class="export-stack">
+            <button id="save-prepared" class="embedded-only" type="button" disabled>Save latest working image</button>
             <button id="download" type="button" disabled>Export cleaned PNG</button>
             <button id="download-original" type="button" disabled>Export straightened original</button>
           </div>
@@ -44,14 +45,16 @@
           <label class="check-control"><input id="protect-symbols" type="checkbox" checked> Preserve original symbol detail</label>
           <label class="check-control"><input id="remove-background" type="checkbox" checked> Remove uneven paper background</label>
         </div>
-        <div class="eraser-control" role="group" aria-label="Manual photo eraser">
-          <strong>Manual eraser</strong>
-          <div><button id="toggle-eraser" type="button" class="secondary" disabled aria-pressed="false">Eraser off</button><label>Shape <select id="eraser-shape" disabled><option value="circle" selected>Circle</option><option value="square">Square</option></select></label><label>Size <select id="eraser-size" disabled><option value="8">8 px</option><option value="16">16 px</option><option value="32" selected>32 px</option><option value="64">64 px</option><option value="96">96 px</option></select></label><button id="undo-eraser" type="button" class="secondary" disabled>Undo erase</button></div>
-          <small>Turn on, then drag across gray areas, dust, or unwanted black spots. Erased pixels become white.</small>
-        </div>
-        <div class="rotation-control" role="group" aria-label="Photo rotation">
-          <strong>Straighten photo</strong>
-          <div><button id="rotate-left" type="button" class="secondary" disabled>↶ 0.2°</button><output id="rotation-value">0.0°</output><button id="rotate-right" type="button" class="secondary" disabled>0.2° ↷</button><button id="reset-rotation" type="button" class="secondary" disabled>Reset</button></div>
+        <div class="photo-tool-grid">
+          <div class="eraser-control photo-tool-pane" role="group" aria-label="Manual photo eraser">
+            <strong>Manual eraser</strong>
+            <div><button id="toggle-eraser" type="button" class="secondary" disabled aria-pressed="false">Eraser off</button><label>Shape <select id="eraser-shape" disabled><option value="circle" selected>Circle</option><option value="square">Square</option></select></label><label>Size <select id="eraser-size" disabled><option value="8">8 px</option><option value="16">16 px</option><option value="32" selected>32 px</option><option value="64">64 px</option><option value="96">96 px</option></select></label><button id="undo-eraser" type="button" class="secondary" disabled>Undo erase</button></div>
+            <small>Turn on, then drag across gray areas, dust, or unwanted black spots. Erased pixels become white.</small>
+          </div>
+          <div class="rotation-control photo-tool-pane" role="group" aria-label="Photo rotation">
+            <strong>Straighten photo</strong>
+            <div><button id="rotate-left" type="button" class="secondary" disabled>↶ 0.2°</button><output id="rotation-value">0.0°</output><button id="rotate-right" type="button" class="secondary" disabled>0.2° ↷</button><button id="reset-rotation" type="button" class="secondary" disabled>Reset</button></div>
+          </div>
         </div>
       </section>
     </section>
@@ -63,6 +66,6 @@
       <strong>Cleanup:</strong> paper-background normalization and conservative micro-dust rejection are automatic. Symbol protection keeps grayscale and antialiased ink detail. The cleaner deliberately does not redraw staff lines, beams, barlines, lyrics, or symbols; Oemer and the Workbench recognition stages receive their original geometry.
     </aside>
   </main>
-  <script type="module" src="photo-cleaner.js?v=20260901-eraser-cursor-reset-1"></script>
+  <script type="module" src="photo-cleaner.js?v=20260902-modern-heic-decode-5"></script>
 </body>
 </html>

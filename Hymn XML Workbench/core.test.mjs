@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { assessPhotoBeamDirections, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, staffBeamEndpointYs, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
+import { applyJianpuOctaveModifier, assessPhotoBeamDirections, chooseChineseLyricAnchors, chooseStaffBeamRange, clampMeasureWidth, combineCompatibleStaffBeamGroups, durationClass, jianpuDurationSuffix, jianpuForMidi, jianpuForSpelledPitch, jianpuParenthesisIssues, jianpuSymbolTime, measureCapacityInQuarterNotes, measureCapacityMeter, measureContentScale, musicXmlTypeForBeats, normalizePhotoConflicts, normalizeSpacingSettings, parseJianpuMeterMarker, pickupControlsForDuration, pickupDurationInQuarterNotes, pitchFromMidi, staffBeamEndpointYs, tokenizeChinese, tokenizeEnglish, unresolvedPhotoConflicts, validatePickupDuration } from './core.mjs';
 
 const hymn1PhotoBeams = JSON.parse(readFileSync(new URL('./test-fixtures/hymn-1-photo-beams.json', import.meta.url), 'utf8'));
 
@@ -48,6 +48,25 @@ test('MusicXML durations convert back to Direct-Entry suffixes', () => {
   assert.equal(jianpuDurationSuffix(1.5), '·');
   assert.equal(jianpuDurationSuffix(3), '−−');
   assert.throws(() => jianpuDurationSuffix(1.25));
+});
+
+test('Jianpu meter markers and timed-symbol anchors are explicit', () => {
+  assert.deepEqual(parseJianpuMeterMarker('{ 6 / 8 }531'), { beats: 6, beatType: 8, length: 9 });
+  assert.equal(parseJianpuMeterMarker('{0/4}'), null);
+  assert.equal(parseJianpuMeterMarker('{3/3}'), null);
+  assert.equal(jianpuSymbolTime(0, 4), .5);
+  assert.equal(jianpuSymbolTime(.5, 4), 1);
+  assert.equal(jianpuSymbolTime(0, 8), .25);
+});
+test('repeated Jianpu octave modifiers accumulate exactly', () => {
+  const raised = { octave: 0 }; applyJianpuOctaveModifier(raised, "'"); applyJianpuOctaveModifier(raised, "'");
+  const lowered = { octave: 0 }; applyJianpuOctaveModifier(lowered, ','); applyJianpuOctaveModifier(lowered, ',');
+  assert.equal(raised.octave, 2);
+  assert.equal(lowered.octave, -2);
+  assert.equal(applyJianpuOctaveModifier(raised, '’'), true);
+  assert.equal(raised.octave, 3);
+  assert.equal(applyJianpuOctaveModifier(lowered, '，'), true);
+  assert.equal(lowered.octave, -3);
 });
 test('Chinese alignment can collapse connected underline groups when the counts match', () => {
   const events = [
@@ -141,6 +160,12 @@ test('saved spacing restores valid controls and defaults invalid or missing valu
   assert.deepEqual(normalizeSpacingSettings({ measureWidth: 418.6, symbolWidth: 37.8, measuresPerLine: 5 }), { measureWidth: 419, symbolWidth: 38, measuresPerLine: '5' });
   assert.deepEqual(normalizeSpacingSettings({ measureWidth: 999, symbolWidth: -4, measuresPerLine: 12 }), { measureWidth: 640, symbolWidth: 0, measuresPerLine: 'auto' });
   assert.deepEqual(normalizeSpacingSettings(), { measureWidth: 320, symbolWidth: 56, measuresPerLine: 'auto' });
+});
+test('Jianpu parenthesis validation locates only unmatched parentheses', () => {
+  assert.equal(jianpuParenthesisIssues('531|s(21)7,|(4/5/)43').size, 0);
+  assert.deepEqual([...jianpuParenthesisIssues('s(45').keys()], [1]);
+  assert.deepEqual([...jianpuParenthesisIssues('45)').keys()], [2]);
+  assert.equal(jianpuParenthesisIssues('|:531|3--:|').size, 0);
 });
 test('measure capacity meter preserves beat divisions and scales mistakes proportionally', () => {
   assert.deepEqual(measureCapacityMeter(4, 4, 1), { status: 'complete', correctPercent: 100, issueStartPercent: 100, issuePercent: 0, dividers: [25, 50, 75] });
