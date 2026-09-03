@@ -353,7 +353,7 @@ function loadEmbeddedStaffLayer() {
     if (profile) {
       state.firstNoteOffsets = new Map(Array.isArray(profile.firstNoteOffsets) ? profile.firstNoteOffsets.map(([measure, offset]) => [Number(measure), Number(offset)]) : []);
       state.measureWidths = new Map(Array.isArray(profile.measureWidths) ? profile.measureWidths.map(([measure, width]) => [Number(measure), clampMeasureWidth(width)]) : []);
-      applyLoadedSpacing(profile.spacing); applyContainerSize(profile.containerSize);
+      applyLoadedSpacing(profile.spacing); applyContainerSize(profile.containerSize,{restoreWidth:false});
       for (const clef of ['treble', 'bass']) state.staffRegisters[clef] = Math.max(-1, Math.min(1, Number(profile.staffRegisters?.[clef]) || 0));
     }
     if (Array.isArray(data.englishTokens) && data.englishTokens.length) state.tokens['2'] = data.englishTokens;
@@ -1689,11 +1689,13 @@ function applyLoadedSpacing(saved = {}) {
   applySpacing(measureWidth, symbolWidth, measuresPerLine);
 }
 
-function applyContainerSize(saved = null) {
+function applyContainerSize(saved = null,{restoreWidth=true}={}) {
   const workspace = $('.workspace'), width = Number(saved?.width), height = Number(saved?.height);
-  if (!Number.isFinite(width) || !Number.isFinite(height)) {
+  if (!Number.isFinite(height)) {
     state.containerSize = null; workspace.style.width = ''; workspace.style.height = ''; workspace.classList.remove('user-sized'); return;
   }
+  if(!restoreWidth){state.containerSize=null;workspace.style.width='';workspace.classList.remove('user-sized');workspace.style.height=`${Math.max(480,Math.min(3000,Math.round(height)))}px`;return;}
+  if(!Number.isFinite(width)){state.containerSize=null;workspace.style.width='';workspace.style.height='';workspace.classList.remove('user-sized');return;}
   state.containerSize = { width: Math.max(320, Math.min(3000, Math.round(width))), height: Math.max(480, Math.min(3000, Math.round(height))) };
   workspace.classList.add('user-sized'); workspace.style.width = `${state.containerSize.width}px`; workspace.style.height = `${state.containerSize.height}px`;
 }
