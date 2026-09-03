@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hymn MusicXML Workbench</title>
-    <link rel="stylesheet" href="./styles.css?v=20260902-unified-save-warning-86" />
+    <link rel="stylesheet" href="./styles.css?v=20260902-persistent-save-summary-87" />
   </head>
   <body>
     <header class="topbar">
@@ -20,7 +20,7 @@
         <button id="delete-project-launcher" class="danger"><strong>Delete Project(s)</strong><span>Delete one hymn project or all hymn projects in a selected collection.</span></button>
       </section>
       <section id="file-level-actions" class="file-level-actions card hidden" aria-label="Working file operations"><strong>Working file</strong><button id="project-save"><span aria-hidden="true">💾</span> Save</button><button id="project-add-input" class="source-file-action">Add Input</button><button id="project-change-input" class="source-file-action">Change Input</button><button id="project-delete-input" class="source-file-action danger">Delete Input</button></section>
-      <button id="unsaved-save-warning" class="unsaved-save-warning hidden" type="button"><span>Unsaved changes. Click here to save.</span><span class="save-warning-icon" aria-hidden="true">💾</span></button>
+      <button id="unsaved-save-warning" class="save-summary" type="button" aria-label="Save project files"><span><strong id="unsaved-change-message" class="hidden">Unsaved changes. </strong><span>Save updates the working MusicXML, revised MusicXML, alignment JSON, and project state.</span></span><span class="save-warning-icon" aria-hidden="true">💾</span></button>
       <p id="status" class="status project-status" role="status" aria-live="polite"></p>
       <nav id="major-tabs" class="major-tabs hidden" aria-label="Workbench areas">
         <button class="major-tab active" data-major-tab="source" aria-selected="true">Source Processing</button>
@@ -209,6 +209,6 @@
       </form>
     </dialog>
     <div id="photo-conflict-popover" class="photo-conflict-popover hidden" role="dialog" aria-label="Staff-photo conflicts"></div>
-    <script type="module" src="./app.js?v=20260902-unified-save-warning-86"></script>
+    <script type="module" src="./app.js?v=20260902-persistent-save-summary-87"></script>
   </body>
 </html>

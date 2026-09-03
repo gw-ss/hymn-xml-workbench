@@ -14,6 +14,8 @@ test('project, file, and tab controls remain present', () => {
   for (const id of ['open-project', 'new-project', 'delete-project-launcher', 'project-save', 'unsaved-save-warning', 'project-add-input', 'project-change-input', 'project-delete-input', 'project-quit', 'major-tabs', 'source-processing-tab', 'editor-tab']) assert.equal(hasId(id), true, `missing #${id}`);
   for (const removed of ['project-reset', 'save-button', 'export-button', 'export-review-button']) assert.equal(hasId(removed), false, `obsolete #${removed}`);
   assert.doesNotMatch(html, /Check and save/);
+  assert.match(html, /Save updates the working MusicXML, revised MusicXML, alignment JSON, and project state/);
+  assert.equal(hasId('unsaved-change-message'), true);
 });
 
 test('development server and repository utility commands remain available', () => {
@@ -220,6 +222,8 @@ test('project Save writes working, revised, and alignment artifacts and clears i
   assert.match(app, /output\/reports\/\$\{reviewName\}/);
   assert.match(app, /state\.history=\[\];state\.future=\[\];updateUnsavedIndicator\(\)/);
   assert.match(app, /unsaved-save-warning/);
+  assert.match(app, /summary\.classList\.toggle\('dirty',dirty\)/);
+  assert.match(app, /warning\.classList\.toggle\('hidden',!dirty\)/);
   assert.doesNotMatch(app, /function resetProjectWorkingState|function saveWorkingCopy|function exportXml|function exportReview/);
 });
 

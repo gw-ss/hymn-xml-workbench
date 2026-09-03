@@ -21,9 +21,10 @@ button { cursor:pointer; }
 .file-level-actions button { padding:8px 12px; border:1px solid var(--line); border-radius:8px; color:var(--forest); background:#f8f4eb; font-weight:800; }
 .file-level-actions .danger { color:#84241f; border-color:#d9aaa6; background:#fff7f6; }
 .file-level-actions .tab-inapplicable { display:none; }
-.unsaved-save-warning { display:flex; align-items:center; justify-content:space-between; width:100%; margin:-4px 0 12px; padding:9px 12px; border:1px solid #df9c99; border-radius:6px; color:#b4231d; background:#f9dddd; font-weight:700; text-align:left; }
-.unsaved-save-warning:hover,.unsaved-save-warning:focus-visible { background:#f6cdca; outline:2px solid #b4231d40; outline-offset:1px; }
-.unsaved-save-warning.hidden { display:none; }
+.save-summary { display:flex; align-items:center; justify-content:space-between; width:100%; margin:-4px 0 12px; padding:9px 12px; border:1px solid #b9c9c2; border-radius:6px; color:var(--forest); background:#f1faf5; font-weight:650; text-align:left; }
+.save-summary:hover,.save-summary:focus-visible { background:#e4f3eb; outline:2px solid #315f8640; outline-offset:1px; }
+.save-summary.dirty { border-color:#df9c99; color:#b4231d; background:#f9dddd; }
+.save-summary.dirty:hover,.save-summary.dirty:focus-visible { background:#f6cdca; outline-color:#b4231d40; }
 .save-warning-icon { margin-left:14px; font-size:1.15rem; }
 .project-status { margin:-4px 0 10px; }
 main { margin-top:24px; margin-bottom:48px; }

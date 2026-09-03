@@ -2289,7 +2289,7 @@ function reviewExtractedStaffRegions() {
 const emptyProcessingState=()=>({schemaVersion:1,activeInput:null,workingImage:null,preparation:{status:'not-started',updatedAt:null},layout:{status:'not-started',updatedAt:null,data:null},recognition:{status:'not-started',updatedAt:null},review:{status:'not-started',updatedAt:null}});
 let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
 function projectHasUnsavedWork(){return Boolean(projectSession.name&&(projectSession.preparationDirty||state.history.length||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null)));}
-function updateUnsavedIndicator(){const warning=$('#unsaved-save-warning');if(warning)warning.classList.toggle('hidden',!projectHasUnsavedWork());}
+function updateUnsavedIndicator(){const summary=$('#unsaved-save-warning'),warning=$('#unsaved-change-message'),dirty=projectHasUnsavedWork();if(summary){summary.classList.toggle('dirty',dirty);summary.setAttribute('aria-label',dirty?'Unsaved changes. Save project files':'Save project files');}if(warning)warning.classList.toggle('hidden',!dirty);}
 let sourcePreviewUrl=null;
 let deleteParentHandle=null;
 let deleteProjectTargets=new Map();
