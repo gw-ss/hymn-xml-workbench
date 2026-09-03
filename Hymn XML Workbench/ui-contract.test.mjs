@@ -226,6 +226,15 @@ test('project Save writes working, revised, and alignment artifacts and clears i
   assert.doesNotMatch(app, /function resetProjectWorkingState|function saveWorkingCopy|function exportXml|function exportReview/);
 });
 
+test('opening a saved project establishes a clean baseline after restoration finishes', () => {
+  const loader = app.match(/async function loadProjectEditorDraft\(\)[\s\S]*?\n\}/)?.[0] || '';
+  assert.match(loader, /const restoredLayers=await loadMusicXmlFile\(file\)/);
+  assert.match(loader, /projectSession\.savedSnapshot=snapshot\(\)/);
+  assert.match(loader, /projectSession\.restoredLayersDirty=Boolean\(restoredLayers\)/);
+  assert.match(loader, /updateUnsavedIndicator\(\)/);
+  assert.match(app, /return restoredMissingLyrics \|\| restoredChineseAlignment/);
+});
+
 test('photo preparation retains its essential controls', () => {
   for (const id of ['protect-symbols', 'remove-background', 'toggle-eraser', 'eraser-shape', 'eraser-size', 'undo-eraser', 'rotate-left', 'rotate-right', 'reset-rotation', 'preview']) assert.match(cleaner, new RegExp(`id=["']${id}["']`), `missing photo cleaner #${id}`);
 });

@@ -2287,8 +2287,8 @@ function reviewExtractedStaffRegions() {
 }
 
 const emptyProcessingState=()=>({schemaVersion:1,activeInput:null,workingImage:null,preparation:{status:'not-started',updatedAt:null},layout:{status:'not-started',updatedAt:null,data:null},recognition:{status:'not-started',updatedAt:null},review:{status:'not-started',updatedAt:null}});
-let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
-function projectHasUnsavedWork(){return Boolean(projectSession.name&&(projectSession.preparationDirty||state.history.length||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null)));}
+let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,restoredLayersDirty:false,requiresInitialInput:false,addControlsVisible:false};
+function projectHasUnsavedWork(){return Boolean(projectSession.name&&(projectSession.preparationDirty||projectSession.restoredLayersDirty||state.history.length||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null)));}
 function updateUnsavedIndicator(){const save=$('#project-save'),message=$('#project-save-message'),dirty=projectHasUnsavedWork();if(save){save.classList.toggle('dirty',dirty);save.setAttribute('aria-label',dirty?'Unsaved changes. Save project files':'Save project files');}if(message)message.textContent=dirty?'Unsaved changes. Click here to save.':'Save updates the working MusicXML, revised MusicXML, alignment JSON, and project state.';}
 let sourcePreviewUrl=null;
 let deleteParentHandle=null;
@@ -2327,20 +2327,20 @@ function showSourcePanel(name){
 }
 
 function activateProject(name,{handle=null,parentHandle=null,requiresInitialInput=false}={}) {
-  projectSession={name,handle,parentHandle,savedSnapshot:state.xml?snapshot():null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput,addControlsVisible:requiresInitialInput};
+  projectSession={name,handle,parentHandle,savedSnapshot:state.xml?snapshot():null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,restoredLayersDirty:false,requiresInitialInput,addControlsVisible:requiresInitialInput};
   $('#project-name-display').textContent=name;
   setProjectWorkspaceVisible(!requiresInitialInput);
   if(!requiresInitialInput)showMajorTab('source'); refreshSourceFileList();
 }
 
 function clearProjectSession() {
-  projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
+  projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,restoredLayersDirty:false,requiresInitialInput:false,addControlsVisible:false};
   $('#project-open-actions').classList.add('hidden');$('#file-level-actions').classList.add('hidden'); $('#major-tabs').classList.add('hidden'); $('#source-processing-tab').classList.add('hidden'); $('#editor-tab').classList.add('hidden'); $('#project-launcher').classList.remove('hidden');
 }
 
 function clearProjectWorkspace() {
   Object.assign(state,{xml:null,filename:'',events:[],measures:[],fifths:0,activeLanguage:'1',tokens:{1:[],2:[]},assignments:{1:new Map(),2:new Map()},staffNotes:[],staffAssignments:new Map(),photoConflicts:[],staffPhoto:null,staffRegisters:{treble:0,bass:0},spacing:{measureWidth:320,symbolWidth:56,measuresPerLine:'auto'},containerSize:null,layoutProfiles:{},firstNoteOffsets:new Map(),measureWidths:new Map(),nextStaffNoteId:1,selectedStaffNoteId:null,staffBeamMode:null,staffBeamStartId:null,selectedTokenId:null,shiftAnchorTokenId:null,selectedEventId:null,selectedContinuation:null,history:[],future:[]});
-  projectSession.sources=[]; projectSession.savedSources=[]; projectSession.activeSource=null;projectSession.processing=emptyProcessingState();projectSession.preparationDirty=false;projectSession.requiresInitialInput=true;projectSession.addControlsVisible=true; projectSession.savedSnapshot=null; staffPhotoReviewData=null;
+  projectSession.sources=[]; projectSession.savedSources=[]; projectSession.activeSource=null;projectSession.processing=emptyProcessingState();projectSession.preparationDirty=false;projectSession.restoredLayersDirty=false;projectSession.requiresInitialInput=true;projectSession.addControlsVisible=true; projectSession.savedSnapshot=null; staffPhotoReviewData=null;
   $('#file-input').value=''; $('#source-photo-input').value=''; $('#source-musicxml-input').value=''; $('#source-reference-input').value='';
   $('#jianpu-input').value=''; updateJianpuPairCheck(); $('#zh-input').value=''; $('#en-input').value=''; $('#file-summary').textContent='No score loaded'; $('#editor').classList.add('hidden');
   $('#staff-photo-status').textContent='Choose a photo above to begin.'; $('#staff-photo-editor-result').classList.add('hidden');$('#extract-staff-layout').disabled=true;$('#recognize-source-content').disabled=true;$('#review-recognition').disabled=true;selectPipelineOperation('prepare-photo');
@@ -2408,8 +2408,10 @@ async function loadProjectEditorDraft(){
   if(!projectSession.handle)return false;
   try{
     const working=await projectSession.handle.getDirectoryHandle('working'),draft=await working.getDirectoryHandle('draft'),handle=await draft.getFileHandle(`${projectSession.name}-working.musicxml`),file=await handle.getFile();
-    await loadMusicXmlFile(file);
+    const restoredLayers=await loadMusicXmlFile(file);
     projectSession.savedSnapshot=snapshot();
+    projectSession.restoredLayersDirty=Boolean(restoredLayers);
+    updateUnsavedIndicator();
     return true;
   }catch(error){
     if(error.name!=='NotFoundError')console.warn('Could not restore the saved Hymn Editor working file',error);
@@ -2539,7 +2541,7 @@ async function saveProjectSession() {
   }
   await saveProcessingState();
   if(projectSession.handle){const manifest={schemaVersion:1,name:projectSession.name,savedAt:new Date().toISOString(),inputs:manifestSources(),activeInput:projectSession.activeSource,stage:state.xml?'editor-working':'source-processing'};await writeProjectFile(projectSession.handle,'hymn-project.json',JSON.stringify(manifest,null,2)+'\n');}
-  projectSession.savedSnapshot=state.xml?snapshot():null; projectSession.savedSources=structuredClone(manifestSources());state.history=[];state.future=[];updateUnsavedIndicator();
+  projectSession.savedSnapshot=state.xml?snapshot():null; projectSession.savedSources=structuredClone(manifestSources());projectSession.restoredLayersDirty=false;state.history=[];state.future=[];updateUnsavedIndicator();
   $('#status').textContent=savedEditorPath?`Saved ${savedEditorPath}, ${savedOutputPath}, and ${savedReviewPath}.`:'Project source-processing state saved.';
   return true;
 }
@@ -2569,6 +2571,7 @@ async function loadMusicXmlFile(file) {
   $('#key-label').textContent = `1 = ${key}`; $('#file-summary').textContent = `${file.name} · ${state.measures.length} measures · ${state.events.length} melody events · 1 = ${key}`;
   $('#editor').classList.remove('hidden'); render();
   if (restoredMissingLyrics || restoredChineseAlignment) $('#status').textContent = `${restoredMissingLyrics ? 'Missing Chinese or English text was restored from the Hymn Display database. ' : ''}${restoredChineseAlignment ? 'Chinese lyrics were aligned to the existing Jianpu. ' : ''}Save the working copy again to preserve the restored layers.`;
+  return restoredMissingLyrics || restoredChineseAlignment;
 }
 $('#file-input').addEventListener('change', event => loadMusicXmlFile(event.target.files[0]));
 $('#source-musicxml-input').addEventListener('change',async event=>{const file=event.target.files[0];if(!file)return;try{const handle=await copySourceIntoProject(file,'MusicXML');if(!handle)return;const source={name:file.name,kind:'MusicXML',path:`input/musicxml/${file.name}`,handle};projectSession.sources.push(source);await openProjectSource(source,{select:true});}catch(error){alert(`Could not add ${file.name}: ${error.message}`);}});
