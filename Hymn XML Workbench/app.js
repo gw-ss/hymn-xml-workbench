@@ -2289,7 +2289,7 @@ function reviewExtractedStaffRegions() {
 const emptyProcessingState=()=>({schemaVersion:1,activeInput:null,workingImage:null,preparation:{status:'not-started',updatedAt:null},layout:{status:'not-started',updatedAt:null,data:null},recognition:{status:'not-started',updatedAt:null},review:{status:'not-started',updatedAt:null}});
 let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
 function projectHasUnsavedWork(){return Boolean(projectSession.name&&(projectSession.preparationDirty||state.history.length||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null)));}
-function updateUnsavedIndicator(){const summary=$('#unsaved-save-warning'),warning=$('#unsaved-change-message'),dirty=projectHasUnsavedWork();if(summary){summary.classList.toggle('dirty',dirty);summary.setAttribute('aria-label',dirty?'Unsaved changes. Save project files':'Save project files');}if(warning)warning.classList.toggle('hidden',!dirty);}
+function updateUnsavedIndicator(){const save=$('#project-save'),message=$('#project-save-message'),dirty=projectHasUnsavedWork();if(save){save.classList.toggle('dirty',dirty);save.setAttribute('aria-label',dirty?'Unsaved changes. Save project files':'Save project files');}if(message)message.textContent=dirty?'Unsaved changes. Click here to save.':'Save updates the working MusicXML, revised MusicXML, alignment JSON, and project state.';}
 let sourcePreviewUrl=null;
 let deleteParentHandle=null;
 let deleteProjectTargets=new Map();
@@ -2589,7 +2589,6 @@ $('#project-delete-input').addEventListener('click',showDeleteInputDialog);
 $('#confirm-delete-input').addEventListener('click',()=>deleteSelectedInput().catch(error=>alert(`Could not delete the input: ${error.message}`)));
 $('#project-input-dialog').addEventListener('cancel',event=>{if(projectSession.requiresInitialInput)event.preventDefault();});
 $('#project-save').addEventListener('click',async()=>{const button=$('#project-save');button.disabled=true;try{await saveProjectSession();}catch(error){alert(`Could not save the project: ${error.message}`);}finally{button.disabled=false;}});
-$('#unsaved-save-warning').addEventListener('click',()=>$('#project-save').click());
 $('#project-quit').addEventListener('click',()=>{
   const hasUnsavedWork=projectHasUnsavedWork();
   if(hasUnsavedWork&&!confirm('Close this project and return to Open Project / New Project? Any work not saved in the project manifest or working copy will be discarded.'))return;
