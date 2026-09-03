@@ -192,6 +192,10 @@ test('resizing the Editor realigns Jianpu, lyrics, guides, and staff notation', 
   assert.match(observer, /state\.containerSize/);
   assert.match(observer, /scheduleStaffRealignment\(\)/);
   assert.match(styles, /\.workspace \{[^}]*max-width:none;[^}]*resize:none;/);
+  assert.match(styles, /\.workspace \{[^}]*width:auto;[^}]*min-width:0;[^}]*justify-self:stretch;/);
+  assert.match(styles, /\.workspace\.user-sized \{[^}]*justify-self:start;/);
+  assert.match(app, /workspace\.classList\.add\('user-sized'\)/);
+  assert.match(app, /workspace\.classList\.remove\('user-sized'\)/);
   assert.match(styles, /\.editor \{[^}]*overflow-x:auto;[^}]*overflow-y:visible;/);
   assert.match(styles, /\.workspace-resize-handle \{[^}]*position:fixed;/);
   assert.match(html, /id="workspace-resize-handle"[^>]*aria-label="Resize notation workspace horizontally and vertically"/);

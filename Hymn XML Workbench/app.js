@@ -1692,10 +1692,10 @@ function applyLoadedSpacing(saved = {}) {
 function applyContainerSize(saved = null) {
   const workspace = $('.workspace'), width = Number(saved?.width), height = Number(saved?.height);
   if (!Number.isFinite(width) || !Number.isFinite(height)) {
-    state.containerSize = null; workspace.style.width = ''; workspace.style.height = ''; return;
+    state.containerSize = null; workspace.style.width = ''; workspace.style.height = ''; workspace.classList.remove('user-sized'); return;
   }
   state.containerSize = { width: Math.max(320, Math.min(3000, Math.round(width))), height: Math.max(480, Math.min(3000, Math.round(height))) };
-  workspace.style.width = `${state.containerSize.width}px`; workspace.style.height = `${state.containerSize.height}px`;
+  workspace.classList.add('user-sized'); workspace.style.width = `${state.containerSize.width}px`; workspace.style.height = `${state.containerSize.height}px`;
 }
 
 function loadSpacing() {
@@ -2648,7 +2648,7 @@ $('#reset-spacing-button').addEventListener('click', () => {
   if (state.measureWidths.size) recordChange();
   state.measureWidths.clear(); allMeasureWidthChanging = false;
   $('#measure-width-slider').value = '320'; $('#all-measure-width-slider').value = '320'; $('#all-measure-width-value').textContent = 'Default';
-  $('#symbol-width-slider').value = '56'; $('#measures-per-line').value = 'auto'; state.containerSize = null; $('.workspace').style.width = ''; $('.workspace').style.height = '';
+  $('#symbol-width-slider').value = '56'; $('#measures-per-line').value = 'auto'; applyContainerSize(null);
   applySpacing(320, 56, 'auto');
   if (state.measures.length) render();
   $('#status').textContent = 'Spacing reset, including all individual measure-window widths.';
