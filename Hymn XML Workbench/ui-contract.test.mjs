@@ -215,6 +215,12 @@ test('Hymn Editor sidebar has complete Chinese and English panes without numbere
   assert.doesNotMatch(editorMarkup, />\s*Step\s+\d/i);
 });
 
+test('notation operation controls remain in document flow instead of covering measures', () => {
+  const styles = readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
+  assert.match(styles, /\.sticky-edit-controls \{[^}]*position:static;/);
+  assert.doesNotMatch(styles, /\.sticky-edit-controls \{[^}]*position:sticky;/);
+});
+
 test('project Save writes working, revised, and alignment artifacts and clears its warning', () => {
   assert.match(app, /working\/draft\/\$\{draftName\}/);
   assert.match(app, /`\$\{projectSession\.name\}-working\.musicxml`/);

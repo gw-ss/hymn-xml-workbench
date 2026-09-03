@@ -189,7 +189,7 @@ textarea { width:100%; resize:vertical; padding:9px; border:1px solid var(--line
 .score-grid.authored-systems .score-system>.measure { width:auto; }
 .score-grid.fixed-columns .score-system { display:grid; grid-template-columns:repeat(var(--measures-per-line),minmax(var(--fixed-measure-width,var(--measure-width)),1fr)); min-width:100%; }
 .score-grid.fixed-columns .measure { width:var(--individual-measure-width,var(--fixed-measure-width,var(--measure-width))); justify-self:start; }
-.sticky-edit-controls { position:sticky; z-index:20; top:12px; padding:1px 0 4px; background:var(--panel); }
+.sticky-edit-controls { position:static; padding:1px 0 4px; background:var(--panel); }
 .note-inspector { margin-top:13px; padding:12px; display:flex; align-items:center; justify-content:space-between; gap:14px; border:1px solid #b9c8d4; border-radius:10px; background:#f1f6fa; }
 .note-inspector.hidden { display:none; }
 .note-inspector small { display:block; color:var(--muted); }
