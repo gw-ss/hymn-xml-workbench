@@ -381,7 +381,7 @@ function restore(snap) {
   applyContainerSize(snap.containerSize);
   render();
 }
-function recordChange() { state.history.push(snapshot()); state.future = []; }
+function recordChange() { state.history.push(snapshot()); state.future = []; updateUnsavedIndicator(); }
 
 function renderPalette() {
   const language = state.activeLanguage;
@@ -1198,6 +1198,7 @@ function render() {
   updateGenericControls();
   $('#workspace-undo-button').disabled = !state.history.length;
   $('#workspace-redo-button').disabled = !state.future.length;
+  updateUnsavedIndicator();
 }
 
 function undo() { if (!state.history.length) return; state.future.push(snapshot()); restore(state.history.pop()); }
@@ -1753,8 +1754,7 @@ function validateScore() {
     const unassigned = state.tokens[language].length - assigned.size;
     if (unassigned > 0) issues.push(`${unassigned} unassigned ${language === '1' ? 'Chinese' : 'English'} token${unassigned === 1 ? '' : 's'}`);
   }
-  const summary = $('#validation-summary'); summary.classList.toggle('warning', Boolean(issues.length));
-  summary.textContent = issues.length ? issues.join(' · ') : `Ready to export · ${state.events.length} melody notes · all lyric tokens assigned`;
+  return issues;
 }
 
 function prepareEnglishSyllables() {
@@ -1784,41 +1784,9 @@ function revisedXml() {
   return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone.documentElement)}\n`;
 }
 
-async function download(content, filename, type) {
-  const blob=new Blob([content],{type});
-  if('showSaveFilePicker'in window){
-    try{const extension=`.${filename.split('.').pop()}`,handle=await window.showSaveFilePicker({suggestedName:filename,startIn:'downloads',types:[{description:type.includes('json')?'JSON':'MusicXML',accept:{[type]:[extension]}}]}),writable=await handle.createWritable();await writable.write(blob);await writable.close();return true;}catch(error){if(error?.name==='AbortError')return false;throw error;}
-  }
-  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.hidden=true;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return true;
-}
-function outputStem(filename) { return filename.replace(/\.(musicxml|xml)$/i, '').replace(/(?:-aligned)+$/i, ''); }
-async function exportXml() { const saved=await download(revisedXml(),outputStem(state.filename)+'-aligned.musicxml','application/vnd.recordare.musicxml+xml');$('#status').textContent=saved?'Revised MusicXML exported.':'Export cancelled; no file was changed.'; }
 function reviewPayload() {
   return { schemaVersion: 7, source: state.filename, keyFifths: state.fifths, environment: currentEnvironmentKey(), sourceLyrics: { zhHant: $('#zh-input').value, en: $('#en-input').value }, layout: currentLayoutProfile(), satb: { notes: state.staffNotes, assignments: [...state.staffAssignments], englishTokens: state.tokens['2'], photoConflicts: state.photoConflicts }, assignments: state.events.map(event => ({ id: event.id, measure: event.measure, beat: event.beat, jianpu: event.isRest ? '0' : jianpuForEvent(event), durationBeats: event.duration, zhHant: assignmentFor('1', event.id)?.text || null, en: assignmentFor('2', event.id)?.text || null })) };
 }
-async function exportReview() {
-  const payload = reviewPayload();
-  const saved=await download(JSON.stringify(payload,null,2)+'\n',outputStem(state.filename)+'-alignment.json','application/json');$('#status').textContent=saved?'Alignment JSON exported.':'Export cancelled; no file was changed.';
-}
-async function saveWorkingCopy() {
-  if (!state.xml || !state.filename) { $('#status').textContent = 'Choose a MusicXML file before saving.'; return; }
-  const button = $('#save-button'); button.disabled = true;
-  try {
-    const save = async overwrite => {
-      const response = await fetch('/api/save', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ filename: state.filename, xml: revisedXml(), review: reviewPayload(), overwrite }) });
-      return { response, result: await response.json() };
-    };
-    let { response, result } = await save(false);
-    if (response.status === 409) {
-      if (!confirm(`${result.xmlPath} already exists. Replace the existing saved working copy?`)) { $('#status').textContent = 'Save cancelled; the existing file was not changed.'; return; }
-      ({ response, result } = await save(true));
-    }
-    if (!response.ok) throw new Error(result.error || `Save failed (${response.status})`);
-    $('#status').textContent = `Saved ${result.xmlPath} and ${result.reviewPath}`;
-  } catch (error) { $('#status').textContent = `Could not save: ${error.message}`; }
-  finally { button.disabled = false; }
-}
-
 function selectedHymnLyrics() {
   const hymn = state.hymnRecord; if (!hymn) return null;
   const ordinal = Number($('#hymn-verse').value);
@@ -2320,6 +2288,8 @@ function reviewExtractedStaffRegions() {
 
 const emptyProcessingState=()=>({schemaVersion:1,activeInput:null,workingImage:null,preparation:{status:'not-started',updatedAt:null},layout:{status:'not-started',updatedAt:null,data:null},recognition:{status:'not-started',updatedAt:null},review:{status:'not-started',updatedAt:null}});
 let projectSession={name:null,handle:null,parentHandle:null,savedSnapshot:null,sources:[],savedSources:[],activeSource:null,processing:emptyProcessingState(),preparationDirty:false,requiresInitialInput:false,addControlsVisible:false};
+function projectHasUnsavedWork(){return Boolean(projectSession.name&&(projectSession.preparationDirty||state.history.length||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null)));}
+function updateUnsavedIndicator(){const warning=$('#unsaved-save-warning');if(warning)warning.classList.toggle('hidden',!projectHasUnsavedWork());}
 let sourcePreviewUrl=null;
 let deleteParentHandle=null;
 let deleteProjectTargets=new Map();
@@ -2336,6 +2306,7 @@ function setProjectWorkspaceVisible(visible){
   $('#file-level-actions').classList.toggle('hidden',!visible);
   $('#major-tabs').classList.toggle('hidden',!visible);
   if(!visible){$('#source-processing-tab').classList.add('hidden');$('#editor-tab').classList.add('hidden');}
+  updateUnsavedIndicator();
 }
 
 function showMajorTab(name) {
@@ -2449,7 +2420,7 @@ async function loadProjectEditorDraft(){
 window.addEventListener('message',async event=>{
   if(event.source!==$('#photo-cleaner-frame').contentWindow||event.origin!==location.origin)return;
   if(event.data?.type==='hymn-ui-zoom'){changeUiZoom(event.data.direction);return;}
-  if(event.data?.type==='hymn-photo-dirty'){projectSession.preparationDirty=true;projectSession.processing.layout={status:'stale',updatedAt:projectSession.processing.layout.updatedAt,data:projectSession.processing.layout.data};projectSession.processing.recognition={status:'stale',updatedAt:projectSession.processing.recognition.updatedAt};projectSession.processing.review={status:'stale',updatedAt:projectSession.processing.review.updatedAt};updatePipelineAvailability();return;}
+  if(event.data?.type==='hymn-photo-dirty'){projectSession.preparationDirty=true;projectSession.processing.layout={status:'stale',updatedAt:projectSession.processing.layout.updatedAt,data:projectSession.processing.layout.data};projectSession.processing.recognition={status:'stale',updatedAt:projectSession.processing.recognition.updatedAt};projectSession.processing.review={status:'stale',updatedAt:projectSession.processing.review.updatedAt};updatePipelineAvailability();updateUnsavedIndicator();return;}
   if(event.data?.type==='hymn-photo-prepared-error'){const pending=preparedPhotoRequests.get(event.data.requestId);if(pending){preparedPhotoRequests.delete(event.data.requestId);pending.reject(new Error(event.data.message));}return;}
   if(event.data?.type!=='hymn-photo-prepared')return;
   const pending=preparedPhotoRequests.get(event.data.requestId);if(pending){preparedPhotoRequests.delete(event.data.requestId);pending.resolve(event.data);return;}
@@ -2506,6 +2477,7 @@ async function openProjectFolder() {
 }
 
 function refreshSourceFileList(){
+  updateUnsavedIndicator();
   const list=$('#source-file-list'),has=kind=>projectSession.sources.some(source=>source.kind===kind);
   const active=projectSession.sources.find(source=>source.path===projectSession.activeSource),activeCard=$('#source-active-file');activeCard.innerHTML=active?`<small>Selected input</small><strong>${escapeHtml(active.name)} · ${escapeHtml(active.kind)}</strong>`:'<small>Selected input</small><strong>None selected</strong>';
   $('#initial-input-prompt').classList.toggle('hidden',!projectSession.requiresInitialInput);document.querySelector('.major-tab[data-major-tab="editor"]').disabled=projectSession.requiresInitialInput;
@@ -2552,27 +2524,24 @@ async function extractChosenStaffLayout(){
 async function saveProjectSession() {
   const active=projectSession.sources.find(source=>source.path===projectSession.activeSource);
   if(active?.kind==='Photo'&&projectSession.preparationDirty&&projectSession.preparationSourcePath===projectSession.activeSource){const prepared=await requestPreparedPhoto(),saved=await savePreparedPhotoFiles(prepared);if(!saved)return false;}
-  let savedEditorPath='';
+  let savedEditorPath='',savedOutputPath='',savedReviewPath='';
   if(state.xml){
     if(!projectSession.handle)throw new Error('The project folder is not available. Reopen the project and save again.');
     const working=await projectSession.handle.getDirectoryHandle('working',{create:true}),draft=await working.getDirectoryHandle('draft',{create:true}),draftName=`${projectSession.name}-working.musicxml`;
     const saved=await writeProjectFile(draft,draftName,revisedXml(),'application/vnd.recordare.musicxml+xml',{confirmReplace:true});
     if(!saved){$('#status').textContent='Save cancelled; the existing project working MusicXML was not changed.';return false;}
     savedEditorPath=`working/draft/${draftName}`;
+    const output=await projectSession.handle.getDirectoryHandle('output',{create:true}),musicxml=await output.getDirectoryHandle('musicxml',{create:true}),reports=await output.getDirectoryHandle('reports',{create:true});
+    const outputName=`${projectSession.name}-revised.musicxml`,reviewName=`${projectSession.name}-alignment.json`;
+    await writeProjectFile(musicxml,outputName,revisedXml(),'application/vnd.recordare.musicxml+xml');
+    await writeProjectFile(reports,reviewName,JSON.stringify(reviewPayload(),null,2)+'\n','application/json');
+    savedOutputPath=`output/musicxml/${outputName}`;savedReviewPath=`output/reports/${reviewName}`;
   }
   await saveProcessingState();
   if(projectSession.handle){const manifest={schemaVersion:1,name:projectSession.name,savedAt:new Date().toISOString(),inputs:manifestSources(),activeInput:projectSession.activeSource,stage:state.xml?'editor-working':'source-processing'};await writeProjectFile(projectSession.handle,'hymn-project.json',JSON.stringify(manifest,null,2)+'\n');}
-  projectSession.savedSnapshot=state.xml?snapshot():null; projectSession.savedSources=structuredClone(manifestSources());
-  $('#status').textContent=savedEditorPath?`Saved project working MusicXML: ${savedEditorPath}`:'Project source-processing state saved.';
+  projectSession.savedSnapshot=state.xml?snapshot():null; projectSession.savedSources=structuredClone(manifestSources());state.history=[];state.future=[];updateUnsavedIndicator();
+  $('#status').textContent=savedEditorPath?`Saved ${savedEditorPath}, ${savedOutputPath}, and ${savedReviewPath}.`:'Project source-processing state saved.';
   return true;
-}
-
-async function resetProjectWorkingState(){
-  if(!confirm('Reset all changes made since the most recent Save? Original input files will not be changed.'))return;
-  if(projectSession.savedSnapshot)restore(projectSession.savedSnapshot);
-  projectSession.preparationDirty=false;await loadProcessingState();state.history=[];state.future=[];refreshSourceFileList();
-  const active=projectSession.sources.find(source=>source.path===projectSession.activeSource);if(active?.kind==='Photo')await showActivePhotoPreparation();
-  $('#status').textContent='Working state reset to the most recent Save.';
 }
 
 async function chooseProjectToDelete(){
@@ -2620,9 +2589,9 @@ $('#project-delete-input').addEventListener('click',showDeleteInputDialog);
 $('#confirm-delete-input').addEventListener('click',()=>deleteSelectedInput().catch(error=>alert(`Could not delete the input: ${error.message}`)));
 $('#project-input-dialog').addEventListener('cancel',event=>{if(projectSession.requiresInitialInput)event.preventDefault();});
 $('#project-save').addEventListener('click',async()=>{const button=$('#project-save');button.disabled=true;try{await saveProjectSession();}catch(error){alert(`Could not save the project: ${error.message}`);}finally{button.disabled=false;}});
-$('#project-reset').addEventListener('click',()=>resetProjectWorkingState().catch(error=>alert(`Could not reset the working state: ${error.message}`)));
+$('#unsaved-save-warning').addEventListener('click',()=>$('#project-save').click());
 $('#project-quit').addEventListener('click',()=>{
-  const hasUnsavedWork=state.history.length>0||JSON.stringify(manifestSources())!==JSON.stringify(projectSession.savedSources)||(state.xml&&projectSession.savedSnapshot===null);
+  const hasUnsavedWork=projectHasUnsavedWork();
   if(hasUnsavedWork&&!confirm('Close this project and return to Open Project / New Project? Any work not saved in the project manifest or working copy will be discarded.'))return;
   location.reload();
 });
@@ -2652,9 +2621,6 @@ $('#photo-conflict-popover').addEventListener('mouseleave', () => { photoConflic
 document.addEventListener('click', event => { if (!event.target.closest('.photo-conflict-popover,.photo-conflict-indicator')) hidePhotoConflictPopover(true); });
 $('#workspace-undo-button').addEventListener('click', undo);
 $('#workspace-redo-button').addEventListener('click', redo);
-$('#save-button').addEventListener('click',async()=>{const button=$('#save-button');button.disabled=true;try{await saveProjectSession();}catch(error){$('#status').textContent=`Could not save the project working MusicXML: ${error.message}`;}finally{button.disabled=false;}});
-$('#export-button').addEventListener('click', exportXml);
-$('#export-review-button').addEventListener('click', exportReview);
 $('#duration-select').addEventListener('change', event => setDuration(Number(event.target.value)));
 $('#insert-rest-button').addEventListener('click', insertRest);
 $('#split-with-rest-button').addEventListener('click', splitWithRestAfter);

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hymn MusicXML Workbench</title>
-    <link rel="stylesheet" href="./styles.css?v=20260902-unclipped-resize-handle-85" />
+    <link rel="stylesheet" href="./styles.css?v=20260902-unified-save-warning-86" />
   </head>
   <body>
     <header class="topbar">
@@ -19,7 +19,9 @@
         <button id="new-project"><strong>New Project</strong><span>Start a hymn in a photo, PDF, or another file type.</span></button>
         <button id="delete-project-launcher" class="danger"><strong>Delete Project(s)</strong><span>Delete one hymn project or all hymn projects in a selected collection.</span></button>
       </section>
-      <section id="file-level-actions" class="file-level-actions card hidden" aria-label="Working file operations"><strong>Working file</strong><button id="project-save">Save</button><button id="project-reset" title="Reset changes made since the most recent Save">Reset</button><button id="project-add-input" class="source-file-action">Add Input</button><button id="project-change-input" class="source-file-action">Change Input</button><button id="project-delete-input" class="source-file-action danger">Delete Input</button></section>
+      <section id="file-level-actions" class="file-level-actions card hidden" aria-label="Working file operations"><strong>Working file</strong><button id="project-save"><span aria-hidden="true">💾</span> Save</button><button id="project-add-input" class="source-file-action">Add Input</button><button id="project-change-input" class="source-file-action">Change Input</button><button id="project-delete-input" class="source-file-action danger">Delete Input</button></section>
+      <button id="unsaved-save-warning" class="unsaved-save-warning hidden" type="button"><span>Unsaved changes. Click here to save.</span><span class="save-warning-icon" aria-hidden="true">💾</span></button>
+      <p id="status" class="status project-status" role="status" aria-live="polite"></p>
       <nav id="major-tabs" class="major-tabs hidden" aria-label="Workbench areas">
         <button class="major-tab active" data-major-tab="source" aria-selected="true">Source Processing</button>
         <button class="major-tab" data-major-tab="editor" aria-selected="false">Hymn Editor</button>
@@ -132,14 +134,6 @@
             <p id="language-token-instructions" class="hint">Select a token in this palette, then select its Jianpu note. The selection clears after one assignment so later note clicks cannot replace lyrics accidentally. Assigned tokens show a checkmark.</p>
             <div id="token-palette" class="token-palette"></div>
           </section>
-          <section class="card actions">
-            <h2>Check and save</h2>
-            <div id="validation-summary" class="validation-summary">Open a score to validate it.</div>
-            <button id="save-button" class="primary">Save project working MusicXML</button>
-            <button id="export-button" class="primary">Export revised MusicXML</button>
-            <button id="export-review-button" class="secondary">Export alignment JSON</button>
-            <p id="status" class="status" role="status"></p>
-          </section>
         </aside>
 
         <section class="workspace card">
@@ -215,6 +209,6 @@
       </form>
     </dialog>
     <div id="photo-conflict-popover" class="photo-conflict-popover hidden" role="dialog" aria-label="Staff-photo conflicts"></div>
-    <script type="module" src="./app.js?v=20260902-unclipped-resize-handle-85"></script>
+    <script type="module" src="./app.js?v=20260902-unified-save-warning-86"></script>
   </body>
 </html>

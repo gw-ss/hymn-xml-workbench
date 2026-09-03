@@ -11,7 +11,9 @@ const packageJson = JSON.parse(readFileSync(new URL('./package.json', import.met
 const hasId = id => new RegExp(`id=["']${id}["']`).test(html);
 
 test('project, file, and tab controls remain present', () => {
-  for (const id of ['open-project', 'new-project', 'delete-project-launcher', 'project-save', 'project-reset', 'project-add-input', 'project-change-input', 'project-delete-input', 'project-quit', 'major-tabs', 'source-processing-tab', 'editor-tab']) assert.equal(hasId(id), true, `missing #${id}`);
+  for (const id of ['open-project', 'new-project', 'delete-project-launcher', 'project-save', 'unsaved-save-warning', 'project-add-input', 'project-change-input', 'project-delete-input', 'project-quit', 'major-tabs', 'source-processing-tab', 'editor-tab']) assert.equal(hasId(id), true, `missing #${id}`);
+  for (const removed of ['project-reset', 'save-button', 'export-button', 'export-review-button']) assert.equal(hasId(removed), false, `obsolete #${removed}`);
+  assert.doesNotMatch(html, /Check and save/);
 });
 
 test('development server and repository utility commands remain available', () => {
@@ -211,10 +213,14 @@ test('Hymn Editor sidebar has complete Chinese and English panes without numbere
   assert.doesNotMatch(editorMarkup, />\s*Step\s+\d/i);
 });
 
-test('project Save uses one project-local working MusicXML path', () => {
+test('project Save writes working, revised, and alignment artifacts and clears its warning', () => {
   assert.match(app, /working\/draft\/\$\{draftName\}/);
   assert.match(app, /`\$\{projectSession\.name\}-working\.musicxml`/);
-  assert.doesNotMatch(app.match(/async function saveProjectSession\(\)[\s\S]*?\n\}/)?.[0] || '', /saveWorkingCopy/);
+  assert.match(app, /output\/musicxml\/\$\{outputName\}/);
+  assert.match(app, /output\/reports\/\$\{reviewName\}/);
+  assert.match(app, /state\.history=\[\];state\.future=\[\];updateUnsavedIndicator\(\)/);
+  assert.match(app, /unsaved-save-warning/);
+  assert.doesNotMatch(app, /function resetProjectWorkingState|function saveWorkingCopy|function exportXml|function exportReview/);
 });
 
 test('photo preparation retains its essential controls', () => {

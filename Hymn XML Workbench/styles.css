@@ -21,6 +21,11 @@ button { cursor:pointer; }
 .file-level-actions button { padding:8px 12px; border:1px solid var(--line); border-radius:8px; color:var(--forest); background:#f8f4eb; font-weight:800; }
 .file-level-actions .danger { color:#84241f; border-color:#d9aaa6; background:#fff7f6; }
 .file-level-actions .tab-inapplicable { display:none; }
+.unsaved-save-warning { display:flex; align-items:center; justify-content:space-between; width:100%; margin:-4px 0 12px; padding:9px 12px; border:1px solid #df9c99; border-radius:6px; color:#b4231d; background:#f9dddd; font-weight:700; text-align:left; }
+.unsaved-save-warning:hover,.unsaved-save-warning:focus-visible { background:#f6cdca; outline:2px solid #b4231d40; outline-offset:1px; }
+.unsaved-save-warning.hidden { display:none; }
+.save-warning-icon { margin-left:14px; font-size:1.15rem; }
+.project-status { margin:-4px 0 10px; }
 main { margin-top:24px; margin-bottom:48px; }
 .card { background:var(--panel); border:1px solid var(--line); border-radius:15px; box-shadow:0 10px 28px #252f2a0d; }
 .project-launcher { display:grid; grid-template-columns:minmax(280px,420px); justify-content:start; gap:12px; }
@@ -199,8 +204,6 @@ textarea { width:100%; resize:vertical; padding:9px; border:1px solid var(--line
 .command-history { grid-column:-2/-1; display:flex; justify-content:flex-end; gap:7px; }
 .command-history button { min-height:32px; padding:5px 10px; border:1px solid #aebbc5; border-radius:7px; color:var(--forest); background:white; font-weight:800; }
 .command-history button:disabled { cursor:not-allowed; opacity:.42; }
-.validation-summary { margin:10px 0; padding:9px; border-radius:8px; background:#eef4f0; color:var(--green); font-size:.77rem; font-weight:750; }
-.validation-summary.warning { color:#8b4b17; background:#fff0df; }
 .layout-controls { display:flex; flex-wrap:wrap; align-items:end; gap:10px 18px; margin-top:12px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:#f8f4eb; }
 .layout-controls label { display:grid; grid-template-columns:auto minmax(120px,220px) 54px; align-items:center; gap:8px; margin:0; }
 .layout-controls input[type="range"] { width:100%; }
