@@ -1184,6 +1184,8 @@ function render() {
   $('#score-grid').classList.toggle('english-mode', englishMode);
   $('#jianpu-entry-controls').classList.toggle('hidden', englishMode);
   $('#jianpu-input').contentEditable = englishMode ? 'false' : 'plaintext-only';
+  $('#start-entry-button').disabled = englishMode;
+  $('#start-entry-button').title = englishMode ? 'Switch to Chinese to encode Jianpu' : 'Create notation from a Jianpu Encoded Stream';
   $('#zh-input').readOnly = englishMode;
   $('#en-input').readOnly = !englishMode;
   const staffNote = selectedStaffNote();

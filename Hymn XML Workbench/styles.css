@@ -36,6 +36,7 @@ main { margin-top:24px; margin-bottom:48px; }
 .project-launcher span { color:var(--muted); }
 .project-launcher .danger { color:#84241f; border-color:#d9aaa6; background:#fff7f6; }
 .project-launcher .danger span { color:#875e5a; }
+#start-entry-button:disabled { cursor:not-allowed; opacity:.65; color:#89908c; border-color:#d2cec5; background:#e6e4df; }
 .major-tabs { display:flex; gap:5px; margin-top:0; border-bottom:3px solid var(--forest); }
 .major-tabs.hidden { display:none; }
 .major-tab { min-width:190px; padding:11px 18px; border:1px solid var(--line); border-bottom:0; border-radius:10px 10px 0 0; color:var(--forest); background:#e9e4d9; font-weight:850; }

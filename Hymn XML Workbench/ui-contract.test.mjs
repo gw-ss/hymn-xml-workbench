@@ -35,10 +35,14 @@ test('photo input accepts supported raster and Apple photo formats', () => {
 });
 
 test('Jianpu editor keeps native editing, wrapping, validation, and spacing controls', () => {
+  assert.match(html, /id="start-entry-button"[^>]*>Encode Jianpu<\/button>/);
+  assert.doesNotMatch(html, /Enter Jianpu directly/i);
   assert.match(html, /Jianpu Encoded Stream/);
   assert.match(html, /id="jianpu-input"[^>]*contenteditable="plaintext-only"/);
   for (const id of ['measures-per-line', 'all-measure-width-slider', 'measure-width-slider', 'symbol-width-slider', 'reset-spacing-button']) assert.equal(hasId(id), true, `missing #${id}`);
   assert.match(app, /jianpuParenthesisIssues/);
+  assert.match(app, /\$\('#start-entry-button'\)\.disabled = englishMode/);
+  assert.match(readFileSync(new URL('./styles.css', import.meta.url), 'utf8'), /#start-entry-button:disabled \{[^}]*opacity:\.65;[^}]*background:#e6e4df;/);
 });
 
 test('beat guides, Jianpu lyrics, and staff notes share one rendered timing map', () => {

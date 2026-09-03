@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Hymn MusicXML Workbench</title>
-    <link rel="stylesheet" href="./styles.css?v=20260902-static-operation-controls-90" />
+    <link rel="stylesheet" href="./styles.css?v=20260902-encode-jianpu-label-91" />
   </head>
   <body>
     <header class="topbar">
@@ -43,7 +43,7 @@
           <h2>Open a MusicXML file</h2>
           <p>Correct the melody, inspect jianpu by measure, and align Chinese and English lyrics.</p>
         </div>
-        <div class="load-actions"><label class="file-button">Choose MusicXML<input id="file-input" type="file" accept=".musicxml,.xml,application/xml" /></label><button id="start-entry-button" class="secondary">Enter Jianpu directly</button></div>
+        <div class="load-actions"><label class="file-button">Choose MusicXML<input id="file-input" type="file" accept=".musicxml,.xml,application/xml" /></label><button id="start-entry-button" class="secondary">Encode Jianpu</button></div>
         <div id="file-summary" class="summary">No score loaded</div>
       </section>
 
@@ -55,7 +55,7 @@
           </nav>
           <div id="chinese-sidebar-pane" class="sidebar-language-pane" role="tabpanel">
           <section class="card direct-entry">
-            <h2>Enter Jianpu</h2>
+            <h2>Encode Jianpu</h2>
             <div class="hymn-picker"><label>Hymn number<input id="hymn-number" type="number" min="1" max="848" value="705" list="hymn-number-list" /></label><button id="load-hymn-button">Load hymn</button></div>
             <datalist id="hymn-number-list"></datalist>
             <p id="hymn-title" class="hint">Choose any hymn from 1 through 848.</p>
@@ -208,6 +208,6 @@
       </form>
     </dialog>
     <div id="photo-conflict-popover" class="photo-conflict-popover hidden" role="dialog" aria-label="Staff-photo conflicts"></div>
-    <script type="module" src="./app.js?v=20260902-static-operation-controls-90"></script>
+    <script type="module" src="./app.js?v=20260902-encode-jianpu-label-91"></script>
   </body>
 </html>
