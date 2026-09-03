@@ -185,11 +185,15 @@ test('resizing the Editor realigns Jianpu, lyrics, guides, and staff notation', 
   assert.match(observer, /scheduleStaffRealignment\(\)/);
   assert.match(styles, /\.workspace \{[^}]*max-width:none;[^}]*resize:none;/);
   assert.match(styles, /\.editor \{[^}]*overflow-x:auto;[^}]*overflow-y:visible;/);
-  assert.match(styles, /\.workspace-resize-handle \{[^}]*position:sticky;[^}]*right:4px;[^}]*bottom:4px;/);
+  assert.match(styles, /\.workspace-resize-handle \{[^}]*position:fixed;/);
   assert.match(html, /id="workspace-resize-handle"[^>]*aria-label="Resize notation workspace horizontally and vertically"/);
   assert.match(app, /workspaceResizeHandle\.addEventListener\('pointerdown'/);
   assert.match(app, /pointer\.clientX - start\.x\) \/ uiZoom/);
   assert.match(app, /pointer\.clientY - start\.y\) \/ uiZoom/);
+  assert.match(app, /function positionWorkspaceResizeHandle\(\)/);
+  assert.match(app, /Math\.min\(workspaceBox\.right, editorBox\.right, window\.innerWidth\)/);
+  assert.match(app, /Math\.min\(workspaceBox\.bottom, window\.innerHeight\)/);
+  assert.match(app, /window\.addEventListener\('scroll', positionWorkspaceResizeHandle/);
 });
 
 test('Automatic layout honors exact user-authored @ system lengths without inference', () => {

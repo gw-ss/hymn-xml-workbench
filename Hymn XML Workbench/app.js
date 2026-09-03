@@ -7,7 +7,7 @@ Object.defineProperty(jianpuEditor, 'value', { configurable:true, get(){return t
 const UI_ZOOM_KEY='hymn-workbench-ui-zoom';
 let uiZoom=Math.min(2,Math.max(.5,Number(localStorage.getItem(UI_ZOOM_KEY))||1));
 function applyUiZoom(){document.documentElement.style.zoom=String(uiZoom);localStorage.setItem(UI_ZOOM_KEY,String(uiZoom));}
-function changeUiZoom(direction){uiZoom=direction===0?1:Math.min(2,Math.max(.5,Math.round((uiZoom+direction*.1)*10)/10));applyUiZoom();}
+function changeUiZoom(direction){uiZoom=direction===0?1:Math.min(2,Math.max(.5,Math.round((uiZoom+direction*.1)*10)/10));applyUiZoom();requestAnimationFrame(positionWorkspaceResizeHandle);}
 function handleUiZoomShortcut(event){if(!(event.metaKey||event.ctrlKey))return;const key=event.key;if(key==='+'||key==='='){event.preventDefault();changeUiZoom(1);}else if(key==='-'||key==='_'){event.preventDefault();changeUiZoom(-1);}else if(key==='0'){event.preventDefault();changeUiZoom(0);}}
 applyUiZoom();document.addEventListener('keydown',handleUiZoomShortcut);
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -2687,15 +2687,30 @@ $('#all-measure-width-slider').addEventListener('input', event => { applyAllMeas
 $('#all-measure-width-slider').addEventListener('change', () => { allMeasureWidthChanging = false; render(); });
 loadSpacing();
 new ResizeObserver(entries => {
-  const workspace = entries[0]?.target; if (!workspace?.style.width && !workspace?.style.height) return;
+  const workspace = entries[0]?.target; positionWorkspaceResizeHandle();
+  if (!workspace?.style.width && !workspace?.style.height) return;
   const box = workspace.getBoundingClientRect(); state.containerSize = { width: Math.round(box.width), height: Math.round(box.height) };
   if (state.measures.length) scheduleStaffRealignment();
 }).observe($('.workspace'));
 function resizeWorkspaceTo(width, height) {
   applyContainerSize({ width, height });
   if (state.measures.length) scheduleStaffRealignment();
+  requestAnimationFrame(positionWorkspaceResizeHandle);
 }
 const workspaceResizeHandle = $('#workspace-resize-handle');
+function positionWorkspaceResizeHandle() {
+  const editor = $('#editor'), workspace = $('.workspace');
+  if (!editor || !workspace || editor.classList.contains('hidden')) { workspaceResizeHandle.hidden = true; return; }
+  const editorBox = editor.getBoundingClientRect(), workspaceBox = workspace.getBoundingClientRect();
+  const visibleRight = Math.min(workspaceBox.right, editorBox.right, window.innerWidth);
+  const visibleBottom = Math.min(workspaceBox.bottom, window.innerHeight);
+  const visibleLeft = Math.max(workspaceBox.left, editorBox.left, 0), visibleTop = Math.max(workspaceBox.top, 0);
+  const renderedHandleSize = 28 * uiZoom, renderedInset = 4 * uiZoom;
+  workspaceResizeHandle.hidden = visibleRight - visibleLeft < renderedHandleSize || visibleBottom - visibleTop < renderedHandleSize;
+  if (workspaceResizeHandle.hidden) return;
+  workspaceResizeHandle.style.left = `${(visibleRight - renderedHandleSize - renderedInset) / uiZoom}px`;
+  workspaceResizeHandle.style.top = `${(visibleBottom - renderedHandleSize - renderedInset) / uiZoom}px`;
+}
 workspaceResizeHandle.addEventListener('pointerdown', event => {
   event.preventDefault();
   const workspace = $('.workspace');
@@ -2718,7 +2733,10 @@ workspaceResizeHandle.addEventListener('keydown', event => {
   const workspace = $('.workspace'), step = event.shiftKey ? 50 : 10;
   resizeWorkspaceTo(workspace.offsetWidth + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0), workspace.offsetHeight + (event.key === 'ArrowDown' ? step : event.key === 'ArrowUp' ? -step : 0));
 });
-window.addEventListener('resize', scheduleStaffRealignment);
+$('#editor').addEventListener('scroll', positionWorkspaceResizeHandle, { passive:true });
+window.addEventListener('scroll', positionWorkspaceResizeHandle, { passive:true });
+window.addEventListener('resize', () => { scheduleStaffRealignment(); positionWorkspaceResizeHandle(); });
+requestAnimationFrame(positionWorkspaceResizeHandle);
 document.addEventListener('keydown', event => {
   if (state.activeLanguage !== '2' || !state.selectedStaffNoteId || !['Delete', 'Backspace'].includes(event.key) || event.target.matches('input, textarea, select, [contenteditable]')) return;
   const note = selectedStaffNote(); if (!note) return; event.preventDefault(); recordChange(); removeStaffNote(note); $('#status').textContent = 'Selected staff note deleted.'; render();
